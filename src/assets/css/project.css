@@ -1,0 +1,503 @@
+/* These styles are generated from project.scss. */
+
+/* Change font
+https://stackoverflow.com/questions/24075222/how-can-i-change-the-bootstrap-default-font-family-using-font-from-google 
+https://stackoverflow.com/questions/21596760/how-to-use-font-family-lato */
+
+body {
+  --bs-body-font-family: 'Lato';
+}
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.eh-hover {
+  color: #b94a48;
+  background-color: #b94a48;
+}
+
+/*.navbar-light .navbar-brand {
+  color: #0b5ed7;
+  font-size: 2rem;
+}
+
+.navbar-light .navbar-brand:hover {
+  color: #083ea7;
+  font-size: 2rem;
+}*/
+
+/*.navbar-light .navbar-brand {
+  color: #500000;
+  font-size: 2rem;
+}
+
+.navbar-light .navbar-brand:hover {
+  color: #9c1616;
+  font-size: 2rem;
+}*/
+
+.navbar-light .navbar-brand {
+  color: #000005;
+}
+
+.navbar-light .navbar-brand:hover {
+  color: #0b5ed7;
+}
+
+*/ .cw-titlebar2 {
+  border-bottom: 1px solid #0b5ed7;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+.cw-orange {
+  background-color: #ffdbb1 !important;
+}
+
+.cw-treatment {
+  background-color: #bfd9ff !important;
+}
+
+.cw-outcome {
+  background-color: #d0fcdc !important;
+}
+
+.cw-bg-success {
+  background-color: #d0fcdc !important;
+}
+
+.cw-bg-danger {
+  background-color: #f2dede !important;
+}
+
+.cw-outcome-fg {
+  color: #184925;
+  font-weight: 700;
+}
+
+.cw-danger-color {
+  color: #841616 !important;
+}
+
+.cw-danger-fg {
+  color: #841616;
+  font-weight: 700;
+}
+
+.cw-callout {
+  background-color: #000;
+  color: #fff;
+}
+
+.watermark {
+  background-image: url('../images/watermark.png');
+  background-repeat: repeat;
+  /*background-position: center;*/
+  /*background-attachment: fixed;*/
+  background-size: 100%;
+}
+
+/* Sparkle magic */
+.star-five {
+  background: transparent;
+  margin: 50px 0;
+  position: relative;
+  display: block;
+  color: #02d9ff;
+  width: 0px;
+  height: 0px;
+  border-right: 100px solid transparent;
+  border-bottom: 70px solid #ffa64d;
+  border-left: 100px solid transparent;
+  /* transform: rotate(35deg) scale(0.1) translate(-1450px, -250px); */
+}
+
+.star-five:before {
+  border-bottom: 80px solid #ffa64d;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  background-color: transparent;
+  position: absolute;
+  height: 0;
+  width: 0;
+  top: -45px;
+  left: -65px;
+  display: block;
+  content: '';
+  transform: rotate(-35deg);
+}
+
+.star-five:after {
+  background-color: transparent;
+  position: absolute;
+  display: block;
+  color: #02d9ff;
+  top: 3px;
+  left: -105px;
+  width: 0px;
+  height: 0px;
+  border-right: 100px solid transparent;
+  border-bottom: 70px solid #ffa64d;
+  border-left: 100px solid transparent;
+  transform: rotate(-70deg);
+  content: '';
+}
+
+.modal-header {
+  border-bottom: 0;
+}
+
+.modal-footer {
+  border-top: 0;
+}
+
+.driver-close-btn {
+  color: #0d6efd !important;
+  background-color: #fff !important;
+  border-color: #0d6efd !important;
+  border-radius: 0 !important;
+  text-shadow: none !important;
+}
+
+.driver-prev-btn {
+  color: #ffffff !important;
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  border-radius: 0 !important;
+  text-shadow: none !important;
+}
+
+.driver-next-btn {
+  color: #ffffff !important;
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  border-radius: 0 !important;
+  text-shadow: none !important;
+}
+
+.driver-close-btn:hover {
+  color: #ffffff !important;
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+
+.driver-prev-btn:hover {
+  color: #ffffff !important;
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+
+.driver-next-btn:hover {
+  color: #ffffff !important;
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+
+.driver-close-btn.driver-disabled {
+  color: #eee !important;
+  background-color: #bbb !important;
+  border-color: #eee !important;
+}
+
+.driver-prev-btn.driver-disabled {
+  color: #eee !important;
+  background-color: #bbb !important;
+  border-color: #eee !important;
+}
+
+.driver-next-btn.driver-disabled {
+  color: #eee !important;
+  background-color: #bbb !important;
+  border-color: #eee !important;
+}
+
+/*
+Multi carousel items - see https://www.codeply.com/p/0CWffz76Q9
+https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-at-once
+*/
+@media (max-width: 767px) {
+  .multi-carousel-inner .carousel-item>div {
+    display: none;
+  }
+
+  .multi-carousel-inner .carousel-item>div:first-child {
+    display: block;
+  }
+}
+
+.multi-carousel-inner .carousel-item.active,
+.multi-carousel-inner .carousel-item-next,
+.multi-carousel-inner .carousel-item-prev {
+  display: flex;
+}
+
+/* medium and up screens */
+@media (min-width: 768px) {
+
+  .multi-carousel-inner .carousel-item-end.active,
+  .multi-carousel-inner .carousel-item-next {
+    transform: translateX(25%);
+  }
+
+  .multi-carousel-inner .carousel-item-start.active,
+  .multi-carousel-inner .carousel-item-prev {
+    transform: translateX(-25%);
+  }
+}
+
+.multi-carousel-inner .carousel-item-end,
+.multi-carousel-inner .carousel-item-start {
+  transform: translateX(0);
+}
+
+.cw-rotate-text {
+  /*width: 25px;*/
+  transform: rotate(90deg);
+}
+
+.cw-carousel-item {
+  width: 100%;
+  /*min-height: 36em;*/
+  min-height: 36em;
+  /*min-height: 40vh;
+  max-height: 40vh;*/
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.cw-carousel-white-content {
+  color: var(--bs-body-color) !important;
+}
+
+.cw-carousel-img {
+  width: 100%;
+}
+
+.cw-carousel-caption {
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: initial;
+}
+
+.grey-tinted-image-decisions {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)),
+    /* your image */
+    url(/static/images/container-port-2.jpg);
+}
+
+.grey-tinted-image-data {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)),
+    /* your image */
+    url(/static/images/stocks.jpg);
+}
+
+.grey-tinted-image-interventions {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)),
+    /* your image */
+    url(/static/images/plumbing.jpg);
+}
+
+.grey-tinted-image-register {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)),
+    /* your image */
+    url(/static/images/pipes-crop.jpg);
+}
+
+.cw-horz-fade-background-1 {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(to right, rgba(255, 255, 255, 1.0) 0%,
+      rgba(255, 255, 255, 1.0) 60%,
+      rgba(255, 255, 255, 0.2) 90%,
+      rgba(255, 255, 255, 0.1) 100%),
+    /* your image */
+    url(/static/images/container-port-2.jpg);
+}
+
+.cw-dark-fg {
+  color: white;
+}
+
+.cw-dark-industrial-bg {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:
+    /* top, transparent red */
+    linear-gradient(to right, rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)),
+    /* your image */
+    url(/static/images/container-port-2.jpg);
+}
+
+/*.card-img-container-data {
+  background-image: url('/static/images/spreadsheet.jpg');
+  background-size: cover;
+  background-position: center;
+
+  /* Don't forget to add height and width,
+Without content, the div won't have any height and with * /
+  height: 200px;
+  width: 100%;
+}*/
+
+/*.card-img-container-graph {
+  background-image: url('/static/images/causal_diagram_crm.png');
+  background-size: cover;
+  background-position: center;
+
+  /* Don't forget to add height and width,
+Without content, the div won't have any height and with * /
+  height: 200px;
+  width: 100%;
+}*/
+
+/*.card-img-container-check {
+  background-image: url('/static/images/yes_check_circle.png');
+  background-size: cover;
+  background-position: center;
+
+  /* Don't forget to add height and width,
+Without content, the div won't have any height and with * /
+  height: 200px;
+  width: 100%;
+}*/
+
+/*.card-img-container-result {
+  background-image: url('/static/images/result_plot.png');
+  background-size: cover;
+  background-position: center;
+
+  /* Don't forget to add height and width,
+Without content, the div won't have any height and with * /
+  height: 200px;
+  width: 100%;
+}*/
+
+/* YouTube embedding */
+.iframe-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Twitter links */
+.twitter-wrapper {
+  margin-left: 0.2em;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+  font: 'Helvetica Neue',
+    Arial,
+    Sans-serif;
+  vertical-align: top;
+  cursor: pointer;
+  font-weight: 500;
+  color: #FFF;
+  background-color: #1d9bf0;
+  border-radius: 9999px;
+}
+
+.twitter-logo {
+  background-image: url('/static/images/twitter.svg');
+  background-size: auto;
+  height: 14px;
+  width: 14px;
+  position: relative;
+  top: 2px;
+  color: #FFF;
+  display: inline-block;
+}
+
+.twitter-link {
+  color: #FFF;
+  text-decoration: none;
+}
+
+.cw-check-fail {
+  color: #dc3545;
+}
+
+.cw-check-fail .nav-link.active {
+  background-color: #000;
+}
+
+.nav .nav-item .cw-check-fail.active {
+  background-color: #dc3545;
+}
+
+.cw-faint {
+  color: #999;
+}
+
+.cw-question-answer .cw-question-answer-prompt {
+  color: #999;
+}
+
+.cw-builder-section {
+  color: #9c1616;
+}
+
+.cw-highlight-url {
+  color: #0000ff;
+  background-color: #ffff00;
+}

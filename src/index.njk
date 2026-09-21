@@ -1,0 +1,424 @@
+---
+layout: base.njk
+title: Causal Wizard
+---
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-5">
+
+      <h1>Causal software for effect estimation</h1>
+      <h2>Quantify cause-and-effect relationships using Causal Inference and Machine Learning</h2>
+      <img src="/assets/images/variable_types.png" class="my-3" style="width:100%;" />
+      <h5>You may have heard that you can't establish or measure causality from existing data, only through
+        Randomized Controlled Trials (RCTs). <b>That's not true.</b></h5>
+      <h5><a href="/articles/publications/" target="_blank">Many peer-reviewed papers</a> including <a
+          href="https://www.nobelprize.org/prizes/economic-sciences/2021/press-release/" target="_blank" title="2021
+          Nobel
+          Prize in Economics was awarded to David Card, Joshua Angrist and Guido Imbens</a>, for their work using
+        Causal Inference to discover new insights about labour market dynamics, and showing that
+        conclusions about cause and
+        effect can be drawn
+        from natural [and observational]
+          experiments">Nobel prize-winning research</a>* have proven that Causal Machine
+        Learning techniques can
+        <b>detect</b>, <b>confirm</b> and <b>quantify</b> cause-and-effect relationships.<br><br>But you must have 2
+        things:
+      </h5>
+      <ul>
+        <li>
+          <h5><b>Some data</b> - to validate and quantify the model and its effects</h5>
+        </li>
+        <li>
+          <h5><b>A causal model</b> - can be specified in advance by elicitation of expert domain knowledge, or learned
+            from
+            data (causal discovery)</h5>
+        </li>
+      </ul>
+      <h5>Causal Wizard helps you use your knowledge to build causal models, and apply them to your
+        data.</h5>
+
+      <p>
+        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapse-observational" aria-expanded="false" aria-controls="collapse-observational">
+          More »
+        </button>
+      </p>
+      <div class="collapse" id="collapse-observational">
+        <div class="card card-body">
+          <h3>Observational experiments</h3>
+          <p class="mb-0">
+            Causal Wizard actually implements a type of scientific experiment, called an <a
+              href="/articles/experiment/" target="_blank"><b>Observational</b> or <b>Natural
+                experiment</b></a>. It's used where it's impossible, impractical, too expensive or simply unethical to
+            conduct a
+            Randomized Controlled Trial. For example, you can't force people to smoke cigarettes for your research!
+            Observational experiments don't control who gets "treated", but they benefit from observing the outcomes
+            of a
+            "treatment", wherever and however it occurs.<br><br>
+            Using Causal Inference and Machine Learning, you can obtain cause-and-effect insights about your data and
+            predict the outcomes of an intervention before trying it.
+
+            <b>But you've got to use the right techniques to avoid mistaking spurious correlations for genuine cause and
+              effect</b>. Using modern Causal Inference techniques, and with your domain knowledge, you can get
+            accurate
+            results from existing data.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="mt-5">What's wrong with other Machine Learning methods?</h2>
+      <h5>
+        With Causal ML you can use historical data to accurately predict the outcomes of hypothetical
+        <b>interventions</b>
+        (i.e. <b>changes</b> to a system), or <b>counterfactual scenarios</b> - things that didn't actually happen,
+        but you want to understand <i>"what would have happened, if ..."</i>
+      </h5>
+      <h5>
+        Non-causal ML <b>does</b> learn accurate predictive models, but these models can be <b>very wrong</b> under
+        changed
+        conditions not well represented in the training data.
+      </h5>
+      <h5>
+        Causal models exploit prior knowledge of the system to give more accurate answers in changed conditions, such
+        as after an intervention. So if you want to explore interventions and counterfactuals, it's important to use
+        Causal models.
+      </h5>
+
+      <p>
+        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapse-changed" aria-expanded="false" aria-controls="collapse-changed">
+          More »
+        </button>
+      </p>
+      <div class="collapse" id="collapse-changed">
+        <div class="card card-body">
+          <h3>The limitations of learning from data alone</h3>
+          <p class="">
+            Data tends to contain a lot of spurious or misleading correlation or association, which might be
+            coincidence, or the
+            effect of other
+            variables, maybe unobserved. Machine learning models will learn these correlations and <b>include them in
+              their predictions</b>.
+          </p>
+          <img src="/assets/images/spurious-correlations.png" class="" style="width:100%;" />
+          <p><small>See <a href="https://www.tylervigen.com/spurious-correlations" target="_blank">Tyler Vigen's
+                site</a>
+              for more.</small></p>
+          <p class="mb-0">
+            If your training data is statistically identical to your use-case, this might not be a problem. But when you
+            want to model the results of an <b>intervention</b> - a change to one or more variables - you're changing
+            the statistics of the data. This is
+            when the limitations of purely associative modelling become <b>dangerous</b>!
+          </p>
+          <img src="/assets/images/simpsons_paradox.png" class="" style="width:100%;" />
+          <p class="">
+            The figure above is an illustration of "Simpson's Paradox", in which the relationship between variables X
+            and Y appears <b>negatively correlated</b> over the entire dataset (<span style="color:magenta;">magenta
+              line</span>), but is in fact the <b>opposite</b> (positively correlated) for all sub-groups (black, <span
+              style="color:red;">red</span>,
+            <span style="color:green;">green</span> and <span style="color:blue;">blue</span>).
+          </p>
+          <h5>Without appropriate handling of the confounding variable used to identify subgroups, it's easy to come
+            away with a completely backwards conclusion about the effect of X on Y. Causal models handle these variables
+            correctly.</h5>
+        </div>
+      </div>
+
+    </div><!-- col -->
+  </div><!-- row -->
+</div><!-- container -->
+<div class="cw-dark-industrial-bg">
+  <div class="container">
+    <div class="row py-5 mt-3">
+      <div class="col-md-6 mt-3 cw-dark-fg">
+
+        <h2>Make better decisions</h2>
+        <h5>
+          By helping you better understand your data and the systems you're studying, Causal ML helps you make
+          better decisions about assets, products and services.
+        </h5>
+        <h5>
+          Better insights also reduce risk, and provide confidence when making changes. It doesn't have to be a leap
+          into the unknown!
+        </h5>
+
+      </div><!-- col -->
+      <div class="col-md-6 mt-3 cw-dark-fg">
+
+        <h2>"What if…?" questions</h2>
+        <h5>By generating accurate outcomes in hypothetical and counterfactual scenarios, Causal ML answers your "What
+          if?" questions.</h5>
+        <h2>Understanding <i>Why</i></h2>
+        <h5>
+          Causal ML also allows you to understand <b>why</b> things happened, by quantifying the contributions of
+          various
+          causes to specific outcomes.
+        </h5>
+      </div><!-- col -->
+
+
+    </div><!-- row -->
+  </div><!-- container -->
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-5">
+
+      <h2>Causal Wizard makes Causal ML accessible to everyone</h2>
+      <p>
+        <b>Causal Wizard is a software web-app for modelling causal relationships between variables</b>.
+        The
+        app is for any subject-matter expert - product managers, asset managers, scientists, engineers and anyone with
+        deep
+        knowledge of the system being studied. It’s great if you have a statistics, ML or data-sci background, but it’s
+        not essential. There's also an extensive set of <a href="/articles/">articles</a> and <a
+          href="/reading/">links</a> to help you learn more about Causality - the
+        science of cause and effect.
+      </p>
+      <ul class="mb-0">
+        <li>
+          <h5>
+            No programming experience needed
+          </h5>
+        </li>
+        <li>
+          <h5>
+            Don't need advanced maths skills
+          </h5>
+        </li>
+        <li>
+          <h5>
+            Results in minutes
+          </h5>
+        </li>
+      </ul>
+    </div><!-- col -->
+  </div><!-- row -->
+  <div class="row">
+    <div class="col my-5" style="width:100%;text-align:center;">
+      <a class="btn btn-danger btn-lg" style="padding:0.6em;" href="/data/">I'm convinced, let's go</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3 my-3">
+      <h2>How it works</h2>
+      <h5>
+        Causal Wizard explores the effect of one variable <b>X</b> on another variable <b>Y</b>,
+        given your knowledge of all relevant variables in the system.
+        <br><br>
+        There are
+        2 ways to use Causal
+        Wizard:
+      </h5>
+      <ol>
+        <li>
+          <h5>You can upload and analyze your own data using the Causal Wizard app.</h5>
+        </li>
+        <li>
+          <h5>Or jump straight into drawing a <a href="/articles/causal-diagram/" target="_blank">Causal
+              Diagram</a> for advice on how to set up an experiment or
+            conduct the analysis.</h5>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div id="carouselHowItWorks" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselHowItWorks" data-bs-slide-to="0" class="active" aria-current="true"
+      aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselHowItWorks" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselHowItWorks" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <button type="button" data-bs-target="#carouselHowItWorks" data-bs-slide-to="3" aria-label="Slide 4"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item grey-tinted-image-data cw-carousel-item active">
+      <div class="carousel-caption cw-carousel-caption">
+        <div class="row">
+          <div class="col ps-0 text-start">
+            <h2>Step 1: Upload data</h2>
+            <h5>Use your existing, historical data.<br><br>(Excel or CSV files)</h5>
+          </div>
+          <div class="col p-0">
+            <img src="/assets/images/tabular_data_files.jpg" class="cw-carousel-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-item grey-tinted-image-interventions cw-carousel-item">
+      <div class=" carousel-caption cw-carousel-caption">
+        <div class="row">
+          <div class="col ps-0 text-start">
+            <h2>Step 2: Define an intervention</h2>
+            <h5>
+              Separate the business-as-usual <b>Control</b> samples from the <b>Treated</b> samples: customers, assets
+              or products which <i>were</i> affected by the change.</h5>
+            <p>
+              These changes may have occurred during a pilot study, during A/B testing or might be a policy you're
+              planning to roll out more widely.
+            </p>
+          </div>
+          <div class="col p-0">
+            <img src="/assets/images/separate-cohorts.jpg" class="cw-carousel-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-item grey-tinted-image-decisions cw-carousel-item">
+      <div class=" carousel-caption cw-carousel-caption">
+        <div class="row">
+          <div class="col ps-0 text-start">
+            <h2>Step 3: Draw a Causal Diagram</h2>
+            <h5>Finally, draw the system as you understand it - how the variables in your data interact.<br><br>It's so
+              easy it's actually fun!
+          </div>
+          <div class="col p-0">
+            <img src="/assets/images/causal_diagram_cause_and_effect_landscape.png" class="cw-carousel-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-item grey-tinted-image-register cw-carousel-item">
+      <div class=" carousel-caption cw-carousel-caption">
+        <div class="row">
+          <div class="col ps-0 text-start">
+            <h2>Step 4: Analysis</h2>
+            <h5>Causal Wizard will use Causal Inference techniques to analyze your Causal Diagram and find a suitable
+              method.</h5>
+            <h5>Next, it will use Machine Learning to model the system and create a report describing the effect of your
+              proposed intervention on all samples.</h5>
+            </h5>
+          </div>
+          <div class="col p-0">
+            <img src="/assets/images/effect-of-treatment-v3.jpg" class="cw-carousel-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselHowItWorks" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselHowItWorks" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-5">
+
+      <h2>Backed by proven statistical methods</h2>
+      <h5>
+        Causal Wizard is built on the solid foundations of popular Open-Source libraries from the Python Data-Science
+        and Machine Learning ecosystem, notably including <b>PyWhy</b> and <b>DoWhy</b>. Many of these libraries, such
+        as <b>NumPy</b> and
+        <b>Pandas</b>, are used and trusted in thousands if not millions of mission-critical systems around the world.
+      </h5>
+      <table class="table" style="width:100%;">
+        <tbody style="border-style:hidden;">
+          <tr>
+            <td style="width:20%;vertical-align:middle;"><a href="https://www.python.org/" target="_blank"
+                title="Python programming language"><img src="/assets/images/python-logo.png"
+                  style="width: 100%;" /></a>
+            </td>
+            <td style="width:20%;vertical-align:middle;"><a href="https://numpy.org/" target="_blank" title="NumPy library"><img
+                  src="/assets/images/numpy-logo.png" style="width: 100%;" /></a></td>
+            <td style="width:20%;vertical-align:middle;"><a href="https://pandas.pydata.org/" target="_blank" title="Pandas library"><img
+                  src="/assets/images/pandas-logo.svg" style="width: 100%;"
+                  style="max-width: 100%; max-height: 100%;" /></a></td>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:20%;vertical-align:middle;"><a href="https://www.pywhy.org/dowhy/v0.9.1/" target="_blank"
+              title="DoWhy library"><img src="/assets/images/dowhy-logo.png" style="width: 100%;" /></a>
+            </td>
+            <td style="width:20%;vertical-align:middle;"><a href="https://www.statsmodels.org/" target="_blank"
+              title="Statsmodels library"><img src="/assets/images/statsmodels.svg" style="width: 100%;" /></a>
+            </td>
+            <td style="width:20%;vertical-align:middle;"><a href="https://econml.azurewebsites.net/" target="_blank"
+                title="EconML library"><img src="/assets/images/econml.jpg" alt="EconML logo" style="width:100%;" /></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="/articles/software/" target="_blank" class="btn btn-sm btn-outline-primary">Read more</a>
+
+      <h5 class="mt-3">
+        All the statistical methods used in Causal Wizard are based on accepted, published research. There's no secret
+        sauce, just convenience.
+        </h2>
+    </div><!-- col -->
+  </div><!-- row -->
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-5">
+      <h2 class="cw-danger-color">Fees and charges</h2>
+      <h5 class="cw-danger-color">
+        <b>There aren’t any.</b> Causal Wizard is free to use, with no account or sign-up required. We won’t
+        spam you.<br>
+        Why do we do this? We're passionate about growing the Causality world and learning how to educate and help people use causal techniques for better science &amp; research.
+      </h5>
+      <h5 class="">
+        Over time, your feedback will help us to grow and improve this site. At some point, we'd like to find a way to
+        cover our support and hosting costs, but for now we provide the service for free.
+      </h5>
+    </div><!-- col -->
+  </div><!-- row -->
+
+  <div class="row">
+    <div class="col mt-5" style="width:100%;text-align:center;">
+      <a class="btn btn-danger btn-lg" style="padding:0.6em;" href="/data/">Start here</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-5">
+      <h2>Still want to know more?</h2>
+      <h5>Check out this introductory video:</h5>
+    </div><!-- col -->
+  </div><!-- row -->
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-3">
+      <div class="iframe-container">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ML1nWMyS0KE"
+          title="An introduction to Causal Wizard" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+</div><!-- container -->
+
+<div class="container-fluid py-3 mt-5" style="background-color: #eee;">
+  <div class="row mx-5">
+    <div class="col">
+      <p><small>Causal Wizard is owned and operated by AI/ML Services, registered in Australia. All website contents ©
+          Causal Wizard, 2023. <a href="/legal/">Terms &amp; Conditions</a><br>
+          Contact us: <a href="/contact/">email</a> or
+          <span class="twitter-wrapper">
+            <i class="twitter-logo"></i>
+            <a href="https://twitter.com/CausalWizard" class="twitter-link">
+              @CausalWizard</a>
+          </span>
+
+        </small></p>
+      <p><small><img src="/assets/images/shield.png" style="width: 3em; float:left; margin-right:0.5em;" />
+          Causal
+          Wizard has been independently tested against the <a href='https://owasp.org/' target='_blank'>OWASP
+            security framework</a>. More about your <a href="/security/">Privacy, security &amp; data
+            sovereignty</a>.</small>
+      </p>
+    </div>
+  </div>
+</div><!-- container -->

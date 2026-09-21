@@ -1,0 +1,26 @@
+{
+  "name": "causal-wizard-app",
+  "version": "1.0.0",
+  "description": "Causal Wizard web app (static, serverless)",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drawlinson/causal_wizard_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/drawlinson/causal_wizard_app/issues"
+  },
+  "homepage": "https://github.com/drawlinson/causal_wizard_app#readme",
+  "private": "true",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  }
+}

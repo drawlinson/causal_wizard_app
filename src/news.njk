@@ -1,0 +1,165 @@
+---
+layout: base.njk
+title: News and feature roadmap
+---
+<div class="container">
+<div class="card-body">
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2>News and updates</h2>
+      <p>We are continually updating this site with new features and services. If you've got an idea for a feature you'd
+        like to
+        have, <a href="/contact/">contact us</a> to have it added to the list and prioritized.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h5 id="new-features">News to date</h5>
+      <ul>
+        <li><b>2024/Nov:</b> Added <a href="https://matheusfacure.github.io/python-causality-handbook/22-Debiased-Orthogonal-Machine-Learning.html" target="_blank" title="Double ML model explained">DoubleML</a> via <a href="https://econml.azurewebsites.net/" target="_blank" title="EconML">EconML</a>. 
+          This popular model has been requested several times.
+          <div class="w100" style="text-align:center;">
+            <img src="/assets/images/econml.jpg" alt="EconML logo" style="width:50%;" />
+          </div>
+          In addition, we improved data file reading, which should be more reliable now given non-ASCII characters and unusual date-time formatting. 
+          If you have problems getting Causal Wizard to read your CSV or Excel files, ensure you have a header row and 
+          read our <a href="/inference/article/dataset">dataset guide</a>. Feel free to contact us for help.
+        </li>
+        <li><b>2024/Oct:</b> Causal Wizard has been growing in popularity and now has <b>over 700 unique users per week</b>. On average, each website visitor reads 10 pages per visit, so we are pleased our educational mission is going well!
+        </li>
+        <li><b>2024/Sep:</b> Minor updates to improve page load speed. Some major new features and upgrades are on the way.
+        </li>
+        <li><b>2024/May:</b> Our first birthday! Causal Wizard has been helping people to adopt Causality in their
+          research for one year.
+          Since we do not advertise, it's been a slow start, but we're pleased that over <b>4,300 unique users have used
+            our tools and read our articles</b>.
+          On average, <b>each user reads 12 pages of content</b> and half our visitors return for more.
+          <div class="w100" style="text-align:center;">
+            <img src="/assets/images/users-chart-1y.png" alt="Users and sessions after 1 year"
+              style="width:80%;" />
+          </div>
+        </li>
+        <li><b>2024/Feb:</b> Edit-Study and Results pages now have numbered titles, making it easier for you to manage,
+          find and compare results when you have may tabs open.
+        </li>
+        <li><b>2024/Jan:</b> CausalWizard developers have been contributing to the Open-Source <a
+            href="https://www.pywhy.org/dowhy/v0.11.1/" target="_blank" title="DoWhy">DoWhy Python library</a>, which
+          provides the key Causal ML
+          methods we use. We aim to push the features we really need to deliver CausalWizard back into DoWhy, so
+          everyone can benefit from them.
+
+          <div class="w100" style="text-align:center;">
+            <img src="/assets/images/dowhy-logo.png" alt="DoWhy logo" style="width:50%;" />
+          </div>
+        </li>
+        <li><b>2024/Jan:</b> Significantly enhanced the <a href="/inference/article/exploratory-analysis">Exploratory
+            Data Analysis (EDA)</a>
+          tools built into CausalWizard. It's vital that users can explore and check their data,
+          visualise individual variable value distributions, and examine <a
+            href="/inference/article/correlationcausality">bivariate relationships (between pairs of
+            variables)</a>.
+          CausalWizard now includes Histograms, Contour and Scatter plots for numerical association,
+          multiple Violin and Box plots for mixed categorical / numerical association and
+          Heatmaps for categorical / categorical analysis.
+          <img src="/assets/images/eda_bivariate_violin.png"
+            alt="Example of plot tools for visualising bivariate association between variables." style="width:100%;" />
+        </li>
+        <li><b>2023/Dec:</b> Added <a href="/inference/article/feature-importance">feature-importance</a> analysis to
+          provide insights into the modelled behaviour and
+          effects of covariates on outcome.
+          <img src="/assets/images/features-feature-importance.png"
+            alt="Display relative magnitude of regression coefficients (including treatment) to observe effect on outcome variable."
+            style="width:80%;" />
+        </li>
+        <li><b>2023/Dec:</b> Option to define a held-out test set in your data and perform Machine-Learning style
+          predictive validation techniques on it, including classification metrics for categorical outcomes and
+          R-squared analysis of continuous outcomes.
+          <img src="/assets/images/features-confusion-matrix.png"
+            alt="Confusion matrix of binary classification model predictive performance on held-out test set."
+            style="width:100%;" />
+        </li>
+        <li><b>2023/Nov:</b> Added <a href="/inference/article/positivity">Positivity analysis</a> (key feature),
+          including Propensity distribution and
+          covariate-balance plots.
+          This feature is enabled whenever a propensity
+          score
+          method is used. It validates that your Control and Treated groups cover the same range of values for
+          all input variables, which is important for unbiased results.
+          <img src="/assets/images/features-propensity-score-distribution.png"
+            alt="Propensity score distribution plot for evaluating Positivity assumption." style="width:80%;" />
+        </li>
+        <li><b>2023/Nov:</b> Added contingency table to results (a summary of all treatment and outcome combinations in
+          data).</li>
+        <li><b>2023/Sep:</b> Added support for Categorical data (major update).</li>
+        <li><b>2023/Aug:</b> <a href="/project/builder/">AI/ML project designer tool</a> added:
+
+          <div class="w100" style="text-align:center;">
+            <a href="/project/builder/"
+              title="AI/ML Project designer tool - Business Model Canvas (BMC) for ML projects."><img
+                src="/assets/images/project_designer_tool.png"
+                alt="AI/ML Project designer tool - Business Model Canvas (BMC) for ML projects."
+                style="width:60%;" /></a>
+          </div>
+        </li>
+        <li><b>2023/Aug:</b> Speaking about Python Causality tools at <a
+            href="https://2023.pycon.org.au/program/CVYXRW/" target="_blank">the 2023 PyCon
+            conference</a> in Adelaide, Australia.
+          <div class="w100" style="text-align:center;">
+            <img src="/assets/images/pycon_au.png" alt="PyCon Australia logo" style="width:50%;" />
+          </div>
+
+        </li>
+        <li><b>2023/Aug:</b> Speaking about Causality and Causal Wizard at <a
+            href="https://www.meetup.com/machine-learning-ai-meetup/events/294879000/" target="_blank">the MLAI
+            meetup</a> in Melbourne, Australia.</li>
+        <li><b>2023/Jul:</b> Enabled drawing of Causal Diagrams without uploading data, by popular request.</li>
+        <li><b>2023/Jul:</b> <a href="/inference/article/counterfactual">Counterfactual outcomes</a> added.</li>
+        <li><b>2023/Jun:</b> <a href="/articles/">Help article database</a> and videos added.
+        </li>
+        <li><b>2023/Jun:</b> Began working with two client organisations to help them model causal effects in their
+          data.</li>
+        <li><b>2023/May:</b> Basic Exploratory Data Analysis (EDA) features added to Datasets.</li>
+        <li><b>2023/May:</b> Causal Wizard launched.</li>
+      </ul>
+
+      <h5 id="future-features">High priority new features / changes</h5>
+      <p>Features with <s>strikethrough</s> style have already been added.</p>
+      <ul>
+        <li><s><b>Predictive performance validation</b>: Allow a percentage of the data to be held out as validation or
+            test set, and measure predictive performance on it.</s></li>
+        <li><s><b>Feature-importance analysis</b>: Provides insights about the modelled behaviour of variables used in
+            regression models.</s></li>
+        <li><s><b>Automatic normalization / standardization</b>: Would allow better feature-importance interpretation
+            with
+            regression models.</s></li>
+        <li><s> Support for <b>categorical variables</b>, String data types, and ability to mark a Variable as
+            categorical
+            even if
+            content is numerical.</s></li>
+        <li><s><b>Positivity (overlap) test</b>: Check whether data satisfies criteria, possibly filter samples which
+            fail
+            the test.</s></li>
+        <li><s>Add support for additional estimation methods from <a href="https://github.com/py-why/EconML"
+            target="_blank" title="EconML library on Github">EconML</a>.</s></li>
+            <li><b>Augmented dataset download</b>: This is our top priority. We will enable you do download the fully preprocessed version of your data we use in the models, including individual model predictions, counterfactual predictions, and categorically encoded variables. This feature will provide greater transparency and utility, enabling you to analyse your data and results offline.</li>
+            <li><b>Enhanced Wizard features</b>: More sophisticated and comprehensive recommendation system.</li>
+        <li><b>How-to articles</b>: Examples of Causal Inference applied to various industry problems.</li>
+      </ul>
+
+      <h5 id="equality">Lower-priority features / changes</h5>
+      <p>Question: Do you prefer interactive plots on the result page, or rendered images? Tell us!</p>
+      <ul>
+        <li>Enhance page load speed (smaller JS files).</li>
+        <li>PDF downloads with selectable text rather than image.</li>
+        <li>Export Causal Diagrams in various machine-readable formats.</li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
+
+</div>
+</div>

@@ -1,0 +1,230 @@
+---
+layout: base.njk
+title: Tutorials
+---
+<div class="container">
+<div class="card-body">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Tutorials</h2>
+      <p>You might also want to check out the <a href="/features/" target="_blank"
+          title="App features">features of the Causal Wizard webapp</a>.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mt-3">
+      <h5>Watch the video!</h5>
+      <p>If you prefer, this short video will explain how to use the app.</p>
+      <div class="iframe-container">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/OWaRj_4RjXE"
+          title="An introduction to Causal Wizard" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="col-md-6 mt-3">
+      <h5>How to use the tutorials</h5>
+      <p>
+        <ul>
+          <li>
+            You can get a good idea what Causal Wizard can do for you by watching the video on this page.
+          </li>
+          <li>
+            If you're interested in <a target="_blank"
+              href="/articles/causal-diagram/">Causal Diagram</a>, the Pearlian approach
+            to Causality or using the
+            <a target="_blank" href="/articles/potential-outcomes/">Potential
+              Outcomes framework</a>, we strongly recommend completing <a
+              href="/articles/tutorial-1/" target="_blank">Tutorial 1</a> to learn the
+            basics of Causal Wizard. It only takes a couple of minutes.
+            Other tutorials assume you've mastered
+            the steps and concepts in Tutorial 1.
+          </li>
+          <li>
+            If your data is in <a target="_blank" href="/articles/panel-data/">Panel Data
+              format</a>, which tracks the characteristics of
+            many entities over time, you can use our <a target="_blank"
+              href="/articles/fixed-effects/">Fixed-Effects</a> and <a target="_blank"
+              href="/articles/did/">Difference-in-Differences</a>
+            models. Follow the <a href="/articles/tutorial-fixed-effects/"
+              target="_blank">Fixed Effects Tutorial</a>.
+          </li>
+          <li>
+            We recommend <a href="/articles/tutorial-4/" target="_blank">Tutorial 4</a>
+            to learn how to explore <a href="/articles/counterfactual/">Counterfactual
+              Outcomes</a> using CausalWizard.
+          </li>
+          <li>
+            The tutorials are reproductions
+            or derivations of case studies from textbooks, with data publicly available. The data for these tutorials
+            will automatically appear for all users as "Tutorial X: NAME" when you
+            create a new Study and must select a Dataset.
+          </li>
+          <li>
+            You may want to have the tutorial open in one window, while following along in another. The links below will
+            open in a new tab.
+          </li>
+        </ul>
+      </p>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-4">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Does tertiary education increase weekly wages, and if so, how much?</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                <a href="/articles/tutorial-1/" target="_blank">Tutorial 1</a>
+              </li>
+            </ul>
+            This tutorial walks through the key steps of using Causal Wizard in detail. This knowledge is assumed in
+            other
+            tutorials.<br><br>
+            This example is loosely based on the discussion in the <a
+              href="https://matheusfacure.github.io/python-causality-handbook/04-Graphical-Causal-Models.html#confounding-bias">Python
+              Causality Handbook, Chapter 4: Confounding Bias</a>, by Matheus Facure. It examines the effect of tertiary
+            education on wages. It demonstrates the importance of your domain knowledge, by
+            showing the change in effect
+            after adding a
+            <a href="/articles/common-cause/" target="_blank">common cause</a> to the <a
+              href="/articles/causal-diagram/" target="_blank">Causal Diagram</a>.
+
+          </p>
+        </div>
+      </div>
+
+    </div><!-- col -->
+
+    <div class="col-md-4">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Does headline-length affect Click-Through-Rate?</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                <a href="/articles/tutorial-2/" target="_blank">Tutorial 2</a>
+              </li>
+            </ul>
+            Before making changes to optimize websites or content to increase engagement, it's important to really
+            understand what is driving user behaviour. This tutorial is derived from an article by <a
+              href="https://medium.com/@akelleh/introducing-the-do-sampler-for-causal-inference-a3296ea9e78d"
+              target="_blank">Adam Kelleher</a>. Adam critically examined the data behind another blog article which
+            claimed
+            that a headline-length of 16-18 words maximized engagement, and noticed that what was actually happening was
+            that certain popular authors tended to pick longer headlines, yet long headlines didn't necessarily help
+            other
+            authors.<br>
+            <br>
+            Using Causal Inference we can repeat the experiment and examine the effect of headline-length on
+            Click-Through
+            Rate when controlling for Author.
+
+          </p>
+        </div>
+      </div>
+
+    </div><!-- col -->
+
+    <div class="col-md-4">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Fixed Effects models</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                <a href="/articles/tutorial-fixed-effects/" target="_blank">Fixed Effects
+                  Tutorial</a>
+              </li>
+            </ul>
+            This tutorial shows you how to replicate 3 results from the Fixed Effects and Difference-in-Differences
+            examples discussed in Matheus Facure's online book <a target="_blank"
+              href="https://matheusfacure.github.io/python-causality-handbook/"
+              title="Causal Inference book Matheus Facure">"Causal Inference for the Brave and True"</a>.
+            <br>
+            <br>
+            In particular, we focus on some of the results from <b>Chapter 13</b> (Difference-in-Differences),
+            <b>Chapter 14</b> (Panel Data and Fixed Effects) and <b>Chapter 24</b> (The Difference-in-Differences saga).
+            <br>
+            <br>
+            These methods require that your data is in <a target="_blank"
+              href="/articles/panel-data/">Panel Data
+              format</a>, which tracks the characteristics of
+            many entities over time.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- col -->
+
+  </div><!-- row -->
+
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Does quitting smoking cause weight gain?</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                <a href="/articles/tutorial-3/" target="_blank">Tutorial 3</a>
+              </li>
+            </ul>
+            This example is reproduced from Chapter 12 of <a
+              href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">Causal Inference: What If (the
+              book)</a>, by Miguel Hernan. This case study uses data from the National Health and Nutrition Examination
+            Survey Data I Epidemiologic Follow-up Study (NHEFS). It attempts to accurately quantify the effect of
+            smoking
+            cessation on weight gain. We can see that despite some simplifications to make the tutorial easy, we obtain
+            a
+            result close to the reported value.
+
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Exploring Counterfactual Outcomes</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                <a href="/articles/tutorial-4/" target="_blank">Tutorial 4</a>
+              </li>
+            </ul>
+
+            This worked example is based on a famous early Causality study, <a
+              href="https://www.jstor.org/stable/1806062" target="_blank"
+              title="Lalonde 1986 - Effect of training on wages.">"Evaluating the Econometric Evaluations of
+              Training Programs with Experimental Data" by RJ Lalonde (1986)</a>.
+
+            The study examines whether a training program increased participants' wages, given various
+            confounding factors. But in this instance we will use the tutorial to show how you can explore
+            <a href="/articles/counterfactual/">Counterfactual
+              Outcomes</a> using CausalWizard. This means we can answer questions about <b>what would happen if</b> the
+            Treatment
+            was applied to various subsets of participants - the Controls, the Treated, <i>all</i> participants, etc.
+            <br><br>
+            This tutorial also shows you how to change variable data-type from <b>Numerical</b> to <b>Categorical</b>,
+            and how to define Control and Treated sample groups given <b>Numerical</b> and <b>Categorical</b> Treatment
+            variables.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>

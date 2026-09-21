@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{{ title or "Causal Wizard" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="AI/ML Services, Australia" />
+  <meta name="description" content="
+Explore cause and effect in historical data; predict the effects of counterfactual
+scenarios and other interventions
+using the latest Causal Inference methods and machine learning tools,
+in an online web-app software.
+Causal Wizard provides graphical causal software toosl for causal ML risk analysis, asset management,
+product research, market research, user research, and industrial process optimization." />
+  <meta name="keywords" content="Causal inference, Causal software, causal diagram, machine learning, causal ML, online, app, webapp, tool, statistics,
+  case-control study, observational, natural experiment,
+  maintenance, AI, user research, product design, asset management, customer relationship management, churn, uplift,
+    A/B testing, risk assessment">
+
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700" type="text/css">
+
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/css/bootstrap-icons.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/css/driver.min.css" type="text/css" />
+  <link rel="stylesheet" href="/assets/css/project.css" type="text/css" />
+  {% if extraCss %}{% for href in extraCss %}
+  <link rel="stylesheet" href="{{ href }}" type="text/css" />
+  {% endfor %}{% endif %}
+
+  <!-- TODO: add an analytics snippet here once you've picked a provider (no server-side settings anymore) -->
+
+  <script src="/assets/js/jquery-3.6.0.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script src="/assets/js/driver.min.js"></script>
+  {% if extraScripts %}{% for src in extraScripts %}
+  <script src="{{ src }}"></script>
+  {% endfor %}{% endif %}
+</head>
+
+<body>
+  <div class="mb-1" id="highlight-nav">
+    <nav class="navbar navbar-expand-md navbar-light bg-light cw-titlebar" style="background-color: white !important;">
+      <div class="container-fluid">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img src="/assets/images/logo.png" style="height: 1.4em" />
+          CausalWizard</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/data/">Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/studies/">Studies</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                AI/ML Projects
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                <li>
+                  <a class="dropdown-item" href="/project/">Design a Project</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/project/list/">My Project ideas</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li><a class="dropdown-item" href="/project/1/">Problem definition</a></li>
+                <li><a class="dropdown-item" href="/project/2/">Value proposition</a></li>
+                <li><a class="dropdown-item" href="/project/3/">Build a team</a></li>
+                <li><a class="dropdown-item" href="/project/4/">Data</a></li>
+                <li><a class="dropdown-item" href="/project/5/">Solution design</a></li>
+                <li><a class="dropdown-item" href="/project/6/">Evaluation</a></li>
+                <li><a class="dropdown-item" href="/project/7/">Adoption</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Help
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/features/">Features</a></li>
+                <li><a class="dropdown-item" href="/tutorials/">Tutorials</a></li>
+                <li><a class="dropdown-item" href="/articles/">Articles</a></li>
+                <li>
+                  <a class="dropdown-item" href="/reading/">Learn more</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/about/">About (FAQ)</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/contact/">Contact</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/news/">News</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/security/">Data security</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/fees/">Fees</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/legal/">Legal</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/ethics/">Ethics</a>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  {{ content | safe }}
+</body>
+
+</html>

@@ -1,0 +1,478 @@
+---
+layout: base.njk
+title: FAQ
+---
+<div class="container">
+<div class="card-body">
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <ul>
+        <li><a href="#what-is-it">What is Causal Wizard?</a></li>
+        <li><a href="#how-help-me">How does it help me?</a></li>
+        <li><a href="#who-can-use">Who can use Causal Wizard?</a></li>
+        <li><a href="#how-it-works">How does it work?</a></li>
+        <li><a href="#how-much-data">How much data do I need?</a></li>
+        <li><a href="#data-format">What data format is needed?</a></li>
+        <li><a href="#samples-and-variables">Samples and Variables</a></li>
+        <li><a href="#datasets-and-studies">Datasets and Studies</a></li>
+        <li><a href="#treatment-and-interventions">Treatment &amp; Outcome: Defining an Intervention</a></li>
+        <li><a href="#causal-effect">Measuring Causal Effects</a></li>
+        <li><a href="#causal-diagram">How to draw a Causal Diagram</a></li>
+        <li><a href="#check">Checking your input</a></li>
+        <li><a href="#results">Understanding your results</a></li>
+        <li><a href="#download-results">Downloading and exporting results</a></li>
+        <li><a href="#learn-more">Where can I learn more?</a></li>
+        <li><a href="#causal-discovery">What DOESN'T it do?</a></li>
+        <li><a href="#ack">Acknowledgements</a></li>
+        <li><a href="#cite">Citing Causal Wizard</a></li>
+        <li><a href="#who-created">Who created Causal Wizard?</a></li>
+        <li><a href="#reg">Registration</a></li>
+        <li><a href="#future">Future plans and features</a></li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h5 id="what-is-it">What is Causal Wizard?</h5>
+      <p>Causal Wizard is an app to help you detect and measure <a target="_blank"
+          href="/articles/causal-effect/">causal effects</a> - that is, changes in a
+        <a target="_blank" href="/articles/variables/">variable</a> <i>
+          caused by</i> another variable.
+        Using a causal model, you can more accurately predict <a target="_blank"
+          href="/articles/counterfactual/">counterfactual</a> or hypothetical “what-if”
+        scenarios.
+
+        Most common statistical tools only measure <a target="_blank"
+          href="/articles/correlationcausality/">association, or correlation</a>. This
+        often gives
+        misleading results,
+        especially when trying to understand the effects of an <a target="_blank"
+          href="/articles/intervention/">intervention</a> (i.e. changing something).
+      </p>
+      <p>
+        For example,
+        eating ice-cream is correlated
+        with sunshine. But does eating ice-cream
+        cause the sun to shine, or does sunshine cause people to eat ice-cream? Or maybe both sunshine <i>and</i>
+        ice-cream
+        sales are both caused by another variable.
+      </p>
+      <p style="text-align: center;">
+        <img src="/assets/images/ice-cream.jpg" alt="Eating ice-cream on a hot day at the beach"
+          style="width:50%;" />
+      </p>
+      <p>
+        By adding your domain knowledge of the <i>direction</i> of causation, the correct results can be predicted. We
+        predict
+        more ice-cream sales on hot days, but also that increasing ice-cream consumption would
+        have
+        no effect on the weather.
+      </p>
+      <p style="text-align: center;">
+        <img src="/assets/images/sunshine_causal_diagram.png"
+          alt="Does sunshine cause ice-cream or does ice-cream cause sunshine. Arrows indicate the direction of causation."
+          style="width:80%;" />
+      </p>
+      <h5 id="how-help-me">How does it help me?</h5>
+      <p>
+        Causal Wizard:
+        <ul>
+          <li>Helps you to measure causal effects in your existing, historical data</li>
+          <li>Recognises and incorporates your subject-matter expertise into its Machine-Learning models</li>
+          <li>Allows you to more accurately predict the outcomes of <a target="_blank"
+              href="/articles/intervention/">interventions</a> (i.e. what happens if you
+            change
+            something)</li>
+          <li>Can confirm or refute the existence of a significant <a target="_blank"
+              href="/articles/causal-effect/">causal effect</a>, allowing you to exploit
+            this new
+            knowledge in further work</li>
+        </ul>
+        While the methods used in Causal Wizard are not new, they are usually only used by statisticians, economists and
+        data
+        scientists. Causal Wizard makes these methods available to everyone, guiding you step-by-step.
+        The app tries to avoid using maths terminology where possible, or explains it in context. You can find
+        explanations of everything in our help articles.
+      </p>
+      <h5 id="who-can-use">Who can use Causal Wizard?</h5>
+      <p>
+        You can use Causal Wizard. We find the tool is particularly useful for people who manage complex systems, such
+        as asset managers, product owners, researchers and manufacturers.
+        Asset managers might want to understand the causes of asset failures.
+        Product owners will want to understand what drives purchasing decisions. And researchers want to understand …
+        how the world works!
+
+        You don’t need advanced statistical knowledge, programming skills or other abilities - the Wizard will tell you
+        what to do, how to interpret your results and potential gotchas to watch out for.
+
+        <a href="/tutorials/">Try some of the tutorials to learn more.</a>
+      </p>
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 id="how-it-works">How does it work?</h5>
+          <p>
+            <b>1/4: Data</b><br>
+            Causal Wizard is basically a statistical tool, so it needs some data. Upload a CSV or Excel file.
+          </p>
+          <p>
+            <b>2/4: Domain Knowledge</b><br>
+            Use our Wizard tool to add your subject-matter expertise. You'll draw a diagram including all <a
+              target="_blank" href="/articles/causal-diagram/">causal
+              relationships</a> which might exist, and their direction.
+          </p>
+          <p>
+            <b>3/4: Validation &amp; Estimation</b><br>
+            Causal Wizard will check your diagram and data all make sense, and provide feedback. If the causal effect
+            can be
+            measured, choose a model and Causal Wizard will go away and calculate everything.
+          </p>
+          <p>
+            <b>4/4: Review &amp; download results</b><br>
+            You'll receive a detailed report describing:
+            <ul>
+              <li>The estimated causal effect and confidence interval</li>
+              <li>Some graphical plots depicting the effect in the context of your data</li>
+              <li>The results of a suite of <a target="_blank"
+                  href="/articles/validation/">robustness and validation checks</a></li>
+              <li>A list of assumptions made</li>
+              <li>Details of all modelling choices and parameters, including your provided causal diagram</li>
+            </ul>
+            <p style="text-align: center;">
+              <img src="/assets/images/result_plot.png" alt="Example causal inference result"
+                style="width:70%;" />
+            </p>
+          </p>
+        </div>
+      </div>
+
+      <h5 id="how-much-data">How much data do I need?</h5>
+      <p>
+        Many people ask “how much data is enough?”
+        The answer depends on the strength of the effects, and the complexity of the <a target="_blank"
+          href="/articles/variables/">interactions between the variables</a>.
+        Typically, users will provide at least hundreds of <a target="_blank"
+          href="/articles/sample/">samples</a>, and ideally thousands. Sometimes,
+        millions of
+        samples are used.
+      </p>
+      <h5 id="data-format">What data format is needed?</h5>
+      <p>
+        Causal Wizard accepts .CSV and Excel spreadsheet data files. <a href="/contact/">Contact us</a> if you
+        have data that doesn’t fit this
+        format - we can help transform it.
+      </p>
+      <h5 id="samples-and-variables">Samples and Variables</h5>
+      <p>
+        A <a target="_blank" href="/articles/sample/">Sample</a> is one individual
+        data point from the population being studied. For example, a sample might be
+        a
+        person, one subject in an experiment, an event, or an object, such as an infrastructure asset...
+        Each sample has a number of properties, which we call <a target="_blank"
+          href="/articles/variable/">Variables</a>. The
+        Variables are the properties of the Samples.
+      </p>
+      <p>
+        The data must be structured as a matrix - a big table with many rows, and columns.
+        We assume that each row contains the properties of a single individual sample.
+        So, one cell of the table contains the value of a specific variable, for that one sample.
+      </p>
+      <p style="text-align: center;">
+        <img src="/assets/images/dataset.png" alt="Structure of data files used in Causal Wizard"
+          style="width:100%;" />
+      </p>
+      <h5 id="datasets-and-studies">Datasets and Studies</h5>
+      <p>
+        Once you’ve uploaded your data, it becomes a <a target="_blank"
+          href="/articles/dataset/">Dataset</a>. You can share and reuse a Dataset
+        between multiple
+        Studies,
+        allowing you to see how different modelling affects the result. Using CausalWizard is a form of experimentation,
+        to
+        explore the data. Each experiment with a different causal diagram, research question or hypothesis is called a
+        <a target="_blank" href="/articles/study/">Study</a>.
+      </p>
+
+      <h5 id="treatment-and-interventions">Treatment &amp; Outcome: Defining an Intervention</h5>
+      <p>
+        A Causal Wizard Study explores the causal relationship between two variables: a <a target="_blank"
+          href="/articles/treatment/">Treatment</a> and an
+        <a target="_blank" href="/articles/outcome/">Outcome</a>. The wizard will attempt
+        to estimate the effect of changes in treatment on the outcome, using
+        your data.
+      </p>
+      <p>
+        More specifically, it models what happens when the treatment variable changes from a <a target="_blank"
+          href="/articles/control-and-treated/">Control value</a> to a <a target="_blank"
+          href="/articles/control-and-treated/">Treated value</a>. The
+        control value represents some sort of default scenario. The
+        treated value represents an <a target="_blank"
+          href="/articles/intervention/">intervention</a> (i.e. change) you could make.
+        For example, Control might mean "no treatment" and Treated might mean "take a new medicine". Or, "control"
+        value
+        might be some default quantity, and Treated value might be a different dose or rate. The treatment variable
+        doesn't have to be a numerical quantity - it can be <a target="_blank"
+          href="/articles/data-type/">categorical</a>, such as "Control=Policy A" and
+        "Treated=Policy
+        B".
+      </p>
+      <h5 id="causal-effect">Measuring Causal Effects</h5>
+      <p>
+        What is a <a target="_blank" href="/articles/causal-effect/">causal effect?</a>
+        There are a number of related quantities, but by default Causal Wizard estimates the
+        <a target="_blank" href="/articles/ate/">Average Treatment Effect (ATE)</a>.
+        This is the <i>average</i> change in outcome value caused by a change in treatment from the <b>control</b>
+        value to the <b>treated</b> value.
+      </p>
+      <p>
+        Once the effect is known, you can estimate <a target="_blank"
+          href="/articles/counterfactual/">counterfactual</a> or hypothetical scenarios
+        such as:
+        <ul>
+          <li>Counterfactual: If we had applied a different maintenance process to this equipment, what are the chances
+            it would have failed when it did?</li>
+          <li>Hypothetical: If we applied a X% discount to product Y, what effect do we expect to have on sales next
+            quarter?</li>
+        </ul>
+      </p>
+      <div class="card mb-2">
+        <div class="card-body">
+
+          <h5 id="causal-diagram">Drawing a Causal Diagram</h5>
+          <p>
+            Use the Wizard tool to draw a graph, called a <a target="_blank"
+              href="/articles/causal-diagram/">Causal Diagram</a>, which represents the
+            relationships you believe
+            exist between your variables.
+            A graph is a “network” of nodes and edges between nodes. Your diagram must have a <a target="_blank"
+              href="/articles/causal-diagram/">directed path</a> (following the
+            arrows) from the <a target="_blank" href="/articles/treatment/">Treatment</a>
+            to
+            the
+            <a target="_blank" href="/articles/outcome/">Outcome</a>, otherwise the
+            causal
+            effect is zero (which is a legitimate result).
+          </p>
+          <p style="text-align: center;">
+            <img src="/assets/images/churn-causal-diagram.png" alt="Example causal diagram."
+              style="width:100%;" />
+          </p>
+          <p>
+            You do not have to include all your <a target="_blank"
+              href="/articles/variables/">Variables</a> in the graph, only the ones you
+            think
+            have a causal relationship
+            to the ones you care about. You can also draw variables which you don’t have data for. These will be treated
+            as
+            <a target="_blank" href="/articles/observed-variable/">unobserved
+              variables</a>.
+          </p>
+          <p>
+            Swap between drawing nodes and edges via the toggle buttons:
+          </p>
+          <p style="text-align: center;">
+            <img src="/assets/images/graph_drawing_controls.png" alt="Example causal diagram."
+              style="width:70%;" />
+          </p>
+          <p>
+            In <b>edit nodes</b> mode:
+            <ul>
+              <li>Click anywhere to add a Node. A dialog will pop up. Choose the relevant variable from the data, or
+                choose
+                "Unobserved node".</li>
+              <li>Press and drag on an existing Node to move it around.</li>
+            </ul>
+            In <b>draw edges</b> mode:
+            <ul>
+              <li>Click and drag from one node to another to add an edge between them.</li>
+              <li>Click an existing edge to delete it.</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+
+      <h5 id="check">Checking your input</h5>
+      <p>
+        You can press the big green CHECK button at any time. Causal Wizard will analyse your Study and report any
+        issues. If the Study is fully defined, it will attempt to Identify the <a target="_blank"
+          href="/articles/estimand/">causal Estimand</a> (see figure below).
+
+        If this is not possible, Causal Wizard will tell you. This means the causal effect you're interested in cannot
+        be estimated given the system described.
+        However, you can adjust your domain knowledge to simplify it and try again. You should note these
+        simplifications as additional assumptions. Keep in mind that the validity of the result is dependent on the
+        validity of the domain knowledge you provide and depends on these assumptions.
+
+      </p>
+      <p style="text-align: center;">
+        <img src="/assets/images/process.png" alt="The Causal Inference process with Causal Wizard"
+          style="width:100%;" />
+      </p>
+
+      <h5 id="results">Understanding your results</h5>
+      <p>
+        After successfully passing the CHECK, the <b>Calculate</b> button will become available. Click Calculate and the
+        Wizard will do its magic,
+        by which we mean it will produce a <a target="_blank"
+          href="/articles/estimate/">statistical estimate</a> of the causal effect of the
+        <a target="_blank" href="/articles/treatment/">Treatment variable</a> on
+        the
+        <a target="_blank" href="/articles/outcome/">Outcome variable</a>, given the data
+        and graph provided.
+        The wizard will also attempt to refute the estimate provided, using several techniques. It will measure the
+        stability of the answer on different subsets of your data, and provide a <a target="_blank"
+          href="/articles/confidence-interval/">confidence interval</a> around the
+        estimated effect.
+        This helps to you to understand how confident you can be in the answer, and what uncertainty remains.
+      </p>
+      <p>
+        You will receive a report describing:
+        <ul>
+          <li>The methodology applied, including identified <a target="_blank"
+              href="/articles/estimand/">Estimand</a></li>
+          <li>The data used, including variables, counts of samples in both control and treated cohorts</li>
+          <li>Hypothesis: <a target="_blank" href="/articles/treatment/">Treatment
+              variable</a> and
+            <a target="_blank" href="/articles/outcome/">Outcome variables</a></li>
+          <li><a target="_blank" href="/articles/causal-diagram/">Causal Diagram</a></li>
+          <li>Core results - estimated <a target="_blank"
+              href="/articles/causal-effect/">causal effect</a>, confidence interval,
+            p-value</li>
+          <li><a target="_blank" href="/articles/validation/">Validation results</a> -
+            evaluation given random common cause, placebo treatment, etc.</li>
+          <li>Model characteristics</li>
+          <li>Explicit and implied assumptions</li>
+        </ul>
+      </p>
+      <p>
+        The best way to use Causal Wizard is as a tool to help you understand your data and the system it represents.
+        We suggest calculating causal effects several times with slightly different graphs and methods to see how the
+        estimated effect changes.
+      </p>
+      <h5 id="download-results">Downloading and exporting results</h5>
+      <p>
+        There's a big DOWNLOAD button in the results page, which produces a PDF file containing all the results. The
+        watermark is removed for
+        paid accounts.
+      </p>
+
+      <h5 id="learn-more">Where can I learn more about Causal Inference?</h5>
+      <p>
+        You can find out about many of the core concepts and ideas in our <a target="_blank"
+          href="/articles/">Help articles</a>. They
+        also explain some maths and stats
+        terminology we can’t avoid using.
+        We try to make Causal Wizard easy to use, but we don’t want to hide important words you might need later if you
+        want to discuss your results with a statistician or data scientist.
+      </p>
+      <p>
+        You don’t need to read anything to start using Causal Wizard, but if you want to learn more about how it works
+        and how to interpret your results, we maintain a list of <a target="_blank"
+          href="/reading/">recommended websites, papers, articles and courses</a>.
+      </p>
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 id="causal-discovery">What DOESN'T it do?</h5>
+          <p>
+            We have carefully avoided two significant, related fields: Causal Discovery and Causal Representation
+            Learning.
+            <b>Causal Discovery</b> aims to use Machine Learning to <i>discover</i> the Causal Diagram of a system,
+            whereas
+            Causal
+            Wizard
+            requires you to <i>provide</i> the Causal Diagram.
+          </p>
+          <p>
+            <b>Causal representation learning</b> aims to infer or detect causal variables and their relations
+            from low
+            level perceptual data such as images, video or other high-dimensional data.
+          </p>
+          <p>
+            Causal Wizard can't do these things for you. It requires <b>your</b> expert knowledge about a system. It's
+            not
+            because these topics aren't important - they are. But different tools and techniques are needed for each
+            problem, which means a simple, friendly web app isn't possible.
+          </p>
+        </div>
+      </div>
+
+      <h5 id="ack">Acknowledgements</h5>
+      <p>
+        This service depends on several Open-Source libraries from the Python Data-Science and Machine Learning
+        ecosystem, most notably:
+      </p>
+      <table class="table" style="width:100%;">
+        <tbody>
+          <tr>
+            <td style="width:20%;"><a href="https://www.python.org/" target="_blank"><img
+                  src="/assets/images/python-logo.png" style="width: 100%;" /></a>
+            </td>
+            <td style="width:20%;"><a href="https://numpy.org/" target="_blank"><img
+                  src="/assets/images/numpy-logo.png" style="width: 100%;" /></a></td>
+            <td style="width:20%;"><a href="https://pandas.pydata.org/" target="_blank"><img
+                  src="/assets/images/pandas-logo.svg" style="width: 100%;"
+                  style="max-width: 100%; max-height: 100%;" /></a></td>
+            <td style="width:20%;"><a href="https://www.pywhy.org/dowhy/v0.9.1/" target="_blank"><img
+                  src="/assets/images/dowhy-logo.png" style="width: 100%;" /></a></td>
+            <td style="width:20%;"><a href="https://www.djangoproject.com/" target="_blank"><img
+                  src="/assets/images/django-logo.png" style="width: 100%;" /></a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5 id="cite">How to cite Causal Wizard</h5>
+      <p>
+        If you use Causal Wizard in your research, we would appreciate a citation. We recommend the following BibTeX
+        entry:
+      </p>
+      <pre>
+@misc{CausalWizard,
+  title = {CausalWizard app},
+  howpublished = {\url{https://causalwizard.app}},
+  note = {Accessed: 2023-11-01}
+}
+      </pre>
+      <h5 id="who-created">Who created Causal Wizard?</h5>
+      <p>
+        Causal Wizard was created, and is maintained by, a small group of Data Scientists with backgrounds in Machine
+        Learning who got fed up telling clients that statistics couldn't tell them about cause and effect.
+        We were amazed there aren’t better tools to help people use Causal Inference in their work, given it’s so
+        important!
+
+        We believe causal inference is a crucial statistical tool that will change the way people reason about data,
+        particularly to understand cause and effect rather than just correlation or association between variables.
+
+        You don’t need to trust us, though. Everything Causal Wizard does for you is open and transparent using
+        peer-reviewed and published methods, implemented using Open-Source Python software tools.
+      </p>
+      <h5 id="reg">Registration</h5>
+      <p>
+        There's no registration or account needed. Your data stays on your own device &mdash; see
+        <a href="/security/">Privacy, security &amp; data sovereignty</a> for details.
+      </p>
+      <h5 id="future">Future plans and features</h5>
+      <p>
+        We have an extensive roadmap of enhancements we want to make, including more powerful models, exploratory data
+        analysis, more sophisticated
+        advice and feedback on causal diagrams and additional analysis of results.
+      </p>
+      <p>
+        <a href="/contact/">Contact us</a> if there’s a feature you need, or a bug that needs
+        fixing,
+        or
+        if
+        something is confusing or somehow
+        not right.
+      </p>
+
+    </div>
+  </div>
+
+</div>
+</div>

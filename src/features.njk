@@ -1,0 +1,311 @@
+---
+layout: base.njk
+title: Causal Inference app - Features
+---
+<div class="container">
+<div class="card-body">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Features</h2>
+      Causal Wizard has a wide range of features to help you <b>explore causal effects in your data</b>.
+      This will enable you to draw causal conclusions from historical, <a target="_blank"
+        href="/articles/observational-data/">observational data</a>, and <b>predict the
+        results of
+        interventions</b> (changes to the system).
+      The features are designed to help you understand and gain confidence in your results.
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Exploratory data Analysis</h5>
+          <p class="card-text">
+            It's always important to look closely at your data and it also helps to be able to quickly check the
+            contents of particular columns (variables) when drawing your <a target="_blank"
+              href="/articles/causal-diagram/">Causal Diagram</a>. Causal Wizard provides
+            <b>tabular</b> and <b>graphical</b> views of your data
+            file.
+            <br><br>
+            The table view allows <b>sorting</b> and <b>filtering</b> to find particular values or ranges.
+            Graphical views display selected variables as <b>histograms</b> and a <b>scatter plot</b> allows you to
+            visualise the
+            relationship between pairs of variables.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Tabular data views</small></p>
+      <img src="/assets/images/features-data-table.png" class="" style="width:100%;" />
+      <p><small>Univariate data plot - histogram</small></p>
+      <img src="/assets/images/features-univariate.png" class="" style="width:100%;" />
+      <p><small>Bivariate data view - scatter plot</small></p>
+      <img src="/assets/images/features-bivariate.png" class="" style="width:100%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Choose from a range of popular Causality methods</h5>
+          <p class="card-text">
+            CausalWizard offers you several popular Causal Inference techniques to choose from.
+            <br>
+            <br>
+            If your data is in <a target="_blank" href="/articles/panel-data/">Panel Data
+              format</a>, which tracks the characteristics of
+            many entities over time, you can use our <a target="_blank"
+              href="/articles/fixed-effects/">Fixed-Effects</a> and <a target="_blank"
+              href="/articles/did/">Difference-in-Differences</a>
+            models.
+            <br>
+            <br>
+            You can also use our more powerful and general-purpose <a target="_blank"
+              href="/articles/causal-diagram/">Causal Diagram</a> &amp;
+            <a target="_blank" href="/articles/potential-outcomes/">Potential
+              Outcomes</a> models to estimate causal effects on many types of data.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <img src="/assets/images/example_outcome_over_time_by_group.png" class="" style="width:100%;"
+        title="Fixed-effects model outcome over time by entity group." />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Modelling the system</h5>
+          <p class="card-text">
+            Capturing your domain knowledge in the form of a <a target="_blank"
+              href="/articles/causal-diagram/">Causal Diagram</a> is a key part of Causal
+            Inference and one of the things that enables estimation of causal effects rather than just association or
+            correlation between variables,
+            which any predictive model could provide.<br>
+            <br>
+            Our Causal Diagram editor allows you to draw a Directed Acyclic Graph (DAG) using all the variables
+            (columns) in your data file.
+            However, if you prefer not to upload any data, you can just draw the DAG and label the variables yourself.
+            <br>
+            <br>
+            Causal Wizard also provides tools to define your Outcome variable and <a target="_blank"
+              href="/articles/treatment/"><b>treatment groups</b></a> either by
+            thresholding a numerical variable or with specific values
+            (categorical variables).
+            Together, these configuration options define the experiment and effect you wish to explore.
+            <br>
+            <br>
+            After drawing the diagram, Causal Wizard will <a target="_blank"
+              href="/articles/identification/"><b>analyse it for you</b></a> to
+            determine whether a causal effect can
+            be measured,
+            and the methods which are applicable to the system as described. The role of each variable in the analysis
+            will be illustrated; Causal Wizard will show you which variables you should <b>include</b> and which
+            variables you must <b>exclude</b> to obtain an unbiased estimate of the causal effect. If you have uploaded
+            data, Causal Wizard
+            will also offer to apply the selected method for you.
+
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Causal Diagram (DAG) editor</small></p>
+      <img src="/assets/images/features-causal-diagram-dag-editor.png" class="" style="width:100%;" />
+      <p><small>Treatment groups identification widget</small></p>
+      <img src="/assets/images/features-treatment-groups.png" class="" style="width:50%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Exploring outcomes</h5>
+          <p class="card-text">
+            If you have provided data, Causal Wizard can perform a causal effect estimation and analysis for you.
+            The results will include key <b>findings</b>, <b>assumptions</b> and a description of the modelling
+            performed.
+            <br>
+            <br>
+            The app will also provide graphical plots depicting the causal effect on the outcome,
+            broken down by treatment group (treated, or control). The exact plots shown depend whether your outcome is
+            numerical or categorical.<br>
+            <br>
+            A key benefit of causal analysis is the ability to accurately predict <a target="_blank"
+              href="/articles/counterfactual/"><b>counterfactual outcomes</b></a>.
+            When suitable analysis methods are provided, Causal Wizard will give you a table listing various
+            counterfactual
+            outcomes for different sub-populations and treatment variable status (treated or control).
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Outcome distribution plot</small></p>
+      <img src="/assets/images/features-outcome-distribution.png" class="" style="width:100%;" />
+      <p><small>Counterfactual outcomes table</small></p>
+      <img src="/assets/images/features-counterfactual-outcomes.png" class="" style="width:100%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Understanding model behaviour</h5>
+          <p class="card-text">
+            Stakeholders often want to confirm that the model uses covariates (input features) as expected,
+            which gives confidence that the system is being modelled correctly. The <b>feature-importance plot</b> shows
+            the
+            sign and magnitude of regression coefficients, which indicate the direction and contribution of
+            each covariate (and the treatment).
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Feature importance plot</small></p>
+      <img src="/assets/images/features-feature-importance.png" class="" style="width:100%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Refutation tests</h5>
+          <p class="card-text">
+            The app uses a set of <a target="_blank"
+              href="/articles/refutation/"><b>statistical tests</b></a> from the
+            DoWhy module to estimate the statistical significance of
+            results
+            and whether they are robust to challenges such as randomized outcomes, a placebo treatment
+            or addition of a random, previously unobserved confounder.
+            <br>
+            <br>
+            Passing these tests provides additional confidence that the estimated effect is significant and robust.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Refutation test results</small></p>
+      <img src="/assets/images/features-refutation-tests.png" class="" style="width:100%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Understanding your results</h5>
+          <p class="card-text">
+            Many causal inference techniques are based on the concept of <a target="_blank"
+              href="/articles/propensity-scores/"><b>Propensity scores</b></a>.
+            These methods also enable us to understand the ways in which the observed population differs between treated
+            and control groups, which is a primary cause of bias in observational studies.
+            <br>
+            <br>
+            The <b>propensity distribution plot</b> shows these differences between groups, allowing you to verify that
+            this bias is likely to be manageable after appropriate weighting, matching or sampling.
+            <br>
+            <br>
+            The <a target="_blank" href="/articles/covariate-balance/"><b>covariate
+                balance plot</b></a> (also known as a Love plot) shows the differences between treatment groups
+            before and after weighting by propensity, confirming to what extent these differences have been controlled.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Propensity score distribution plot</small></p>
+      <img src="/assets/images/features-propensity-score-distribution.png" class="" style="width:100%;" />
+      <p><small>Covariate balance plot</small></p>
+      <img src="/assets/images/features-covariate-balance-plot.png" class="" style="width:100%;" />
+    </div>
+  </div>
+</div><!-- card body -->
+
+
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 mt-3">
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">Validating model accuracy</h5>
+          <p class="card-text">
+            In Machine Learning, it is common to validate model performance on a set of samples not available during
+            model training or fitting. This allow us to estimate how well the model <a target="_blank"
+              href="/articles/validation/"><b>generalizes</b></a> to unseen data.
+            <br>
+            <br>
+            Causal Wizard keeps a user-defined percentage or specific rows of your data for this type of validation.
+            The results are displayed in a range of plots or tables, depending whether your outcome variable is
+            categorical or numerical.
+            <br>
+            <br>
+            For numerical outcomes, we show a scatter plot of predicted vs actual outcomes for individual samples
+            coloured by treatment group. We report key predictive metrics such as <b>r-squared</b> and
+            <b>root-mean-square error</b>.
+            <br>
+            <br>
+            For categorical outcomes, we provide a <b>confusion matrix</b> listing all predicted classification outcomes
+            and summary metrics including <b>Accuracy</b>, <b>F1-score</b>, <b>Precision</b> and <b>Recall</b>.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6 mt-3">
+      <p><small>Actual vs predicted generalization performance plot</small></p>
+      <img src="/assets/images/features-scatter-plot.png" class="" style="width:100%;" />
+      <p><small>Generalization performance metrics</small></p>
+      <img src="/assets/images/features-generalization-performance-r2.png" class="" style="width:100%;" />
+      <p><small>Categorical generalization performance - confusion matrix</small></p>
+      <img src="/assets/images/features-confusion-matrix.png" class="" style="width:100%;" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mt-3">
+      <p>Need a new feature? <a href="/contact/">Tell us about it!</a></p>
+    </div>
+  </div>
+
+</div><!-- card body -->
+</div>
