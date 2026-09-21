@@ -149,7 +149,9 @@ handling.
   export pipeline in `result.js`). There are no paid accounts anymore, so
   when this export functionality gets ported (if it's even still needed —
   results now live in notebooks, not the browser) don't carry the
-  watermarking logic or `watermark.png` over at all.
+  watermarking logic over at all. `watermark.png` has already been removed
+  from `src/assets/images` — if the export pipeline gets ported, don't
+  re-add it.
 
 ## Risks / things to watch
 
