@@ -241,12 +241,124 @@ hung on "Loading dataset..." with no console error, since the browser's
 module loader just refused the entire graph. Root-caused via
 `read_network_requests` (a 503 on the wrong path), not the console.
 
-**8.4 — Migrate wizard / causal diagram editor**
-Port `graph.js` (Cytoscape diagram), `wizard.js`, `treatment.js`,
-`estimand.js`; add the in-browser identification/model-compatibility logic;
-replace "Calculate" with "Download study config JSON."
-*Deliverable*: full wizard flow works end-to-end client-side and produces a
-config JSON in the schema the notebooks will consume.
+**8.4 — Migrate wizard / causal diagram editor** ✅ done
+Renamed "the wizard" to **Studies** throughout (nav already said Studies).
+Both old methods in scope (CD+PO and PD+FE, by request — the old site
+roughly doubles its validation matrix for this, same here). New code in
+`src/assets/js/studies/`:
+
+- **`db.js`**: `StudyStore`, IndexedDB. A study is `{datasetId, graph,
+  question}`, matching the old `Study` model's shape. Storage is now
+  unified: added `src/assets/js/db.js` as a single shared IndexedDB
+  connection (single DB, single version, one `onupgradeneeded`) that both
+  `datasets/db.js` and `studies/db.js` open — two independent
+  `indexedDB.open()` calls against the same database name would have been
+  a real version-conflict bug waiting to happen.
+- **`graph.js`**: `StudyGraph`, a from-scratch Cytoscape wrapper (same
+  vendored library as the old site) - modern class, no jQuery, no global
+  DOM event bus, modal concerns left to the page controller. Node
+  add/edit/delete, edge add/delete via the vendored edgehandles plugin,
+  node-role CSS classes (treatment/outcome/backdoor-adjusted/IV/frontdoor/
+  mediator/unobserved) ported directly from the old site's styling.
+  Serializes to `{nodes, edges}` keyed by Cytoscape's own ids, plus a
+  `toDagShape()` that re-keys by variable name (column name, or `u<n>`/
+  `x<n>` for unobserved/user-defined) for the identification algorithms.
+- **`dag.js`**: the one genuinely new piece of engineering in this stage -
+  a from-scratch d-separation implementation (moralized-ancestral-graph
+  algorithm) plus backdoor-set search (smallest valid set, increasing-size
+  enumeration - a reasonable, well-justified choice, not claimed to be
+  bit-for-bit DoWhy's own "minimize IV count" heuristic), best-effort
+  frontdoor detection (Pearl's three conditions), and instrumental-variable
+  detection. Unobserved variables fully participate in the graph structure
+  but are excluded from candidate adjustment sets (can't condition on data
+  you don't have). **Verified against 13 hand-written textbook cases**
+  (classic confounding, collider (both a direct d-separation check and via
+  the backdoor-set search), chain-blocking, the canonical frontdoor
+  example, a valid-instrument example, cycle detection, directed-path
+  detection) via a standalone Node test script before it touched any UI -
+  all passing.
+- **`causal-methods.js`**: ported `causal_methods.py`'s
+  `get_compatible_models()` rule table (estimand type + outcome type/
+  cardinality → compatible estimators + warnings) essentially 1:1.
+- **`identify.js`**: orchestrates `dag.js` into the estimand list shape
+  (backdoor/frontdoor/IV, each with its compatible models attached).
+- **`validate.js`** + **`issue-messages.js`**: the "Check" pipeline,
+  ordered per the old site's `identification.py` `validate()` - outcome
+  usability → treatment-group sizes/balance → covariate cardinality →
+  method-specific identification (CD+PO graph identification, or PDFE
+  panel-structure checks: entity/time present, each entity×time
+  combination unique). Message vocabulary is conceptually the old ~25-key
+  set, adapted to this site's actual data model rather than force-fitted
+  to the old single-threshold/tag fields.
+- **`config-export.js`**: builds the downloadable JSON (schema version,
+  study name, dataset filename + expected column names/types, graph,
+  question, chosen identification/model) and triggers the browser download.
+
+**The treatment-group UI is the same `treatment-widget.js` built for stage
+8.3**, exactly as asked - one shared component, no duplicate logic between
+the dataset page and the wizard. The old "Define Intervention" naming is
+gone; both pages now just say "Treatment groups." A **new "design" concept**
+was added that the old naming didn't cleanly separate: for a numeric
+treatment, you now explicitly choose between splitting into Control/Treated
+groups (the widget) or using the value continuously (e.g. "effect per extra
+year of age") - shown only when it's actually a live choice (numeric
+treatment, CD+PO method). The embedded dataset "Data" tab from the old
+wizard is gone, replaced by an "Explore dataset ↗" link to the XDA page in
+a new tab, per your request.
+
+**The Colab handoff finding** (see the chat - not repeated in full here):
+a fully automatic data+config handoff into a live Colab runtime isn't
+achievable without either the user manually uploading in-session or the
+data leaving the browser via some hosted intermediary, which would break
+the core "your data never leaves your device" promise. Shipped instead:
+one-click "Open in Colab" (deep-links straight to the identification
+notebook), a config JSON download, and copy-paste-ready instructions.
+*The Colab/notebooks-repo links are wired up now to the path stage 8.6
+will commit to* (`notebooks/01-identification-and-estimation.ipynb` in
+this same repo) *but won't resolve until that stage actually creates it.*
+
+**Tested end-to-end in Chrome**: study creation → treatment/outcome
+selection (with a placeholder-option fix so neither dropdown silently
+looked pre-selected) → treatment widget (categorical smart-default and
+numeric range editor, including the grey full-distribution histogram from
+the 8.3 revision) → diagram nodes (add/edit, including the "unused
+variables only" picker and type restrictions) → diagram edges (drag-to-
+connect via the vendored edgehandles plugin didn't work under browser
+automation - verified the underlying wiring correctly instead, by
+injecting edges into a saved study and confirming they deserialize,
+render with correct arrows, and drive Check correctly) → Check for both
+CD+PO (found the right backdoor set on a classic confounding structure,
+correct node re-coloring) and PDFE (valid and invalid/duplicate-entity-
+time cases) → config download. Two real bugs caught in this pass:
+- `causal-methods.js` had its GLM-compatibility condition order wrong,
+  so GLM was silently excluded for *numeric* outcomes (the one case it's
+  unconditionally valid for) whenever outcome cardinality was `null` -
+  numeric outcomes don't have a "cardinality," so this hit every numeric
+  outcome. Caught by the Node integration test before it ever reached
+  the browser.
+- `cytoscape-edgehandles.js`'s UMD wrapper falls back to
+  `root["_"]["memoize"]` (global lodash) when no other module system is
+  detected - silently uninstalled the plugin since lodash wasn't vendored
+  on this page. Fixed by vendoring `lodash.min.js` and loading it before
+  the plugin. (Also hit Eleventy dev-server live-reload doing a DOM-patch-
+  without-reload after a rebuild, which left stale pre-fix JS running -
+  not a real bug, just a reminder that a hard reload is sometimes needed
+  when chasing a script-loading issue in dev mode.)
+- Also re-confirmed the stage-8.3-revision pattern (a widget's
+  smart-default spec must be explicitly captured via `getSpec()` after the
+  first render, since `onChange` only fires on user interaction) - missed
+  it again in the new treatment-groups integration on this page
+  specifically, same fix applied.
+
+*Known gaps, not done this pass*: no UI yet for the "advanced" question
+fields (effect type / target unit / train-test-split percentage) - they're
+in the config schema with sensible defaults, just not exposed as controls;
+node dragging/repositioning and the diagram's zoom in/out/legend/clear
+buttons were wired but not exhaustively re-verified after the edgehandles
+fix; frontdoor/IV detection is best-effort (documented in `dag.js`) rather
+than exhaustively validated against DoWhy's own edge cases - the notebook
+re-identifies everything independently regardless, per the original
+in-browser-identification decision.
 
 **8.5 — Remove user account features**
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser

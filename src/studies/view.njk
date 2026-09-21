@@ -1,0 +1,218 @@
+---
+layout: base.njk
+title: Study
+extraScripts:
+  - /assets/js/papaparse.min.js
+  - /assets/js/xlsx.full.min.js
+  - /assets/js/plotly-2.20.0.min.js
+  - /assets/js/lodash.min.js
+  - /assets/js/cytoscape.min.js
+  - /assets/js/cytoscape-edgehandles.js
+extraBodyScripts:
+  - /assets/js/study-view.js
+---
+<div class="container">
+<div class="card-body">
+
+  <p><a href="/studies/">&larr; Your Studies</a></p>
+
+  <div id="sv-loading" class="alert alert-info">Loading study&hellip;</div>
+  <div id="sv-error" class="alert alert-danger" hidden></div>
+
+  <div id="sv-content" hidden>
+    <div class="d-flex flex-row bd-highlight mb-3 align-items-center">
+      <div style="margin-right:1em;">
+        <h2 id="sv-name"></h2>
+      </div>
+      <div>
+        <a id="sv-dataset-link" href="#" target="_blank" class="btn btn-sm btn-outline-secondary">Explore dataset &#8599;</a>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label" for="sv-method">Method</label>
+        <select class="form-select" id="sv-method">
+          <option value="cd+po">Causal Diagram &amp; Potential Outcomes</option>
+          <option value="pd+fe">Panel Data with Fixed Effects</option>
+        </select>
+        <div class="form-text" id="sv-method-help"></div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="sv-treatment">Treatment</label>
+        <select class="form-select" id="sv-treatment"></select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="sv-outcome">Outcome</label>
+        <select class="form-select" id="sv-outcome"></select>
+      </div>
+    </div>
+
+    <div class="row mb-3" id="sv-design-row" hidden>
+      <div class="col-md-6">
+        <label class="form-label">How should the treatment be used?</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="sv-design" id="sv-design-grouped" value="grouped" checked>
+          <label class="form-check-label" for="sv-design-grouped">Split into Control / Treated groups</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="sv-design" id="sv-design-continuous" value="continuous">
+          <label class="form-check-label" for="sv-design-continuous">Use as a continuous value (e.g. effect per unit increase)</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="sv-treatment-widget-wrapper" hidden>
+      <h5>Treatment groups</h5>
+      <div id="sv-treatment-widget"></div>
+    </div>
+
+    <!-- Panel data fields -->
+    <div id="sv-panel-fields" hidden>
+      <hr class="my-4" />
+      <h5>Panel data structure</h5>
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label" for="sv-panel-entity">Entity column</label>
+          <select class="form-select" id="sv-panel-entity"></select>
+          <div class="form-text">The column identifying each unit tracked over time (e.g. customer ID).</div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="sv-panel-time">Time column</label>
+          <select class="form-select" id="sv-panel-time"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="sv-panel-covariates">Covariates</label>
+          <select class="form-select" id="sv-panel-covariates" multiple size="4"></select>
+          <div class="form-text">Ctrl/Cmd-click to select multiple.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <h5>Causal diagram</h5>
+    <p class="text-muted">
+      Click empty space to add a node. Click a node to edit it. Switch to
+      "Draw edges" and drag from one node to another to connect them; click
+      an edge to delete it. See
+      <a href="/articles/causal-diagram/" target="_blank">How to draw a causal diagram</a>.
+    </p>
+    <div class="btn-toolbar mb-2 gap-2" role="toolbar">
+      <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-nodes" checked>
+        <label class="btn btn-outline-primary btn-sm" for="sv-mode-nodes">Edit nodes</label>
+        <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-edges">
+        <label class="btn btn-outline-primary btn-sm" for="sv-mode-edges">Draw edges</label>
+      </div>
+      <div class="btn-group" role="group">
+        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-in">Zoom in</button>
+        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-out">Zoom out</button>
+        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-fit">Fit</button>
+      </div>
+      <button class="btn btn-outline-secondary btn-sm" id="sv-legend-toggle">Legend</button>
+      <button class="btn btn-outline-danger btn-sm" id="sv-graph-clear">Clear diagram</button>
+    </div>
+
+    <div id="sv-legend" class="card card-body mb-2" hidden>
+      <div class="d-flex flex-wrap gap-3">
+        <span><span class="badge" style="background:#bfd9ff;color:#05419c;">&nbsp;&nbsp;</span> Treatment</span>
+        <span><span class="badge" style="background:#d0fcdc;color:#184925;">&nbsp;&nbsp;</span> Outcome</span>
+        <span><span class="badge" style="background:#fab5a5;color:#f03a11;">&nbsp;&nbsp;</span> Adjusted for (backdoor)</span>
+        <span><span class="badge" style="background:#f2ccff;color:#cc33ff;">&nbsp;&nbsp;</span> Instrumental variable</span>
+        <span><span class="badge" style="background:#ffe6cc;color:#cc6600;">&nbsp;&nbsp;</span> Frontdoor mediator</span>
+        <span><span class="badge" style="background:#cccccc;color:#980000;">&nbsp;&nbsp;</span> Mediator</span>
+        <span>Dashed border = unobserved</span>
+      </div>
+    </div>
+
+    <div id="sv-graph" style="width:100%; height:450px; border:1px solid #ccc;"></div>
+
+    <hr class="my-4" />
+    <button class="btn btn-primary" id="sv-check-button">Check</button>
+    <span id="sv-check-status" class="ms-2"></span>
+
+    <div id="sv-export-section" class="mt-4" hidden>
+      <div class="card card-body">
+        <h5>Next: run the analysis</h5>
+        <p>
+          This site doesn't run the actual estimation &mdash; that happens in a
+          notebook, on your own computer or in Colab, using the same data you
+          already have. Nothing about your data changes; you're just moving
+          the last step somewhere with full Python statistics tooling.
+        </p>
+        <div class="mb-3">
+          <label class="form-label" for="sv-model-select">Model</label>
+          <select class="form-select w-auto d-inline-block" id="sv-model-select"></select>
+        </div>
+        <ol>
+          <li>Download your study configuration: <button class="btn btn-sm btn-success" id="sv-download-config">Download config JSON</button></li>
+          <li>Make sure you have your data file handy (the one you uploaded here).</li>
+          <li>
+            Open the notebooks &mdash;
+            <a id="sv-colab-link" href="#" target="_blank" class="btn btn-sm btn-outline-primary">Open in Colab &#8599;</a>
+            or clone the <a id="sv-notebooks-repo-link" href="#" target="_blank">notebooks repository</a> to run locally.
+          </li>
+          <li>When the notebook asks for your config file and data file, provide the two files above.</li>
+        </ol>
+        <p class="text-muted">
+          The notebook re-checks everything independently (it doesn't just
+          trust this page), so if anything here turns out to be a poor fit
+          for your data, it'll tell you there too.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- Node add/edit modal -->
+<div class="modal fade" id="node-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="node-modal-title">Add node</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label" for="node-modal-src">Variable</label>
+          <select class="form-select" id="node-modal-src"></select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="node-modal-name">Label</label>
+          <input type="text" class="form-control" id="node-modal-name" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="node-modal-type">Type</label>
+          <select class="form-select" id="node-modal-type">
+            <option value="numerical">Numerical</option>
+            <option value="categorical">Categorical</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger me-auto" id="node-modal-delete" hidden>Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="node-modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Check results modal -->
+<div class="modal fade" id="check-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Check results</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="check-modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,31 +1,30 @@
-// Dataset storage. Each record holds the raw uploaded file (as a Blob) plus
-// a small cached schema (computed once at upload time, and whenever the
-// file is replaced) so the dataset list and XDA page don't need to re-scan
-// the file just to show column names/counts.
+// Study storage. A study references a dataset (by id) plus the causal
+// diagram and "question" (treatment/outcome/design/method/etc), mirroring
+// the old site's Study model ({name, dataset, graph, question}) but with
+// no server and a richer treatment-group spec (see treatment-widget.js).
 //
 // Record shape:
 // {
-//   id: string (uuid),
-//   name: string,
-//   fileName: string,
-//   fileType: "csv" | "xlsx",
-//   fileBlob: Blob,
-//   createdAt: number (epoch ms),
-//   modifiedAt: number (epoch ms),
-//   schema: {
-//     rowCount: number,
-//     columns: [{
-//       name, inferredType, peekType, missingCount, uniqueCount,
-//       min, max, mean, std, topCategories: [{value, count}], isConstant, isNearUnique
-//     }],
-//   } | null,   // null until the background full scan finishes
+//   id, name, datasetId,
+//   graph: { nodes: [...], edges: [...], variableTypes: {} },  // Cytoscape-shaped
+//   question: {
+//     method: "cd+po" | "pd+fe",
+//     treatment, outcome,                 // column names
+//     treatmentDesign: "grouped" | "continuous",
+//     treatmentSpec,                       // treatment-widget.js spec, when grouped
+//     effect, targetUnit,
+//     splitTestPc,
+//     panelData: { entity, time, covariates: [] },  // pd+fe only
+//     modelKey,                            // chosen estimator, once Checked
+//   },
+//   createdAt, modifiedAt,
 // }
 
 import { openDb, requestToPromise, STORES } from "../db.js";
 
-const STORE = STORES.DATASETS;
+const STORE = STORES.STUDIES;
 
-export const DatasetStore = {
+export const StudyStore = {
   async list() {
     const db = await openDb();
     const tx = db.transaction(STORE, "readonly");

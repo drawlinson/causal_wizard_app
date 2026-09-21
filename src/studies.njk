@@ -1,0 +1,76 @@
+---
+layout: base.njk
+title: Studies
+extraBodyScripts:
+  - /assets/js/study-list.js
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <div style="margin-right:1em;">
+      <h2>Your Studies</h2>
+    </div>
+  </div>
+
+  <p>
+    A study is a causal diagram plus your treatment, outcome, and how you've
+    grouped them &mdash; see <a href="/articles/study/" target="_blank">what a Study is</a>
+    and <a href="/articles/causal-diagram/" target="_blank">how to draw a causal diagram</a>
+    for background.
+  </p>
+
+  <div id="studies-no-dataset" class="alert alert-warning" hidden>
+    You'll need a dataset before creating a study &mdash;
+    <a href="/data/">upload one first</a>.
+  </div>
+
+  <div class="card card-body mb-4" id="studies-create-card" hidden>
+    <h5>Create a new study</h5>
+    <form id="create-form">
+      <div class="mb-3">
+        <label for="study-name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="study-name" placeholder="e.g. Effect of onboarding on retention" />
+      </div>
+      <div class="mb-3">
+        <label for="study-dataset" class="form-label">Dataset</label>
+        <select class="form-select" id="study-dataset"></select>
+      </div>
+      <button type="submit" class="btn btn-success">Create</button>
+    </form>
+  </div>
+
+  <div id="study-list-empty" class="alert alert-secondary" hidden>
+    No studies yet &mdash; create one above to get started.
+  </div>
+
+  <table class="table" id="study-table" hidden>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Dataset</th>
+        <th>Modified</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="study-table-body"></tbody>
+  </table>
+</div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete study?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>This removes <strong id="delete-modal-name"></strong> from this browser. This can't be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
