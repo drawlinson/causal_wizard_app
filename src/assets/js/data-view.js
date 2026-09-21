@@ -1,7 +1,14 @@
 import { DatasetStore } from "./datasets/db.js";
 import { parseFileFull } from "./datasets/parse.js";
 import { sniffType, parseNumeric } from "./datasets/types.js";
-import { computeColumnStats, sampleRowIndices, groupBy } from "./datasets/stats.js";
+import {
+  computeColumnStats,
+  sampleRowIndices,
+  groupBy,
+  categoryCounts,
+  pearsonCorrelation,
+  standardizedMeanDiff,
+} from "./datasets/stats.js";
 import {
   plotHistogram,
   plotCategoryBar,
@@ -11,6 +18,7 @@ import {
   plotHeatmap,
   plotCorrelationHeatmap,
 } from "./datasets/charts.js";
+import { renderTreatmentWidget, classifierFromSpec } from "./treatment-widget.js";
 
 const TABLE_PAGE_SIZE = 50;
 const SAMPLE_SIZE = 1000;
@@ -30,6 +38,9 @@ const state = {
   schema: null,
   tablePage: 0,
   sampleIndices: null,
+  filteredIndices: null,
+  typeOverrides: {},
+  treatmentSpec: null,
 };
 
 function columnByName(name) {
@@ -73,6 +84,14 @@ function hideProgress() {
   document.getElementById("dv-loading").hidden = true;
 }
 
+async function persist() {
+  state.record.typeOverrides = state.typeOverrides;
+  state.record.treatmentSpec = state.treatmentSpec;
+  state.record.schema = state.schema;
+  state.record.modifiedAt = Date.now();
+  await DatasetStore.put(state.record);
+}
+
 async function main() {
   const id = new URLSearchParams(window.location.search).get("id");
   if (!id) {
@@ -102,26 +121,35 @@ async function main() {
   state.columnNames = parsed.columnNames;
 
   showProgress("Analyzing columns…");
-  state.schema = {
-    rowCount: parsed.rowCount,
-    columns: parsed.columnNames.map((name) => {
-      const sniff = sniffType(parsed.columns[name]);
-      const stats = computeColumnStats(parsed.columns[name], sniff.type);
-      return {
-        name,
-        type: sniff.type,
-        detectedType: sniff.type,
-        isConstant: sniff.isConstant,
-        isNearUnique: sniff.isNearUnique,
-        ...stats,
-      };
-    }),
-  };
+  const columns = parsed.columnNames.map((name) => {
+    const sniff = sniffType(parsed.columns[name]);
+    const stats = computeColumnStats(parsed.columns[name], sniff.type);
+    return {
+      name,
+      type: sniff.type,
+      detectedType: sniff.type,
+      isConstant: sniff.isConstant,
+      isNearUnique: sniff.isNearUnique,
+      ...stats,
+    };
+  });
+
+  // Re-apply any type overrides the user previously chose on this dataset -
+  // otherwise they'd silently revert every time the file gets re-scanned.
+  state.typeOverrides = record.typeOverrides || {};
+  for (const col of columns) {
+    const override = state.typeOverrides[col.name];
+    if (override && override !== col.type) {
+      col.type = override;
+      Object.assign(col, computeColumnStats(parsed.columns[col.name], override));
+    }
+  }
+  state.schema = { rowCount: parsed.rowCount, columns };
+  state.treatmentSpec = record.treatmentSpec || null;
 
   // Cache the refined schema so the list page / a future visit don't need
   // to re-scan the file just to show row/column counts.
-  record.schema = state.schema;
-  await DatasetStore.put(record);
+  await persist();
 
   hideProgress();
   document.getElementById("dv-summary").textContent =
@@ -137,7 +165,7 @@ function render() {
   renderTableTab();
   renderUnivariateTab();
   renderBivariateTab();
-  renderBalanceTab();
+  renderTreatmentTab();
   renderCorrelationsTab();
 }
 
@@ -148,12 +176,20 @@ function populateSelect(select, names, selected) {
   if (selected && names.includes(selected)) select.value = selected;
 }
 
+function populateSortSelect(select, names) {
+  const current = select.value;
+  select.innerHTML = `<option value="">(none)</option>` + names.map((n) => `<option value="${n}">${n}</option>`).join("");
+  if (names.includes(current)) select.value = current;
+}
+
 function renderColumnSelects() {
   const names = state.columnNames;
   populateSelect(document.getElementById("dv-uni-column"), names);
   populateSelect(document.getElementById("dv-biv-x"), names, names[0]);
   populateSelect(document.getElementById("dv-biv-y"), names, names[1]);
-  populateSelect(document.getElementById("dv-treatment-column"), names);
+  populateSelect(document.getElementById("dv-treatment-column"), names, state.treatmentSpec?.columnName);
+  populateSortSelect(document.getElementById("dv-table-sort1"), names);
+  populateSortSelect(document.getElementById("dv-table-sort2"), names);
 }
 
 // ---------- Columns / data-quality tab ----------
@@ -194,36 +230,99 @@ function renderColumnsTab() {
       const stats = computeColumnStats(state.columns[col.name], col.type);
       Object.assign(col, stats);
       state.sampleIndices = null; // numeric-column set may have changed
+      state.filteredIndices = null; // sort behaviour may depend on type
+      state.typeOverrides[col.name] = select.value;
+      persist();
       renderColumnsTab();
       renderUnivariateTab();
       renderBivariateTab();
+      renderTreatmentTab();
       renderCorrelationsTab();
+      renderTableTab();
     });
   });
 }
 
 // ---------- Table tab ----------
 
+function computeFilteredSortedIndices() {
+  const query = document.getElementById("dv-table-search").value.trim().toLowerCase();
+  const sort1 = document.getElementById("dv-table-sort1").value;
+  const sort1Dir = document.getElementById("dv-table-sort1-dir").value;
+  const sort2 = document.getElementById("dv-table-sort2").value;
+  const sort2Dir = document.getElementById("dv-table-sort2-dir").value;
+
+  let indices = [];
+  for (let i = 0; i < state.schema.rowCount; i++) {
+    if (query) {
+      let matched = false;
+      for (const name of state.columnNames) {
+        const v = state.columns[name][i];
+        if (v !== null && v !== undefined && String(v).toLowerCase().includes(query)) {
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) continue;
+    }
+    indices.push(i);
+  }
+
+  function compareBy(colName, dir, a, b) {
+    const col = columnByName(colName);
+    const va = state.columns[colName][a];
+    const vb = state.columns[colName][b];
+    let cmp;
+    if (col.type === "numeric") {
+      const na = parseNumeric(va);
+      const nb = parseNumeric(vb);
+      cmp = (na === null ? -Infinity : na) - (nb === null ? -Infinity : nb);
+    } else {
+      cmp = String(va ?? "").localeCompare(String(vb ?? ""));
+    }
+    return dir === "desc" ? -cmp : cmp;
+  }
+
+  if (sort1) {
+    indices.sort((a, b) => {
+      const c1 = compareBy(sort1, sort1Dir, a, b);
+      if (c1 !== 0) return c1;
+      return sort2 ? compareBy(sort2, sort2Dir, a, b) : 0;
+    });
+  }
+
+  return indices;
+}
+
+function updateFilteredIndices() {
+  state.filteredIndices = computeFilteredSortedIndices();
+  state.tablePage = 0;
+}
+
 function renderTableTab() {
+  if (!state.filteredIndices) updateFilteredIndices();
+  const indices = state.filteredIndices;
+
   const thead = document.querySelector("#dv-table thead");
   const tbody = document.querySelector("#dv-table tbody");
   thead.innerHTML = `<tr>${state.columnNames.map((n) => `<th>${n}</th>`).join("")}</tr>`;
 
   const start = state.tablePage * TABLE_PAGE_SIZE;
-  const end = Math.min(start + TABLE_PAGE_SIZE, state.schema.rowCount);
+  const end = Math.min(start + TABLE_PAGE_SIZE, indices.length);
   const rowsHtml = [];
-  for (let i = start; i < end; i++) {
+  for (let p = start; p < end; p++) {
+    const i = indices[p];
     rowsHtml.push(
       `<tr>${state.columnNames.map((n) => `<td>${state.columns[n][i] ?? ""}</td>`).join("")}</tr>`
     );
   }
-  tbody.innerHTML = rowsHtml.join("");
+  tbody.innerHTML = rowsHtml.join("") || `<tr><td colspan="${state.columnNames.length}">No matching rows.</td></tr>`;
 
-  const totalPages = Math.max(1, Math.ceil(state.schema.rowCount / TABLE_PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(indices.length / TABLE_PAGE_SIZE));
   document.getElementById("dv-table-page-label").textContent =
-    `Rows ${start + 1}-${end} of ${state.schema.rowCount.toLocaleString()} (page ${state.tablePage + 1} of ${totalPages})`;
+    `Rows ${indices.length ? start + 1 : 0}-${end} of ${indices.length.toLocaleString()} (page ${state.tablePage + 1} of ${totalPages})`;
   document.getElementById("dv-table-prev").disabled = state.tablePage === 0;
-  document.getElementById("dv-table-next").disabled = end >= state.schema.rowCount;
+  document.getElementById("dv-table-next").disabled = end >= indices.length;
 }
 
 document.getElementById("dv-table-prev").addEventListener("click", () => {
@@ -235,6 +334,21 @@ document.getElementById("dv-table-prev").addEventListener("click", () => {
 document.getElementById("dv-table-next").addEventListener("click", () => {
   state.tablePage += 1;
   renderTableTab();
+});
+
+let searchDebounceHandle = null;
+document.getElementById("dv-table-search").addEventListener("input", () => {
+  clearTimeout(searchDebounceHandle);
+  searchDebounceHandle = setTimeout(() => {
+    updateFilteredIndices();
+    renderTableTab();
+  }, 200);
+});
+["dv-table-sort1", "dv-table-sort1-dir", "dv-table-sort2", "dv-table-sort2-dir"].forEach((id) => {
+  document.getElementById(id).addEventListener("change", () => {
+    updateFilteredIndices();
+    renderTableTab();
+  });
 });
 
 // ---------- Univariate tab ----------
@@ -321,72 +435,128 @@ document.getElementById("dv-biv-x").addEventListener("change", renderBivariateTa
 document.getElementById("dv-biv-y").addEventListener("change", renderBivariateTab);
 document.getElementById("dv-biv-contour").addEventListener("change", renderBivariateTab);
 
-// ---------- Treatment balance + Covariates tabs ----------
+// ---------- Treatment tab (assignment widget + covariate balance) ----------
 
-function renderBalanceTab() {
+function renderTreatmentTab() {
   const name = document.getElementById("dv-treatment-column").value || state.columnNames[0];
   if (!name) return;
+  const col = columnByName(name);
   const values = state.columns[name];
-  const groups = groupBy(values, values, "categorical");
-  const total = groups.reduce((sum, g) => sum + g.count, 0);
+  const container = document.getElementById("dv-treatment-widget");
 
-  const tbody = document.querySelector("#dv-balance-table tbody");
-  tbody.innerHTML = groups
-    .map((g) => `<tr><td>${g.group}</td><td>${g.count}</td><td>${((g.count / total) * 100).toFixed(1)}%</td></tr>`)
-    .join("");
+  const initialSpec = state.treatmentSpec && state.treatmentSpec.columnName === name ? state.treatmentSpec.spec : null;
 
-  const warningEl = document.getElementById("dv-balance-warning");
-  const smallGroups = groups.filter((g) => g.count / total < 0.05);
-  if (groups.length < 2) {
-    warningEl.innerHTML = `<div class="alert alert-warning">Only one group found - this column doesn't vary, so it can't be used as a treatment.</div>`;
-  } else if (smallGroups.length > 0) {
-    warningEl.innerHTML = `<div class="alert alert-warning">${smallGroups.length} group(s) have fewer than 5% of samples (${smallGroups.map((g) => g.group).join(", ")}). This can violate the <a href="/articles/positivity/" target="_blank">positivity</a> assumption - estimates for small groups will be less reliable.</div>`;
-  } else {
-    warningEl.innerHTML = `<div class="alert alert-success">Group sizes look reasonably balanced.</div>`;
-  }
+  const widget = renderTreatmentWidget(container, {
+    columnType: col.type,
+    values,
+    sampleValues: sampledColumn(name),
+    topCategories: categoryCounts(values, 50),
+    initialSpec,
+    onChange: (spec) => {
+      state.treatmentSpec = { columnName: name, spec };
+      persist();
+      renderCovariatesTable(name, spec);
+    },
+  });
 
-  renderCovariatesTab(name);
+  state.treatmentSpec = { columnName: name, spec: widget.getSpec() };
+  persist();
+  renderCovariatesTable(name, widget.getSpec());
 }
 
-document.getElementById("dv-treatment-column").addEventListener("change", renderBalanceTab);
+document.getElementById("dv-treatment-column").addEventListener("change", renderTreatmentTab);
 
-function renderCovariatesTab(treatmentName) {
+function smdBadge(smd) {
+  if (smd === null) return "-";
+  const cls = Math.abs(smd) > 0.25 ? "text-danger fw-bold" : Math.abs(smd) > 0.1 ? "text-warning" : "";
+  return `<span class="${cls}">${smd.toFixed(2)}</span>`;
+}
+
+function renderCovariatesTable(treatmentName, spec) {
   const treatmentValues = state.columns[treatmentName];
-  const groupNames = [...new Set(treatmentValues.filter((v) => v !== null && String(v).trim() !== "").map(String))];
+  const classify = classifierFromSpec(spec);
+  // groupBy() skips null/empty labels, which conveniently drops "excluded"
+  // rows out of the balance comparison entirely.
+  const labels = treatmentValues.map((v) => {
+    const bucket = classify(v);
+    return bucket === "excluded" ? null : bucket;
+  });
 
   const others = state.columnNames.filter((n) => n !== treatmentName);
-  const headerHtml = `<thead><tr><th>Covariate</th>${groupNames.map((g) => `<th>${g}</th>`).join("")}</tr></thead>`;
+  const headerHtml = `<thead><tr><th>Covariate</th><th>Control</th><th>Treated</th><th>SMD</th></tr></thead>`;
   const rowsHtml = others
     .map((name) => {
       const col = columnByName(name);
-      const groups = groupBy(treatmentValues, state.columns[name], col.type);
-      const cellsHtml = groupNames
-        .map((g) => {
-          const stat = groups.find((s) => s.group === g);
-          if (!stat) return "<td>-</td>";
-          if (col.type === "numeric") {
-            return `<td>${stat.mean?.toFixed(2)} (${stat.std?.toFixed(2)})</td>`;
-          }
-          return `<td>${stat.topValue} (${(stat.topFraction * 100).toFixed(0)}%)</td>`;
-        })
-        .join("");
-      return `<tr><td>${name}</td>${cellsHtml}</tr>`;
+      const groups = groupBy(labels, state.columns[name], col.type);
+      const controlStat = groups.find((g) => g.group === "control");
+      const treatedStat = groups.find((g) => g.group === "treated");
+
+      if (col.type === "numeric") {
+        const smd =
+          controlStat?.mean != null && treatedStat?.mean != null
+            ? standardizedMeanDiff(treatedStat.mean, treatedStat.std, controlStat.mean, controlStat.std)
+            : null;
+        return `<tr>
+          <td>${name}</td>
+          <td>${controlStat ? `${controlStat.mean.toFixed(2)} &plusmn; ${controlStat.std.toFixed(2)}` : "-"}</td>
+          <td>${treatedStat ? `${treatedStat.mean.toFixed(2)} &plusmn; ${treatedStat.std.toFixed(2)}` : "-"}</td>
+          <td>${smdBadge(smd)}</td>
+        </tr>`;
+      }
+      return `<tr>
+        <td>${name}</td>
+        <td>${controlStat ? `${controlStat.topValue} (${(controlStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
+        <td>${treatedStat ? `${treatedStat.topValue} (${(treatedStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
+        <td>-</td>
+      </tr>`;
     })
     .join("");
 
-  document.getElementById("dv-covariates-table").innerHTML = headerHtml + `<tbody>${rowsHtml}</tbody>`;
+  document.getElementById("dv-covariates-table").innerHTML =
+    `<caption>Numeric covariates shown as mean &plusmn; SD; categorical as most common value (% of group).</caption>` +
+    headerHtml +
+    `<tbody>${rowsHtml}</tbody>`;
 }
 
 // ---------- Correlations tab ----------
 
 function renderCorrelationsTab() {
   const names = numericColumnNames();
+  const plotEl = document.getElementById("dv-corr-plot");
+  const tableEl = document.getElementById("dv-corr-table");
   if (names.length < 2) {
-    document.getElementById("dv-corr-plot").innerHTML =
-      "<p>Need at least two numeric columns to compute correlations.</p>";
+    plotEl.innerHTML = "<p>Need at least two numeric columns to compute correlations.</p>";
+    tableEl.innerHTML = "";
     return;
   }
+  plotEl.innerHTML = "";
   plotCorrelationHeatmap("dv-corr-plot", state.columns, names);
+
+  const parsed = {};
+  for (const name of names) parsed[name] = state.columns[name].map(parseNumeric);
+
+  const headerHtml = `<thead><tr><th></th>${names.map((n) => `<th>${n}</th>`).join("")}</tr></thead>`;
+  const rowsHtml = names
+    .map((rowName) => {
+      const cells = names
+        .map((colName) => {
+          if (rowName === colName) return `<td>&mdash;</td>`;
+          const a = [];
+          const b = [];
+          for (let i = 0; i < parsed[rowName].length; i++) {
+            if (parsed[rowName][i] !== null && parsed[colName][i] !== null) {
+              a.push(parsed[rowName][i]);
+              b.push(parsed[colName][i]);
+            }
+          }
+          const r = pearsonCorrelation(a, b);
+          return `<td>${r === null ? "-" : r.toFixed(2)}</td>`;
+        })
+        .join("");
+      return `<tr><th>${rowName}</th>${cells}</tr>`;
+    })
+    .join("");
+  tableEl.innerHTML = headerHtml + `<tbody>${rowsHtml}</tbody>`;
 }
 
 main();

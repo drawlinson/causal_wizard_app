@@ -197,6 +197,50 @@ duplicate-row flags were proposed but not confirmed in scope, so deferred;
 datetime columns are treated as categorical for bivariate plot-type
 selection (no time-series-aware plotting yet).
 
+**8.3 revision — treatment widget + review fixes** ✅ done
+A round of hands-on testing turned up real design problems, not just
+polish:
+- **New `src/assets/js/treatment-widget.js`**: a standalone, reusable
+  treated/control/excluded assignment component, deliberately factored out
+  of the dataset page because the old site's wizard has its own version of
+  this (`treatment.js`) and we want exactly one implementation shared by
+  both. Numeric columns get optionally-half-open range editors per group
+  (e.g. age &ge; 35 &rarr; treated) instead of one global threshold like
+  the old site; categorical/boolean/text columns get a per-value
+  Control/Treated/Exclude assignment with an "everything else" wildcard per
+  group (same concept as the old site's tag UI). Smart defaults: a 2-valued
+  boolean column auto-assigns truthy &rarr; treated; any 2-valued column
+  auto-assigns by frequency. Replaces the old Treatment Balance tab, which
+  was unusable for a numeric column (it rendered one table row per distinct
+  numeric value).
+- **Treatment Balance and Covariates merged into one "Treatment" tab** -
+  they shared state (the treatment column) across two separate tabs before,
+  which was confusing and, worse, meant the covariate table didn't actually
+  reflect the Control/Treated split you'd defined (it grouped by raw
+  column value, not by the assignment). Now the covariate table is driven
+  directly by the widget's classifier function.
+- **Covariate table**: added an SMD (standardized mean difference) column
+  for numeric covariates, colour-flagged past 0.1/0.25 - the standard
+  single-number imbalance signal, replacing the old vague "distribution"
+  claim that didn't match what was actually shown. Numeric cells now show
+  `mean ± SD` explicitly rather than a bare pair of numbers.
+- **Column type overrides now persist.** They were being recomputed from
+  scratch (and silently discarded) on every page load; `record.typeOverrides`
+  is now saved to IndexedDB and reapplied after each fresh full-scan.
+- **Correlations tab**: added the pairwise correlation table under the
+  heatmap - same numbers, easier to read exact values off.
+- **Table tab**: added a search box (substring match across all columns,
+  treated as text even for numeric columns) and two-level sort (primary +
+  secondary column, each with direction), replacing plain sequential
+  browsing.
+
+Caught one real bug while re-testing: `treatment-widget.js` imported
+`./types.js` instead of `./datasets/types.js` (it lives one directory up
+from the `datasets/` modules) - failed silently enough that the whole page
+hung on "Loading dataset..." with no console error, since the browser's
+module loader just refused the entire graph. Root-caused via
+`read_network_requests` (a 503 on the wrong path), not the console.
+
 **8.4 — Migrate wizard / causal diagram editor**
 Port `graph.js` (Cytoscape diagram), `wizard.js`, `treatment.js`,
 `estimand.js`; add the in-browser identification/model-compatibility logic;

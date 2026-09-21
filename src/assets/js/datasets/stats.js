@@ -55,6 +55,21 @@ export function computeColumnStats(values, type) {
   };
 }
 
+/** Full (not top-10-capped) frequency table, for UI that needs to list
+ * every distinct value - e.g. the treatment-assignment widget. */
+export function categoryCounts(values, limit = 50) {
+  const counts = new Map();
+  for (const v of values) {
+    if (v === null || v === undefined || String(v).trim() === "") continue;
+    const key = String(v).trim();
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([value, count]) => ({ value, count }));
+}
+
 /** Random sample of row indices, always including the argmin/argmax row for
  * every numeric column in `numericColumnNames` (mirrors the old site's
  * approach: extremes aren't lost to a small random sample). */
@@ -177,4 +192,13 @@ export function groupBy(treatmentValues, columnValues, columnType) {
     }
   }
   return result.sort((a, b) => b.count - a.count);
+}
+
+/** Standardized mean difference between two groups - the standard "Table 1"
+ * balance metric: (meanA - meanB) / pooled std dev. |SMD| > 0.1 is
+ * conventionally worth a look, > 0.25 a real imbalance concern. */
+export function standardizedMeanDiff(meanA, stdA, meanB, stdB) {
+  const pooled = Math.sqrt((stdA ** 2 + stdB ** 2) / 2);
+  if (pooled === 0) return null;
+  return (meanA - meanB) / pooled;
 }

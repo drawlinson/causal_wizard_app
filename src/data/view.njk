@@ -31,8 +31,7 @@ extraBodyScripts:
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-columns" type="button">Columns</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-univariate" type="button">Univariate</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-bivariate" type="button">Bivariate</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-balance" type="button">Treatment Balance</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-covariates" type="button">Covariates</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-treatment" type="button">Treatment</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-correlations" type="button">Correlations</button></li>
     </ul>
 
@@ -40,6 +39,26 @@ extraBodyScripts:
 
       <!-- Table -->
       <div class="tab-pane fade show active" id="tab-table" role="tabpanel">
+        <div class="row mb-3 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label" for="dv-table-search">Search / filter rows</label>
+            <input type="text" class="form-control" id="dv-table-search" placeholder="Matches any column, as text" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="dv-table-sort1">Sort by</label>
+            <div class="d-flex gap-1">
+              <select class="form-select" id="dv-table-sort1"><option value="">(none)</option></select>
+              <select class="form-select w-auto" id="dv-table-sort1-dir"><option value="asc">&uarr;</option><option value="desc">&darr;</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="dv-table-sort2">Then by</label>
+            <div class="d-flex gap-1">
+              <select class="form-select" id="dv-table-sort2"><option value="">(none)</option></select>
+              <select class="form-select w-auto" id="dv-table-sort2-dir"><option value="asc">&uarr;</option><option value="desc">&darr;</option></select>
+            </div>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table table-sm" id="dv-table"><thead></thead><tbody></tbody></table>
         </div>
@@ -126,43 +145,40 @@ extraBodyScripts:
         <div id="dv-biv-stats"></div>
       </div>
 
-      <!-- Treatment balance -->
-      <div class="tab-pane fade" id="tab-balance" role="tabpanel">
+      <!-- Treatment: assignment + balance + covariates, one shared widget -->
+      <div class="tab-pane fade" id="tab-treatment" role="tabpanel">
         <p>
           Pick the variable you're considering as a <b>treatment</b> (the
-          thing whose effect you want to measure). Causal estimates need
-          every group to have a reasonable number of samples &mdash; this is
-          the <a href="/articles/positivity/" target="_blank">positivity</a>
-          assumption. See also
-          <a href="/articles/class-imbalance/" target="_blank">Class imbalance</a>
-          and <a href="/articles/control-and-treated/" target="_blank">Control and treated groups</a>.
+          thing whose effect you want to measure) and map its values into
+          <b>Control</b> and <b>Treated</b> groups &mdash; for a numeric
+          column, as ranges (e.g. a threshold); for anything else, by
+          assigning each value to a group. Values matching neither are
+          excluded. See
+          <a href="/articles/control-and-treated/" target="_blank">Control and treated groups</a>
+          and <a href="/articles/positivity/" target="_blank">positivity</a>.
         </p>
         <div class="row mb-3">
           <div class="col-md-4">
-            <label class="form-label" for="dv-treatment-column">Treatment / grouping column</label>
+            <label class="form-label" for="dv-treatment-column">Treatment column</label>
             <select class="form-select" id="dv-treatment-column"></select>
           </div>
         </div>
-        <div id="dv-balance-warning"></div>
-        <div class="table-responsive">
-          <table class="table table-sm" id="dv-balance-table">
-            <thead><tr><th>Group</th><th>Count</th><th>% of total</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
+        <div id="dv-treatment-widget"></div>
 
-      <!-- Covariate balance -->
-      <div class="tab-pane fade" id="tab-covariates" role="tabpanel">
+        <hr class="my-4" />
+
+        <h5>Covariate balance</h5>
         <p>
-          For each other column, compare its distribution across your
-          treatment groups (chosen in the <b>Treatment Balance</b> tab).
-          Large differences here are a warning sign of
+          For each other column, compare its average value (numeric) or most
+          common value (categorical) between your Control and Treated
+          groups. Large differences are a warning sign of
           <a href="/articles/confounding/" target="_blank">confounding</a>
           &mdash; you may want that column in your causal diagram as a
-          common cause. See
-          <a href="/articles/covariate-balance/" target="_blank">Covariate balance</a>
-          for how to read this table.
+          common cause. The <b>SMD</b> (standardized mean difference)
+          column gives a single number for numeric covariates: as a rule of
+          thumb, above 0.1 is worth a look, above 0.25 is a real imbalance.
+          See <a href="/articles/covariate-balance/" target="_blank">Covariate balance</a>
+          for more.
         </p>
         <div class="table-responsive">
           <table class="table table-sm" id="dv-covariates-table"></table>
@@ -178,6 +194,9 @@ extraBodyScripts:
           <a href="/articles/correlationcausality/" target="_blank">correlation isn't causation</a>.
         </p>
         <div id="dv-corr-plot" style="height:500px;"></div>
+        <div class="table-responsive mt-3">
+          <table class="table table-sm" id="dv-corr-table"></table>
+        </div>
       </div>
 
     </div>
