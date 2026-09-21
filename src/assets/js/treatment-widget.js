@@ -93,31 +93,27 @@ export function summarize(values, spec) {
 
 function numericGroupHtml(prefix, label, group) {
   return `
-    <div class="mb-2">
-      <label class="form-label mb-1"><b>${label}</b></label>
-      <div class="d-flex align-items-center gap-1 flex-wrap">
-        <select class="form-select form-select-sm w-auto" data-role="${prefix}-minOp">
-          <option value=">=" ${group.minOp === ">=" ? "selected" : ""}>&ge;</option>
-          <option value=">" ${group.minOp === ">" ? "selected" : ""}>&gt;</option>
-        </select>
-        <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" data-role="${prefix}-min" value="${group.min ?? ""}" placeholder="no lower bound" />
-        <span>and</span>
-        <select class="form-select form-select-sm w-auto" data-role="${prefix}-maxOp">
-          <option value="<" ${group.maxOp === "<" ? "selected" : ""}>&lt;</option>
-          <option value="<=" ${group.maxOp === "<=" ? "selected" : ""}>&le;</option>
-        </select>
-        <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" data-role="${prefix}-max" value="${group.max ?? ""}" placeholder="no upper bound" />
-      </div>
+    <div class="d-flex align-items-center gap-1 flex-wrap mb-2">
+      <b style="display:inline-block; width:5em;">${label}</b>
+      <select class="form-select form-select-sm w-auto" data-role="${prefix}-minOp">
+        <option value=">=" ${group.minOp === ">=" ? "selected" : ""}>&ge;</option>
+        <option value=">" ${group.minOp === ">" ? "selected" : ""}>&gt;</option>
+      </select>
+      <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" data-role="${prefix}-min" value="${group.min ?? ""}" placeholder="no lower bound" />
+      <span>and</span>
+      <select class="form-select form-select-sm w-auto" data-role="${prefix}-maxOp">
+        <option value="<" ${group.maxOp === "<" ? "selected" : ""}>&lt;</option>
+        <option value="<=" ${group.maxOp === "<=" ? "selected" : ""}>&le;</option>
+      </select>
+      <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" data-role="${prefix}-max" value="${group.max ?? ""}" placeholder="no upper bound" />
     </div>`;
 }
 
 function renderNumericEditor(container, spec, onChange) {
   container.innerHTML = `
-    <div class="row">
-      <div class="col-md-6">${numericGroupHtml("control", "Control", spec.control)}</div>
-      <div class="col-md-6">${numericGroupHtml("treated", "Treated", spec.treated)}</div>
-    </div>
-    <p class="text-muted">Values matching neither range are excluded. Leave a group's bounds empty to disable it.</p>
+    ${numericGroupHtml("control", "Control", spec.control)}
+    ${numericGroupHtml("treated", "Treated", spec.treated)}
+    <p class="text-muted">Values matching neither range are excluded (shown in grey below). Leave a group's bounds empty to disable it.</p>
     <div id="tw-numeric-plot" style="height:300px;"></div>
     <div id="tw-summary"></div>`;
 
@@ -257,14 +253,20 @@ export function renderTreatmentWidget(container, opts) {
       const xs = sampleValues.map(parseNumeric).filter((v) => v !== null);
       const control = [];
       const treated = [];
+      const excluded = [];
       for (const v of xs) {
         const bucket = classify(v);
         if (bucket === "control") control.push(v);
         else if (bucket === "treated") treated.push(v);
+        else excluded.push(v);
       }
       Plotly.newPlot(
         "tw-numeric-plot",
         [
+          // Full/excluded distribution first and pale, so Control/Treated
+          // stand out on top of it - by default (no ranges set) this is
+          // the whole column, letting you see what you're picking from.
+          { x: excluded, name: "Excluded", type: "histogram", opacity: 0.5, marker: { color: "#c8c8c8" } },
           { x: control, name: "Control", type: "histogram", opacity: 0.7, marker: { color: "#3D85C6" } },
           { x: treated, name: "Treated", type: "histogram", opacity: 0.7, marker: { color: "#e03e2d" } },
         ],
