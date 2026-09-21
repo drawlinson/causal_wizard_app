@@ -1,0 +1,67 @@
+[
+  {
+    "id": "10",
+    "name": "Causal Effect",
+    "slug": "causal-effect"
+  },
+  {
+    "id": "6",
+    "name": "Causal Inference",
+    "slug": "causal-inference"
+  },
+  {
+    "id": "2",
+    "name": "Causal Wizard Concept",
+    "slug": "causal-wizard-concept"
+  },
+  {
+    "id": "4",
+    "name": "Data",
+    "slug": "data"
+  },
+  {
+    "id": "3",
+    "name": "Graph",
+    "slug": "graph"
+  },
+  {
+    "id": "11",
+    "name": "Independence",
+    "slug": "independence"
+  },
+  {
+    "id": "12",
+    "name": "Method",
+    "slug": "method"
+  },
+  {
+    "id": "5",
+    "name": "Process",
+    "slug": "process"
+  },
+  {
+    "id": "8",
+    "name": "Statistics",
+    "slug": "statistics"
+  },
+  {
+    "id": "9",
+    "name": "Study Design",
+    "slug": "study-design"
+  },
+  {
+    "id": "13",
+    "name": "Tutorial",
+    "slug": "tutorial"
+  },
+  {
+    "id": "7",
+    "name": "Validation",
+    "slug": "validation"
+  },
+  {
+    "id": "1",
+    "name": "Variables",
+    "slug": "variables"
+  }
+]

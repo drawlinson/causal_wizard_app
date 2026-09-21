@@ -1,0 +1,22 @@
+---
+title: "Covariate Balance"
+summary: "Covariate balance ensures that observed groups in a study, with and without a particular treatment, are comparable in terms of measured variables, minimizing the risk of confounding"
+keywords: "positivity assumption covariate balance valid data"
+categorySlugs: ["causal-wizard-concept", "data", "causal-inference", "validation"]
+---
+<h3>What is Covariate Balance?</h3>
+<p><strong>Covariate balance</strong> is a critical concept in observational studies and causal inference. In the context of a study, covariates are variables that are measured before the treatment or exposure is assigned - hence they are also usually included as input features in models such as those used in Causal Wizard. The variables are included in the analysis to control for potential confounding and ensure that the treatment groups are comparable, resembling a randomized experiment as closely as possible. The process of <strong>identification</strong> ensures that the right set of variables are included and excluded as covariates.</p>
+<p>When researchers say that covariate balance is important, they mean that <a title="Why covariate balance is important" href="https://hesscl.com/data-viz-workshop/case-a-covariate-balance.html" target="_blank" rel="noopener">it's crucial for the distribution of covariates to be similar between the <strong>treated</strong> (exposed) and untreated (<strong>control</strong>) groups</a>. The goal is to achieve <em>balance</em> in order to reduce the risk of confounding, which occurs when imbalances in covariates lead to <strong>biased</strong> estimates of the treatment effect.</p>
+<h3>How can Covariate Balance be measured?</h3>
+<p><a title="Evaluating covariate balance using a Love plot" href="https://cran.r-project.org/web/packages/cobalt/vignettes/cobalt.html" target="_blank" rel="noopener">One way to assess covariate balance is by using a <strong>Love plot</strong></a>, also known as a <strong>standardized mean difference</strong> (SMD) plot. This method is provided in any Causal Wizard result when a <strong>Propensity Score method</strong> is used. Note: Only numerical covariates can be assessed using the Love plot (not categorical).</p>
+<p>A Love plot visually displays the standardized mean differences in covariates between the treated and untreated groups. The standardized mean difference is a measure of effect size that quantifies the difference between group means in terms of standard deviations.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/features-covariate-balance-plot.png" alt="" width="80%" /></p>
+<p>Here's how a Love plot is typically constructed:</p>
+<ol>
+<li>
+<p><strong>Calculate Standardized Mean Differences:</strong> For each covariate, calculate the standardized mean difference, which is the difference in means divided by the pooled standard deviation.</p>
+</li>
+<li><strong>Plotting:</strong> Create a scatter plot with each covariate on the y-axis and its corresponding standardized mean difference on the x-axis. The Love plot provides a visual representation of the balance achieved for each covariate. Typically, values are displayed before and after any matching method is applied, to evaluate the effect of matching on achieving balance.</li>
+<li><strong>Threshold:</strong> Researchers often use thresholds (e.g., &plusmn;0.2) to assess whether the balance is achieved. A smaller standardized mean difference indicates better balance. There is no precise threshold which defines "balanced" vs "imbalanced" as it also depends on your data distribution.</li>
+</ol>
+<p>If the Love plot shows that most covariates have small standardized mean differences and are distributed evenly around zero, it suggests that the covariate balance has been achieved. On the other hand, if there are <em>large</em> imbalances, it may indicate a lack of comparability between treatment groups, raising concerns about the validity of causal inference.</p>

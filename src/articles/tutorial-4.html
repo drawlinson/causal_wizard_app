@@ -1,0 +1,73 @@
+---
+title: "Tutorial 4"
+summary: "Does a training programme increase participants' wages?"
+keywords: "tutorial example case study domain knowledge common cause"
+categorySlugs: ["tutorial"]
+---
+<h3>Introduction</h3>
+<div>
+<div>This worked example is based on a famous early Causality study, <a title="Lalonde study" href="https://www.jstor.org/stable/1806062" target="_blank" rel="noopener">"Evaluating the Econometric Evaluations of Training Programs with Experimental Data"</a> by RJ Lalonde (1986).</div>
+</div>
+<p>The study explores whether a training program increases participants' wages, given other confounding factors. Later updates to this study added new participants and there was some controversy over whether the right participants were included in the study to draw strong conclusions. But we're not interested in the final result - we would like to show that you can explore <a title="counterfactual outcomes" href="/articles/counterfactual/" target="_blank" rel="noopener">counterfactual outcomes</a> using Causal Wizard.</p>
+<h3>Counterfactual Outcomes - What if?</h3>
+<p>Remember, a <strong>counterfactual</strong> outcome is one which didn't happen, but might have. Causal Wizard allows you to understand <em><strong>what would have happened, if </strong></em>different <strong>Treatment</strong> statuses (<strong>Treated</strong>, or <strong>Control</strong>) were applied to various <strong>sample</strong> sub-groups. Ok, let's get started.</p>
+<h3>Step 1: Create a new Study</h3>
+<ol>
+<li>Click on <strong>Studies</strong> in the menu bar.</li>
+<li>In the Studies list page, click the <strong>Create</strong> button.</li>
+<li>Give the new Study any <strong>name</strong> you like (e.g. <strong>Tutorial 4</strong>).</li>
+<li><strong>Select the Dataset </strong>with the name beginning "<strong>Tutorial 4 - Lalonde</strong>"</li>
+<li>Click <strong>Create</strong> and the new Study will be displayed.</li>
+</ol>
+<h3>Step 2: Examine the data</h3>
+<p>Before we go any further, let's examine the data. To do this, click the <strong>Data</strong> tab. You'll see the variables available in the data file, and a sample of the data to help understand it. In particular, look at the variables <strong>Training</strong> and <strong>Wage_1978</strong> and the values they contain. We can see that the Training variable (or column - same thing) contains Bool or Boolean values which are True or False, and that the Wage_1978 column contains Real (continuous numerical) values:</p>
+<h3><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_variable_data_types.png" alt="" width="100%" /></h3>
+<h3>Step 3: Specify Treatment and Outcome</h3>
+<p>In this case study our <strong>treatment</strong> is the variable <strong>Training </strong>(a boolean value, <strong>True</strong> if the participant completed the training program, and <strong>False</strong> otherwise).</p>
+<p>The Outcome we're interested in is<strong>&nbsp;W</strong><strong>age_1978</strong>, 3 years after completing the training program.&nbsp;</p>
+<p>Set the Treament and Outcome variables as described above.</p>
+<h3>Step 4: Add Treatment and Outcome to the Causal Diagram</h3>
+<p>Now let's start to build our Causal Diagram by adding the <strong>Treatment</strong> (Training) and <strong>Outcome</strong> (Wage_1978). Then add an edge between them, expressing that Treatment directly affects the Outcome:</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_graph_1.png" alt="" width="50%" /></p>
+<h3>Step 5: Change variable type (categorical or numerical)</h3>
+<p>A new feature of Causal Wizard is the ability to specify whether a variable should be interpreted as <strong>Categorical</strong> or <strong>Numerical</strong>. To change the variable type, click the variable in the Causal Diagram. In this case, click <strong>Training</strong>. A modal dialog will appear. Change "<strong>Interpret values as</strong>" to switch between Categorical and Numerical type.&nbsp;</p>
+<p>In the Causal Diagram, each variable has an icon to represent its data type. A <strong>bar chart</strong> indicates categorical data, and a <strong>smooth curve</strong> indicates numerical data.</p>
+<p>A boolean value can be interpreted as either Categorical or Numerical. If numerical, False = 0 and True = 1.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_change_variable_type.png" alt="" height="50%" /></p>
+<h3>Step 5: Separate Control and Treated Groups</h3>
+<p>Next, click the <strong>Define groups</strong> <strong>button</strong> to specify which participants are <strong>Treated</strong>&nbsp;and <strong>Controls</strong>. Our Treatment variable data values are either False (0) or True (1). Boolean values can be represented as Numerical or Categorical, so there are two ways we could define the same separation of samples.</p>
+<p>Numerical values are separated with a Threshold value.&nbsp;</p>
+<ul>
+<li>If you have set the <strong>Training</strong> variable to <strong>Numerical</strong>, enter a <strong>Threshold</strong> of 0 (False). Values which are <strong>True</strong> will have value 1 and will be <strong>Treated</strong>.</li>
+</ul>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_boolean_as_numerical.png" alt="" height="50%" /></p>
+<p>Categorical values are separated via a set of user-defined values for each group.&nbsp;</p>
+<ul>
+<li>If you have set the <strong>Training</strong> variable to <strong>Categorical</strong>, there are a few ways you can define the groups using the dialog:
+<ul>
+<li><strong>False</strong> vs <strong>True</strong></li>
+<li><strong>False</strong> vs <strong>Anything else</strong></li>
+<li><strong>Anything else</strong> vs <strong>True</strong>&nbsp;</li>
+</ul>
+</li>
+</ul>
+<p>Type each value in the relevant <strong>text input box</strong> and press the <strong>Add </strong>button. If you want to specify "Anything else", press that button instead. In the following example, the groups are defined as Control = False and Treated = True.<strong> <span style="color: #ba372a;">"Anything else" can't be combined with other text values.</span></strong></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_boolean_as_categorical.png" alt="" height="50%" /></p>
+<p>Experiment with the editor to understand how to define our two groups (Treated - Training is True, and Control - Training is False). <span style="color: #ba372a;"><strong>Note that using the Tags editor, you must enter True and False with a leading capital letter.</strong></span></p>
+<h3>Step 6: Complete the Causal Diagram</h3>
+<p>We should add some additional confounding variables to complete the Causal Diagram. Note that Wage_1974 affects both Training and Wage_1978. This is an important confounder, and it illustrates how initial values for a later Outcome can be included in a Study, when the values vary over time.</p>
+<p>Just for variety (not reflecting the original study) the Age variable only affects Wage, not whether the participant is given Training.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_graph_3.png" alt="" width="80%" /></p>
+<h3>Step 7: Check and select Model</h3>
+<p>Press the <strong>Check button</strong> to confirm the Study is set up completely. If successful, you should be presented with a choice of models. Select <strong>Backdoor</strong>: <strong>Linear</strong> <strong>Regression</strong> because this includes <strong>Counterfactual</strong> analysis. Click <strong>Calculate</strong> to begin analysis.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_choose_model.png" alt="" width="100%" /></p>
+<h3>Step 8: Examine counterfactual results</h3>
+<p>For now, skip the other results and scroll down to the <strong>Counterfactual Outcomes table</strong>. Let's examine the results to see what they say and what insights we can find.</p>
+<p>The table has four columns: <strong>Scenario</strong>, <strong>Samples</strong>, <strong>Sum</strong> and <strong>Mean</strong> outcomes:</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_counterfactuals.png" alt="" width="80%" /><strong>Each row represents the outcome of a different scenario. </strong>In the image above, a red box highlights the scenario <em>"If all samples were treated"</em> i.e. in this study, if all participants received the training program. Scenarios can vary in the number of participants, for example, some scenarios include only Control or Treated samples. Therefore, the <strong>Samples</strong> column tells you how many samples are involved.</p>
+<p>The <strong>Sum</strong> and <strong>Mean</strong> columns are summary statistics of each scenario. We can quickly sanity-check that these numbers make sense, for each scenario. Let's focus on Mean outcomes.</p>
+<p>First, we can see that the Mean outcome for all actual controls is approx. <strong>4500</strong> and the mean outcome for all actual treated is about <strong>6300</strong>. So we might expect to see the mean outcomes of <em>all</em> scenarios to be <em>between</em> these values.</p>
+<p>Sure enough, we can see that if all samples were controls the mean outcome would be <strong>4600</strong> (slightly higher than actual controls) and if all samples were treated, the mean outcome would be <strong>6200</strong> - slightly lower than the actual treated outcomes.&nbsp;</p>
+<p>Finally, two additional scenarios swap treatment status for Control and Treated groups separately. These values also lie within the expected ranges.</p>
+<p>You can use counterfactual analysis in your own data in the same way, to estimate the effect of treatment on untreated samples, and vice-versa.</p>
+<p>&nbsp;</p>

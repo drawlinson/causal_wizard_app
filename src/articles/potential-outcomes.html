@@ -1,0 +1,19 @@
+---
+title: "Potential Outcomes Framework"
+summary: "The potential outcomes framework is a theoretical framework for causal inference that helps us understand the relationship between treatment and outcome variables in a Study."
+keywords: "study design, experiment, causality, paradigm"
+categorySlugs: ["study-design", "causal-inference"]
+---
+<h3>What are potential outcomes?</h3>
+<p>In Causal Inference, there are outcomes we can observe - because they happened - and outcomes we will never observe (because they didn't happen)! The unobserved outcome is also known as a counterfactual outcome.</p>
+<p>The<a title="Rubin causal model (aka potential outcomes framework)" href="https://en.wikipedia.org/wiki/Rubin_causal_model#Potential_outcomes" target="_blank" rel="noopener"> Potential Outcomes framework</a> aims to deal with these possibilities explicitly. It is based on the idea that each individual in a study has two <strong>potential outcomes</strong>: the outcome that would be observed if they received the treatment, and the outcome that would be observed if they did not receive the treatment.</p>
+<p>To use the potential outcomes framework for causal inference, we first need to define the treatment variable and the outcome variable. The treatment variable is the variable of interest that we want to study, and the outcome variable is the variable that we want to measure, to determine the effect of the treatment.</p>
+<p><a title="Introduction to the Potential Outcomes framework" href="https://www.causalconversations.com/post/po-introduction/" target="_blank" rel="noopener">This article gives a good and friendly introduction to the Potential Outcomes framework</a>.</p>
+<p><a title="Causal inference book - Potential Outcomes (Rubin Causal Model)" href="https://alexdeng.github.io/causal/rcm.html" target="_blank" rel="noopener">A more detailed article can be found here</a>.</p>
+<h3>Individual participant example</h3>
+<p>Next, we need to define the potential outcomes for each individual in the study. Let Y1 be the potential outcome if an individual receives the treatment, and Y0 be the potential outcome if they do not receive the treatment. In other words, Y1 represents the outcome that would be observed if the individual is given the treatment, while Y0 represents the outcome that would be observed if the individual is not given the treatment.</p>
+<p>Since each individual can only receive one treatment (either the treatment or the control), <strong>we can only observe one of the potential outcomes for each individual. </strong>If an individual receives the treatment, we observe their outcome Y1, and if they do not receive the treatment, we observe their outcome Y0.</p>
+<p>To estimate the causal effect of the treatment, we compare the outcomes of individuals who received the treatment to the outcomes of individuals who did not receive the treatment. This is known as the treatment effect, and it can be calculated as Y1 - Y0.</p>
+<h3>Summary</h3>
+<p>The potential outcomes framework allows us to account for confounding variables that may influence the relationship between the treatment and outcome variables. By comparing the outcomes of individuals who received the treatment to the outcomes of individuals who did not receive the treatment, we can estimate the causal effect of the treatment while controlling for other variables that may be affecting the outcome.</p>
+<p>Overall, the potential outcomes framework is a powerful tool for causal inference because it allows us to estimate the causal effect of a treatment while controlling for confounding variables, which can help us make more accurate and reliable conclusions about the effectiveness of a treatment.</p>

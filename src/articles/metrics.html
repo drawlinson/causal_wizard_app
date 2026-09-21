@@ -1,0 +1,26 @@
+---
+title: "Generalization performance metrics"
+summary: "Causal Wizard uses a range of metrics to evaluate model performance."
+keywords: "generalization, performance, accuracy, f1-score, precision, recall, RMSE, r-squared, R2, sensitivity specificity"
+categorySlugs: ["validation"]
+---
+<h3>Generalization</h3>
+<p>Since December 2023, Causal Wizard will attempt to measure regression model <a title="Generalization and validation in machine learning" href="/articles/validation/" target="_blank" rel="noopener">generalization</a> performance on a held-out test set of your data. This means this data was <strong>not</strong> available to the model during training / fitting.</p>
+<p>To measure generalization performance, a number of metrics are provided. The metrics used depend on whether your <a href="/articles/outcome/">outcome</a> variable <a href="/articles/data-type/">data-type</a> is Categorical or Numerical.</p>
+<p>Using multiple performance metrics for measuring model performance in machine learning is essential because a single metric may not provide a comprehensive assessment of how well a model is performing. Different metrics capture different aspects of a model's performance, and relying on a diverse set of metrics can offer a more nuanced understanding. You should consider all metrics when evaluating a model and deciding to what extent you trust the results.</p>
+<h3>Categorical Outcome performance metrics</h3>
+<p>Categorical outcomes are limited to 2 distinct values (e.g. True/False or 0,1). This is known as a binary classification problem.</p>
+<ul>
+<li><strong>Confusion matrix:</strong> A confusion matrix shows all the outcomes in terms of predictions and actual classification in the data. This helps you to see if the model is biased towards predicting specific outcomes.</li>
+<li><strong>Accuracy:</strong> The proportion of correctly classified instances among all instances (true positives + true negatives) divided by the total number of instances. It can be misleading in highly imbalanced datasets, because it is easy to get high accuracy by predicting the most common outcome.</li>
+<li><strong>Precision:</strong> The ratio of true positives to the total predicted positives, representing the ability of the model to correctly identify positive instances without misclassifying too many negatives.</li>
+<li><strong>Recall:</strong> The ratio of true positives to the total actual positives, indicating the model's ability to capture all positive instances without missing too many.</li>
+<li><strong>F1-Score:</strong> The harmonic mean of precision and recall, providing a balanced measure that considers both false positives and false negatives, making it particularly useful in imbalanced datasets.</li>
+</ul>
+<h3>Numerical Outcome performance metrics</h3>
+<ul>
+<li><strong>R-squared:</strong> A measure that represents the proportion of the variance in the dependent variable (target) that is explained by the independent variables (features) in the model. R-squared values range from 0 to 1, where 1 indicates a perfect fit and 0 indicates that the model does not explain any variability.</li>
+<li><strong>Root Mean Square Error (RMSE):</strong> The square root of the average of the squared differences between the predicted and actual values. RMSE provides a measure of the typical magnitude of errors, with lower values indicating better model performance. It is sensitive to large errors due to the squaring operation.</li>
+<li><strong>Mean Absolute Error (MAE):</strong> The average of the absolute differences between the predicted and actual values. MAE provides a measure of the average magnitude of errors without considering their direction. It is less sensitive to outliers compared to RMSE.</li>
+</ul>
+<p>In addition, a scatter plot of predicted vs actual outcomes is displayed, with a fitted linear trend line. The displayed outcomes are coloured by Treatment group, so you can see if performance is worse on one group.</p>

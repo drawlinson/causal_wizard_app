@@ -1,0 +1,24 @@
+---
+title: "Variables"
+summary: "In causal inference, a variable refers to any factor or attribute that has the potential to affect the outcome of interest in a study."
+keywords: "variable, property, attribute, column"
+categorySlugs: ["statistics", "variables", "causal-wizard-concept", "study-design"]
+---
+<p>In statistics, a <a title="What is a statistical variable" href="https://www.abs.gov.au/statistics/understanding-statistics/statistical-terms-and-concepts/variables" target="_blank" rel="noopener"><strong>variable</strong> is a characteristic, number, quantity or some other attribute</a> in data about a <a href="/articles/sample/">sample</a> of items, or participants in a study. Variables have different <a href="/articles/data-type/">data types</a>, and different <a href="https://statisticsbyjim.com/basics/what-is-a-variable/">statistical properties</a>. Remember, in Causal Wizard <a href="/articles/dataset/">any <strong>column</strong> in your data file can be used as a variable</a>.</p>
+<p><a title="Introduction to statistical variables" href="https://stattrek.com/descriptive-statistics/variables" target="_blank" rel="noopener">This page has a good, easy introduction</a> to the concept of a variable.</p>
+<h3>Variables in Causal Inference</h3>
+<p>In causal inference, a variable refers to any factor or attribute of an entity that has the <em>potential</em> to directly or indirectly affect the outcome of interest in a study. A number of specific variable types exist.</p>
+<h3>Treatment Variables</h3>
+<p>Exposure, "intervention" or <a title="Treatment variable" href="/articles/treatment/">Treatment variables </a>are all names for the variable that is hypothesized to cause or influence the outcome of interest. In other words, they are the <a href="/articles/independent-variable/">independent variables</a> that the researcher wants to <a href="/articles/experiment/">study</a>. For example, if the outcome of interest is the risk of developing heart disease, exposure or treatment variables could include factors such as smoking, diet, and exercise.</p>
+<h3>Outcome variables</h3>
+<p><a href="/articles/outcome/">Outcome variables</a>, on the other hand, are the dependent variables that are affected by the exposure variables. They represent the outcome of interest that the researcher wants to measure. For example, in the case of heart disease, the outcome variable could be the occurrence of a heart attack. These are the <a href="/articles/independent-variable/">dependent</a> variables of an <a href="/articles/experiment/">Experiment</a>.</p>
+<h3>Observed and unobserved variables</h3>
+<p><a href="/articles/observed-variable/">Observed variables</a> are present in your data; <strong>unobserved</strong> variables are not. This restricts their use in analysis, but it's very important to include and consider them.</p>
+<h3>Other types of variable</h3>
+<p>Variables can also be further classified into <a href="/articles/confounding/"><strong>confounding</strong></a> variables and <a href="/articles/effect-modifier/"><strong>effect modifiers</strong></a>. Confounding variables are those that are associated with both the exposure and outcome variables, making it difficult to determine the true causal relationship between them. Effect modifiers, on the other hand, are variables that influence the strength or direction of the relationship between the exposure and outcome variables.</p>
+<p><a href="/articles/mediation/">Mediating variables</a> are found in a directed path between the Treatment and Outcome variables. They modify (mediate) the effect of the Treatment.</p>
+<h3>Relationships between variables</h3>
+<p>Causal relationships between variables are defined in your <a href="/articles/causal-diagram/">Causal Diagram</a>. Variables may also be <a href="/articles/correlationcausality/">correlated or associated</a> (statistical relationships), even if they do not have a direct, causal relationship.</p>
+<h3>Summary</h3>
+<p>In summary, variables play a critical role in causal inference as they help researchers understand the relationship between exposure and outcome variables and identify potential confounding factors or effect modifiers.</p>
+<p>In Causal Wizard, the columns in your data are taken as Variables you can use in your Studies. You don't need to include all columns as variables. You can also include Variables for which there is no corresponding data. These are treated as unobserved variables.</p>

@@ -1,0 +1,21 @@
+---
+title: "Observed / unobserved variable"
+summary: "An Observed variable is present in your data, whereas an Unobserved variable is not, and therefore its values are not available for use in inference."
+keywords: "observed, unobserved, variable, latent, hidden"
+categorySlugs: ["variables", "causal-inference", "study-design"]
+---
+<p>In causal inference, an <a title="Observed and latent (unobserved) variables" href="https://en.wikipedia.org/wiki/Latent_and_observable_variables" target="_blank" rel="noopener">observed variable </a>is a variable that can be directly measured or observed in a study or experiment. Therefore, this includes all variables included in your Dataset, as Columns.</p>
+<p>In other contexts, it is also referred to as a measured variable or a manifest variable.</p>
+<p>An unobserved variable may also be described as a <strong>latent</strong> variable, although this latter term also refers to variables which aren't merely not measured, but <a title="Some unobserved or latent variables can't be measured" href="https://measuringu.com/latent-variables/" target="_blank" rel="noopener">impossible to measure</a>.</p>
+<h3>Why is observability important?</h3>
+<p>Observed variables are important in causal inference because they can be used to estimate the causal effects of one variable on another. For example, if we are interested in understanding the causal effect of smoking on lung cancer, we can measure the smoking status of individuals and the incidence of lung cancer, and use statistical methods to estimate the causal effect of smoking on lung cancer.</p>
+<p>On the other hand, an <strong>unobserved variable</strong> (also known as a latent variable or a confounding variable) is a variable that <strong>was not</strong>, or <strong>cannot</strong> be directly measured or observed in a study or experiment. Instead, it is inferred based on its relationship with observed variables, or identified from prior domain knowledge.</p>
+<p>Unobserved variables can often <strong>confound</strong> the relationship between two observed variables, leading to <a title="Bias caused by confounding" href="/articles/bias/">spurious or biased results</a>. However, we can defened against this with some strategies.&nbsp;</p>
+<ul>
+<li>First, we can use domain knowledge to identify or exclude potential confounding unobserved variables.&nbsp;</li>
+<li>Second, we can use <a title="Sensitivity analysis to detect confounding caused by unobserved variables" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3800481/" target="_blank" rel="noopener">sensitivity analysis </a>to estimate upper bounds on the degree of <a title="Confounding (variable)" href="/articles/confounding/">confounding</a> that might be present.</li>
+</ul>
+<p>For example, if we are interested in understanding the causal effect of exercise on heart disease, we may observe that people who exercise regularly have lower rates of heart disease. However, we cannot assume that this is a causal relationship, because there may be unobserved confounding variables that are driving both exercise behavior and heart disease risk (such as genetics, diet, or socioeconomic status). If we do not account for these unobserved variables, our estimate of the causal effect of exercise on heart disease may be biased.</p>
+<p>Sometimes, <a title="Using domain knowledge to solve unobserved or latent variable data" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7050445/" target="_blank" rel="noopener">domain knowledge can be used to avoid the need unobserved variable data</a>, or to identify suitable proxies (alternatives).</p>
+<h3>Summary</h3>
+<p>In summary, observed variables are directly measured or observed in a study or experiment, while unobserved variables are not directly measured and may confound the relationship between observed variables. It is important to carefully consider both types of variables in causal inference to avoid bias and ensure accurate estimates of causal effects.</p>

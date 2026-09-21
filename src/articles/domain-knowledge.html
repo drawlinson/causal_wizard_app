@@ -1,0 +1,24 @@
+---
+title: "Domain Knowledge"
+summary: "Expert knowledge about the system in question, including the relevant relationships between important variables."
+keywords: "prior, SME, subject matter expert, expertise, knowledge"
+categorySlugs: ["variables", "causal-wizard-concept", "graph", "causal-inference", "study-design"]
+---
+<p>Prior domain knowledge refers to information or understanding a Subject Matter Expect (SME) has about a particular subject or field, before engaging in a task or activity related to that subject. It is the pre-existing knowledge that is used to guide or inform decision-making, problem-solving, or learning. This knowledge can come from previous experiences, education, training, or research.</p>
+<h3>Role of domain knowledge in Machine Learning and Exploratory Data Analytics</h3>
+<p>Having prior domain knowledge can help to more effectively and efficiently model and understand a system, as well as identify relevant patterns, relationships, and solutions. <a title="Use of expert domain knowledge in causal inference" href="https://www.tandfonline.com/doi/full/10.1080/09332480.2019.1579578" target="_blank" rel="noopener">It can also be used to make predictions or generate hypotheses about the domain.</a> Experts <a title="Use domain knowledge before exploratory data analysis" href="https://stats.stackexchange.com/questions/558754/which-comes-first-domain-expertise-or-an-experimental-approach" target="_blank" rel="noopener">generally recommend exploiting expert domain knowledge first</a>, rather than unguided <a title="Exploratory data analysis (EDA)" href="https://en.wikipedia.org/wiki/Exploratory_data_analysis" target="_blank" rel="noopener">exploratory data analysis</a> which can be both time-consuming and prone to false leads.</p>
+<h3>Elicitation of domain knowledge</h3>
+<p>Graphical tools such as Causal Diagrams, or more generally Bayesian networks, can be used to extract structured domain knowledge from a group of experts. This process is known as <a title="elicitation for applied machine learning" href="https://statmodeling.stat.columbia.edu/2021/12/07/eliciting-expert-knowledge-in-applied-machine-learning/" target="_blank" rel="noopener">elicitation</a>.</p>
+<p>Software such as <a title="BARD: a structured technique for group elicitation of Bayesian networks to support analytic reasoning" href="https://research.monash.edu/en/publications/bard-a-structured-technique-for-group-elicitation-of-bayesian-net" target="_blank" rel="noopener">BARD</a> can be used to elicit this information in a disciplined, thorough manner, while combining the views of multiple experts using the Delphi process.</p>
+<h3>Elicitation of Domain Knowledge in Causal Wizard</h3>
+<p>In Causal Wizard, Domain Knowledge is provided by you, the user, while editing your Studies. You provide this knowledge:</p>
+<ul>
+<li>in terms of the research question:
+<ul>
+<li>the selection of <a title="treatment" href="/articles/treatment/">treatment</a> and <a href="/articles/outcome/">outcome</a> variables</li>
+<li>specifying the thresholds or values that divide the <a href="/articles/control-and-treated/">control and treated groups</a></li>
+</ul>
+</li>
+<li>and in the form of the <a href="/articles/causal-diagram/">Causal Diagram</a>, where possible causal relationships between variables are identified.</li>
+</ul>
+<p>The domain knowledge you provide is used to <a href="/articles/identification/">identify</a> the causal effect to be calculated, and to generate the estimand. It is important to include all relevant variables, although you may use your judgement to exclude some where not available, or not relevant to a particular result. Any omitted variables should be clearly listed in your assumptions when you write up your results.</p>

@@ -1,0 +1,23 @@
+---
+title: "Outcome (variable)"
+summary: "The variable which represents the effect of different treatment values."
+keywords: "outcome, treatment, variable, dependent"
+categorySlugs: ["variables", "causal-wizard-concept", "graph", "causal-inference", "study-design"]
+---
+<h3>Treatment and Outcome</h3>
+<p>In Causal Wizard, you must specify two variables in your data:</p>
+<ol>
+<li>The <a title="Treatment variable" href="/articles/treatment/">Treatment</a> variable</li>
+<li>The Outcome variable</li>
+</ol>
+<p>Usually, <a title="How to regress on the Treatment Variable to measure causal effects" href="https://www.cambridge.org/highereducation/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C/causal-inference-using-regression-on-the-treatment-variable/5EC22DA4A13BFC9A5944C74D713D0408" target="_blank" rel="noopener">you will be wanting to estimate the effect of the Treatment on the Outcome</a>. The effect may be <strong>partial</strong>, or <strong>full</strong>; it may be <strong>direct</strong>, or <strong>indirect</strong>.</p>
+<h3>What is the outcome variable?</h3>
+<p>In causal inference, an <strong>outcome</strong> refers to a particular measure or observation that is used to evaluate the effect of a specific intervention or exposure on a population. An outcome variable is the variable that is being measured or observed in order to determine the effect of an intervention or exposure. In experimental design, this would be the dependent variable.</p>
+<p>For example, suppose we want to study the effect of a new drug on blood pressure. In this case, blood pressure would be the outcome variable. We would measure blood pressure in a group of patients before and after they are given the new drug. By comparing the blood pressure measurements before and after the intervention, we can determine the effect of the drug on blood pressure.</p>
+<p>Another example could be studying the impact of a new teaching method on student test scores. In this case, the test scores would be the outcome variable. We would measure the test scores of a group of students before and after the new teaching method is implemented, and compare the scores to determine the effect of the intervention.</p>
+<h3>Treatment must be different to Outcome</h3>
+<p>The <strong>outcome</strong> variable is the one which is (possibly) affected by the treatment variable. You're using Causal Wizard to try to measure the effect of Treatment on Outcome. Therefore, the outcome variable must not be the same as the treatment variable.&nbsp;</p>
+<h3>Change in a variable over time</h3>
+<p>You <em>can</em> use the value of a variable at time A as the treatment, and the value of the <strong>same</strong> variable at time B as the Outcome, as long as they are represented in your data as different columns (i.e. will be modelled as different variables). A specific method, known as the<a title=" Difference-in-Differences method" href="https://mixtape.scunning.com/09-difference_in_differences" target="_blank" rel="noopener"> Difference-in-Differences method</a>, uses this technique to estimate causal effects.&nbsp;</p>
+<h3>Summary</h3>
+<p>Overall, identifying the outcome variable is an important step in causal inference, as it helps to determine the effectiveness of an intervention or exposure in producing a particular outcome. In Causal Wizard, your <a title="domain knowledge" href="/articles/domain-knowledge/">domain knowledge</a> is used to identify the outcome variable.</p>

@@ -1,0 +1,36 @@
+---
+title: "Dataset (Tabular, Matrix)"
+summary: "Causal Wizard accepts Tabular data, such as Excel and CSV files."
+keywords: "data, dataset, matrix, tabular, csv, file, excel"
+categorySlugs: ["variables", "data", "causal-wizard-concept"]
+---
+<h3><img src="/assets/images/tabular_data_files.png" alt="" width="100%" /></h3>
+<h3>Tabular Data</h3>
+<p><a title="Tabular data file example" href="https://www.statology.org/tabular-data/" target="_blank" rel="noopener">Tabular data files like <strong>CSV</strong> or <strong>Excel</strong> organize data in rows and columns</a>, allowing them to be represented as matrices, and can contain various data types including numbers, text and categorical labels.</p>
+<p>A tabular <strong>dataset</strong> is a collection of data organized in a table format, where the data is presented in rows and columns. The data may represent <a title="Observational historical data" href="/articles/observational-data/">historical data</a>, a collection of events, the results of a delivery data-gathering survey or any other process.</p>
+<h3>Data format</h3>
+<p><strong>Causal Wizard supports two tabular data formats.</strong> The general-purpose format is described in this article, and a more specific <a href="/articles/study-design-method/">Panel Data</a> format is introduced in a separate article. This article also covers fundamental concepts and terminology for describing datasets.</p>
+<p>In typical datasets, Causal Wizard assumes that <a href="/articles/sample/">each <strong>row</strong> represents a single record (or sample unit)</a>, and <a title="Columns are variables" href="/articles/variables/">each column represents a specific attribute or feature</a> of that record (and can be used as a <strong>Variable</strong> in the <a href="/articles/causal-diagram/">Causal Diagram</a> in Causal Wizard).&nbsp;</p>
+<p><strong>Header row</strong></p>
+<p><span style="color: #ba372a;">You should include a header row in your data file.</span> This allows us to use the header row column names as your variable names.</p>
+<p><strong>File type / format</strong></p>
+<p>Tabular datasets are commonly stored in file formats like <strong>CSV</strong> or <strong>Excel</strong>, both accepted by Causal Wizard.</p>
+<p><strong>Data types</strong></p>
+<p>Most <a href="/articles/data-type/">common data-types</a> are supported. Time and date values are converted to isoformat datetime string (aka text) values. They are treated as categorical values without ordering in Causal Wizard models, because this does not affect our models (which are not time-series models). In Fixed-Effect models, each time-value is handled independently. Time and date values may be ordered in some plots, but this is not guaranteed in all plots.</p>
+<p><img src="/assets/images/dataset.png" width="100%" /></p>
+<h3>Matrices</h3>
+<p>The mathematical concept of a <a title="Matrix" href="https://en.wikipedia.org/wiki/Matrix_(mathematics)" target="_blank" rel="noopener">matrix</a> is closely related to a tabular dataset. A matrix is a rectangular array of numbers arranged in rows and columns. Like a tabular dataset, a matrix can represent a collection of data with each row and column representing a specific attribute or feature.</p>
+<p>However, the a big difference between tabular data and a matrix is that in a matrix <a href="/articles/data-type/">all types of data are encoded as numbers</a>, via a preprocessing step. Depending on the <a href="/articles/cardinality/">cardinality</a> or <a href="/articles/distribution/">distribution</a> of the values,&nbsp;</p>
+<p>In fact, most data analysis and machine learning algorithms operate on matrices rather than tabular datasets directly. Matrices offer a convenient and efficient way to perform mathematical operations on large amounts of data.</p>
+<h3>Dimensions and Variables</h3>
+<p>Remember that each Column of your dataset represents an attribute, feature or dimension, which represents a statistical <a href="/articles/variables/">Variable</a>. The number of Variables is also known as the <a href="/articles/dimension/">dimensionality</a> of the dataset.</p>
+<h3>Panel Data format</h3>
+<p><strong>Causal Wizard also supports a data format known as <a title="Panel data format explanation" href="/articles/panel-data/" target="_blank" rel="noopener">Panel Data</a>.</strong> In this format, the same entities (which could be individuals, or groups rather than individuals) are observed over a common set of time points. This data format enables use of additional methods, in particular our <a title="Fixed-effects models including difference in differences." href="/articles/fixed-effects/" target="_blank" rel="noopener">Fixed-Effects</a> models. If your data matches this format, you may want to consider using the Fixed-Effects models and methodology.</p>
+<p>In contrast, the standard Dataset format described here is used with our <a title="Study design and method, methodology options" href="/articles/study-design-method/" target="_blank" rel="noopener">Causal-Diagram and Potential Outcomes methodology</a>.</p>
+<h3>Data types</h3>
+<p>A tabular dataset can contain not only numerical data, but also <a href="/articles/data-type/">other types of data such as text or categorical variables</a>.&nbsp;</p>
+<h3>Relational data</h3>
+<p><a href="https://cloud.google.com/learn/what-is-a-relational-database">Normalized, relational data is stored in multiple tables which are related by keys</a>. The struture depends on the <a href="/articles/cardinality/">cardinality of the data</a> and the entities it represents. This structure is tabular, but it comprises many tables.&nbsp;</p>
+<p><a title="Need to transform (denormalize) data for causal inference" href="https://www.r-bloggers.com/2021/07/data-structures-tabular-vs-relational/" target="_blank" rel="noopener">Relational databases are ideal for storing and representing data, but not ideal for machine learning and other statistical analyses</a>. <strong>Therefore, you will need to <a title="denormalizing data to prepare for machine learning" href="https://machinelearningmastery.com/data-preparation-is-important/" target="_blank" rel="noopener">denormalise the data</a> into a single table</strong> to create a data file suitable for Causal Wizard (or any other machine learning tool).</p>
+<h3>Summary</h3>
+<p>In summary, a tabular dataset is a collection of data presented in a table format. A matrix is a mathematical concept of a rectangular array of numbers that can represent a collection of data. In Causal Wizard, the columns of the dataset represent attributes that can be used as Variables, and the rows represent the Sample of the population; each row contains one sample-unit</p>

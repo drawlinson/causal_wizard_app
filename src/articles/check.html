@@ -1,0 +1,54 @@
+---
+title: "Check (Verification and Identification)"
+summary: "When editing a Study, clicking Check will check your config and determine if the Causal Effect can be identified."
+keywords: "Check, verify, identify, identification"
+categorySlugs: ["variables", "causal-wizard-concept", "graph", "data", "process", "causal-inference"]
+---
+<h3><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/process.png" alt="" width="500" /></h3>
+<h3>Check Button</h3>
+<p>The Check button is available when editing a Study. You can click it at any time.</p>
+<p>The Check process will broadly do <strong>two</strong> things:</p>
+<ol>
+<li><strong>It will review and check the setup and configuration of your Study</strong>, ensuring you have:
+<ul>
+<li>entered all necessary data,</li>
+<li>selected <a title="Treatment" href="/articles/treatment/">Treatment</a> and <a title="Outcome" href="/articles/outcome/">Outcome</a> variables,</li>
+<li>identified the <a title="Control and Treated Cohorts" href="/articles/control-and-treated/">Control and Treated Cohorts</a>, and&nbsp;</li>
+<li>completed a <a title="Causal Diagram" href="/articles/causal-diagram/">Causal Diagram</a>.</li>
+</ul>
+</li>
+<li><strong>The Wizard will attempt to Identify the Causal Estimand</strong> (the statistical quantity which can be used to Estimate the desired Causal Effect).</li>
+</ol>
+<h3>Check result</h3>
+<p>If the Check fails, you can't get a <a title="Result" href="/articles/result/">Result</a> unless you change the way the problem is modelled, or provide more information.</p>
+<ul>
+<li><strong>If there is a problem, you will be given feedback about specific issues that you can fix.</strong> These usually involve the setup and configuration options, the data, or the structure of the Causal Diagram.</li>
+<li><strong>You may receive a warning that your data is highly skewed. </strong>You can proceed, but bear in mind this may affect your results.</li>
+<li><strong>In some cases, the result of Identification will confirm that the Causal Effect is zero</strong>, which is a valid result! Congratulations - you used the Causal Diagram editor to confirm that there cannot be any causal relationship from Treatment to Outcome.</li>
+</ul>
+<h3>Identification result</h3>
+<p><span style="color: #000000;">Assuming your Study passes the Check, Causal Wizard will attempt to <a title="Identification" href="/articles/identification/">identify</a> an <a title="Estimand" href="/articles/estimand/">Estimand</a> that would provide an Estimate of the <a title="Causal Effect (treatment effect)" href="/articles/causal-effect/">Causal Effect</a> you want. Think of an Estimand as a strategy to perform the <a title="estimation" href="/articles/estimation/">estimation</a>.</span></p>
+<p><strong><span style="color: #169179;">If an estimand can be identified:</span></strong></p>
+<ul>
+<li>You'll see a green panel which invites you to select the Estimation <strong>method</strong> and <strong>model</strong> type, and the <strong>Calculate</strong> button will become available.</li>
+<li>Select the desired model and then press the Calculate button. Causal Wizard will then go and estimate your Result.</li>
+</ul>
+<p><strong><span style="color: #ba372a;">If an estimand cannot be identified:</span></strong></p>
+<ul>
+<li>The causal effect you desire <strong>cannot</strong> be directly estimated given the domain knowledge you have provided.</li>
+<li>You will have to <strong>change your Study design </strong>to find a quantity which <em>can</em> be estimated.</li>
+<li><strong>Often, this can be achieved by simplifying the Causal Diagram</strong>, in particular by removing Unobserved Variables.&nbsp;<br />
+<ul>
+<li>But remember, that this implicitly creates new assumptions which you need to consider when interpreting your results - the edges or variables you removed may have a material effect, which has not been reflected in the estimate.&nbsp;</li>
+<li>You will need to use your judgement to decide which edges (relationships) and variables to keep in your Causal Diagram.&nbsp;</li>
+<li><strong>You can compare Results given different Causal Diagrams</strong>, removing different relationships or variables each time and checking to see if this has a significant effect on the result.</li>
+<li>Ensure to document variables or relationships not present in the Causal Diagram, but suspected to exist in the real world.</li>
+</ul>
+</li>
+<li>Sometimes you can change the way you define the problem - perhaps by measuring a proxy of the desired treatment or outcome, or replacing an unobserved <a title="confounding" href="/articles/confounding/">confounding</a> variable with a proxy which is present in your data (i.e. <a title="observed variable" href="/articles/observed-variable/">observable</a>).
+<ul>
+<li>A proxy just means a variable which can be used instead of the real variable, perhaps because they are highly correlated.</li>
+</ul>
+</li>
+<li>Occasionally, adding new Variables to the graph (such as <a title="Instrumental Variables" href="/articles/iv/">Instrumental Variables</a>) may create a way to Identify the desired Causal Effect. Check whether you have data for these variables already.</li>
+</ul>

@@ -1,0 +1,41 @@
+---
+title: "Regression (method)"
+summary: "Regression models for causal inference aim to identify the causal relationship between an independent variable and a dependent variable by controlling for the effects of confounding variables."
+keywords: "model, fitting, optimise, optimization, estimation, estimate"
+categorySlugs: ["statistics", "method"]
+---
+<h3>Regression models</h3>
+<ul>
+<li><a title="Introduction to regression" href="https://hbr.org/2015/11/a-refresher-on-regression-analysis" target="_blank" rel="noopener">High level explanation</a> (easier to grasp the intuition)</li>
+<li><a title="detailed explanation of regression" href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank" rel="noopener">Detailed explanation</a></li>
+</ul>
+<p>Regression models are statistical methods used to analyze the relationship between one or more independent variables (predictors) and a dependent variable (outcome). In simple terms, regression models try to find a mathematical formula that can accurately predict the value of the outcome variable based on the values of the predictor variables.</p>
+<p>For example, consider a study investigating the effect of exercise on weight loss. The predictor variable in this case would be the amount of exercise performed, while the outcome variable would be the amount of weight lost. A regression model can be used to determine the relationship between these two variables and predict how much weight a person might lose if they exercise a certain amount.</p>
+<p>In the context of causal inference, regression models can be used to control for potential confounding variables that might affect the relationship between the predictor (which could be a treatment variable) and outcome variables. For example, in our exercise and weight loss study, there may be other factors that affect weight loss, such as age, gender, and diet. By including these variables in the regression model, we can isolate the effect of exercise on weight loss and determine if exercise is a causal factor.</p>
+<p>An Estimand that determines which variables should be included is produced by analysis of the causal diagram, before training of the regression model. This ensures only the correct covariates are included in the model.</p>
+<p>Regression models are powerful tools for understanding the relationship between predictor and outcome variables, and can be used to control for confounding variables in causal inference.</p>
+<h3>Linear Regression</h3>
+<p>Causal Wizard includes a Linear Regression model.&nbsp;<a title="Linear regression causal inference" href="https://matheusfacure.github.io/python-causality-handbook/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html" target="_blank" rel="noopener">Linear regression is a statistical method used to model the linear relationship between one or more independent variables (predictors) and a continuous dependent variable (outcome)</a>. In simple terms, it tries to find the straight line that best fits the data by minimizing the sum of squared differences between the observed and predicted values of the outcome variable.</p>
+<p>The general formula for a simple linear regression model is:</p>
+<p>Y = &beta;0 + &beta;1X + &epsilon;</p>
+<p>Where Y is the outcome variable, X is the predictor variable, &beta;0 is the intercept, &beta;1 is the slope, and &epsilon; is the error term. The goal of linear regression is to estimate the values of &beta;0 and &beta;1 that best fit the data.</p>
+<h3>Linear model assumptions and limitations</h3>
+<p>Linear regression is a powerful and widely used statistical method. <a title="interpreting linear regression coefficients" href="https://statisticsbyjim.com/regression/interpret-coefficients-p-values-regression/" target="_blank" rel="noopener">One of the core benefits of linear regression is that the results are easy to interpret</a>, meaning it's a good baseline model where suitable for the data or problem. However, you should be aware of the following <a title="Assumptions of linear regression" href="https://www.statisticssolutions.com/free-resources/directory-of-statistical-analyses/assumptions-of-linear-regression/" target="_blank" rel="noopener">limitations and assumptions made by linear regression</a>:</p>
+<ol>
+<li>
+<p><strong>Linearity</strong> assumption: Linear regression assumes that the relationship between the predictors and outcome variable is linear. If the relationship is nonlinear, the model may not accurately predict the outcome.</p>
+</li>
+<li>
+<p><strong>Independence</strong> assumption: Linear regression assumes that the observations are independent of each other. If there is correlation or dependence between the observations, the model may be biased.</p>
+</li>
+<li>
+<p><strong>Outliers</strong>: Linear regression is sensitive to outliers, which can have a disproportionate impact on the model.</p>
+</li>
+<li>
+<p><strong>Multicollinearity</strong>: If the predictors are highly correlated with each other, linear regression may not be able to accurately estimate their individual effects.</p>
+</li>
+<li>
+<p><strong>Extrapolation</strong>: Linear regression is not suitable for making predictions outside of the range of the observed data.</p>
+</li>
+</ol>
+<p>In summary, linear regression is a powerful and widely used statistical method, but it is not without its limitations. It is important to understand these limitations and use caution when interpreting the results of a linear regression model.</p>

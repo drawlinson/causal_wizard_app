@@ -1,0 +1,15 @@
+---
+title: "Software used in Causal Wizard"
+summary: "Causal Wizard is implemented with Open-Source Python packages."
+keywords: "python, library, package, module, source code"
+categorySlugs: ["causal-wizard-concept"]
+---
+<p>Causal Wizard is built on top of several very popular and widely used <a title="Python community page" href="https://www.python.org/" target="_blank" rel="noopener">Python</a> packages.&nbsp; There are so many that only some key packages are mentioned here.</p>
+<h3>Statistics and technical computing</h3>
+<p>For core number crunching, we use <a href="https://numpy.org/" target="_blank" rel="noopener">NumPy</a> and <a href="https://pandas.pydata.org/" target="_blank" rel="noopener">Pandas</a>, two of the most globally popular scientific and technical computing tools.</p>
+<p>For Causal Inference, we are using <a href="https://www.pywhy.org/dowhy/v0.9.1/" target="_blank" rel="noopener">DoWhy</a>, part of <a title="PyWhy community page" href="https://www.pywhy.org/" target="_blank" rel="noopener">PyWhy</a>. We will also extend the models to include those supported by <a title="EconML python package documentation" href="https://econml.azurewebsites.net/" target="_blank" rel="noopener">EconML</a> and possibly some custom models as well. So far, we only support <a title="Double ML model settings" href="/articles/double-ml/"><strong>DoubleML</strong></a> from <a title="EconML" href="https://econml.azurewebsites.net/index.html" target="_blank" rel="noopener">EconML</a>.</p>
+<p>If you're an experienced Python programmer, you can also use DoWhy directly, although you may still find Causal Wizard a convenient shortcut.&nbsp;</p>
+<p>The <a title="DoWhy 4 step approach" href="https://www.pywhy.org/dowhy/v0.9.1/user_guide/effect_inference/index.html" target="_blank" rel="noopener">DoWhy paradigm of Identification, Estimation and Refutation</a> is followed pretty closely in Causal Wizard, although we've wrapped these steps in more thorough checks and added a lot of error handling and messaging around issues detected. In addition we always perform a broad suite of additional validation checks and other options in DoWhy, such as Bootstrap resampling for confidence intervals and significance testing. In short, we try to make it easy for non-experts to use.</p>
+<h3>Web services</h3>
+<p>Causal Wizard was built in <a href="https://www.djangoproject.com/" target="_blank" rel="noopener">Django</a>. The user interface HTML/CSS is based on <a href="https://getbootstrap.com/" target="_blank" rel="noopener">Bootstrap</a>.&nbsp;</p>
+<p>We'd also like to call out <a href="https://js.cytoscape.org/" target="_blank" rel="noopener">Cytoscape.js</a>, which we use for causal diagram model rendering and interaction. Other plots are rendered with <a href="https://plotly.com/javascript/" target="_blank" rel="noopener">Plotly.js</a>.</p>

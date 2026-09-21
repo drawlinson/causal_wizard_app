@@ -1,0 +1,41 @@
+---
+title: "Controlling for and Conditioning on a Variable"
+summary: "Controlling for a variable means including it as a covariate in a statistical model to account for its potential influence on the outcome of interest."
+keywords: "controlling, conditioning, variable, statistics"
+categorySlugs: ["method", "statistics", "variables", "causal-effect", "data"]
+---
+<h3>Controlling for and Conditioning on Variables</h3>
+<p>Controlling for and conditioning on a variable are two statistical techniques used to address <a href="/articles/confounding/">confounding</a> variables, which can lead to inaccurate estimates of causal effects.</p>
+<p><strong>Controlling for a variable involves including the variable as a covariate in the statistical model</strong>. This method adjusts for the potential influence of the <a href="/articles/confounding/">confounding</a> variable on the outcome of interest. For example, if we want to estimate the effect of a new drug on blood pressure, we may need to control for age, as older people tend to have higher blood pressure regardless of the drug they take.</p>
+<p><strong>Conditioning on a variable involves stratifying the data</strong> according to the values of the variable and analyzing each stratum separately. This method effectively eliminates the confounding variable by restricting the analysis to a subset of the data. For example, we could condition on sex and estimate the effect of the drug separately for men and women.</p>
+<p>Both controlling for and conditioning on variables can be useful in different scenarios, depending on the research question and the available data. However, it is important to note that these methods assume that the confounding variable has been correctly identified and measured. If there are unmeasured confounders, then these techniques may not fully address the issue of confounding.</p>
+<h3>Which Variables should be controlled / conditioned?</h3>
+<p>The image below shows three common situations in a Causal Diagram: <a title="Confounding variables (Wikipedia)" href="https://en.wikipedia.org/wiki/Confounding" target="_blank" rel="noopener"><strong>Confounding</strong> variables</a>, <a title="Collider (Wikipedia)" href="https://en.wikipedia.org/wiki/Collider_(statistics)" target="_blank" rel="noopener"><strong>Collider</strong> variables</a> and <a title="Mediator variables (Wikipedia)" href="https://en.wikipedia.org/wiki/Mediation_(statistics)" target="_blank" rel="noopener"><strong>Mediator</strong> variables</a>. Note the direction of the red arrows, which vary between each graph:</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/variable_types.png" alt="" width="400" /></p>
+<p>Causal Wizard displays all variable types after Identification, which is triggered by the <a title="Check button" href="/articles/check/">Check process</a>. Causal Wizard will handle each type of variable appropriately, but here's the intuition behind this:</p>
+<h3>Confounding variables</h3>
+<p>Do control for <a href="/articles/confounding/">confounders</a>.</p>
+<p>Confounding variables affect both the Treatment and Outcome, directly or indirectly.</p>
+<p>It is generally important to control for confounding variables to reduce bias and estimate effects accurately. However, there are situations where <a title="Collider Bias in Observational Studies " href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9131185/" target="_blank" rel="noopener">controlling for other types of variable actually creates or increases bias</a>!</p>
+<h3>Collider variables</h3>
+<p>Do not control for colliders.</p>
+<p>A collider variable is affected by both Treatment and Outcome, directly or indirectly, and is not on the Causal path between them. <strong>Conditioning on a collider variable can induce spurious associations and thereby bias the estimated causal effect.</strong> Therefore, controlling for a collider variable can lead to biased results.&nbsp;</p>
+<h3>Mediator variables</h3>
+<p>Do not control for mediators.</p>
+<p>A Mediator variable lies on the causal path between the Treatment and Outcome. It mediates (modifies) the causal effect of the Treatment on the Outcome. Controlling for a mediating variable can block the causal effect you want to estimate. <strong>This is obviously inappropriate, and at best creates bias.</strong></p>
+<h3>Over-controlling</h3>
+<p>Do not over-control.</p>
+<p>Overcontrolling occurs when a variable is controlled for unnecessarily, even though it is not a confounding variable or related to the causal relationship of interest. <strong>Overcontrolling can create bias</strong>, by artificially reducing variation in the treatment variable and forcing the model to learn a less generalised form of the relationship.</p>
+<h3>Rare variable values</h3>
+<p>Controlling for variables with rare values has pros and cons.</p>
+<p>If the variable you want to control for has some rare values, or limited variation, controlling for it may yield poor models that do not generalise well (are overfitted), and / or biased.&nbsp;</p>
+<p>However, a confounder variable may have rare values.</p>
+<h3>Unobserved confounders</h3>
+<p>It is not possible to control for unobserved confounders - because they are not observed!</p>
+<p>These variables are not present in your data, but in the Causal Diagram they are confounders. If you cannot find a suitable identification method due to unobserved confounders, you can remove them from the graph; however, note that this creates the possibility that to some extent the effect is really due to the unobserved confounders rather than the observed Treatment.</p>
+<p><strong>Document</strong> unobserved confounders which you suspect may exist but aren't in the Causal Diagram. You might exclude them because:</p>
+<ul>
+<li>You want to keep the diagram simple, or</li>
+<li>Including them prevents successful identification</li>
+</ul>
+<p>&nbsp;</p>

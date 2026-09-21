@@ -1,0 +1,12 @@
+---
+title: "Cycle (Graph)"
+summary: "A graph cycle is a sequence of connected vertices in a graph that begins and ends at the same vertex."
+keywords: "graph acyclic component dag"
+categorySlugs: ["variables", "independence", "graph"]
+---
+<p>A cycle in a <a href="/articles/graph/">graph</a> refers to a <a title="Definition of a cycle in a graph" href="https://en.wikipedia.org/wiki/Cycle_(graph_theory)" target="_blank" rel="noopener">sequence of vertices connected by edges that starts and ends at the same vertex</a>. In other words, it's a closed path in the graph. A graph is said to be cyclic if it contains at least one cycle, and acyclic if it does not contain any cycles.</p>
+<p>A <a title="Graph component" href="https://en.wikipedia.org/wiki/Component_(graph_theory)" target="_blank" rel="noopener">component</a> in a graph refers to a subset of vertices that are connected to each other by paths. A graph can have one or more components, and each component is essentially a separate sub-graph of the original graph.</p>
+<p>A <a href="/articles/dag/">directed acyclic graph (DAG)</a> is a special type of directed graph that contains no cycles. This means that there is no way to start at a vertex and follow a sequence of directed edges that leads back to the same vertex. DAGs are often used to represent relationships between objects or events that have a natural direction, such as task dependencies in a project schedule.</p>
+<p>DAGs are useful in many applications because they allow us to reason about the order in which events or tasks must occur without getting stuck in an infinite loop of dependencies. They are also more efficient to process than cyclic graphs because we can perform certain operations, such as topological sorting, in linear time.</p>
+<h3>Causal Diagram</h3>
+<p>A <a href="/articles/causal-diagram/">Causal Diagram</a> is a specific type of Acyclic graph in which edges imply the existence of a direct causal relationship between vertices, which are assumed to be <a href="/articles/variables/">variables</a>.</p>

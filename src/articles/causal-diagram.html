@@ -1,0 +1,33 @@
+---
+title: "Causal Diagram"
+summary: "A causal diagram is a visual representation of the relationships between different variables and their direction of causality in a system or process. Absence of an edge implies no causal relationship."
+keywords: "graph directed acyclic graph causal diagram domain knowledge"
+categorySlugs: ["variables", "independence", "causal-wizard-concept", "graph", "data"]
+---
+<p>A <a title="Illustrated introduction to causal diagrams" href="https://theeffectbook.net/ch-CausalDiagrams.html#causal-diagrams" target="_blank" rel="noopener">causal diagram is a visual representation of the relationships between different variables</a> in a system or process, with arrows indicating the direction of causality (from cause, to effect). It is a tool for understanding cause-and-effect relationships and identifying potential sources of bias in statistical analyses.</p>
+<p>Causal diagrams are commonly used in fields such as epidemiology, economics, and social sciences to help researchers understand the complex relationships between different factors that may contribute to a particular outcome. They can also be used to identify potential <a href="/articles/confounding/">confounding variables</a> or other sources of <a href="/articles/bias/">bias</a> that may affect the accuracy of statistical analyses.</p>
+<p><img src="/assets/images/churn-causal-diagram.png" alt="" width="100%" /></p>
+<h3>&nbsp;What do the arrows in a Causal Diagram mean?</h3>
+<p>An arrow represents a <strong>direct,</strong> <strong>causal</strong> relationship between one <a href="/articles/variables/">variable</a> and another. The arrows in a causal diagram capture the <strong>direction</strong> of causality. For example, if variable A directly <strong>causes</strong> variable B, there would be an arrow pointing from A to B. If A causes B <em>indirectly</em>, there will be edges to and from one or more <a href="/articles/mediation/"><strong>mediating variables</strong></a>.</p>
+<p>The absence of an arrow between two variables does not necessarily indicate that there is no relationship between them, only that the relationship is not direct, or not causal (there is often <a href="/articles/correlationcausality/">association</a> between variables which do not have a direct causal link).</p>
+<p>Causal diagrams can take many different forms, including <a href="/articles/dag/">directed acyclic graphs (DAGs)</a>, path diagrams, and<a title="Structural causal models, causal diagrams, and structural equation models" href="https://www.causalflows.com/structural-causal-models/" target="_blank" rel="noopener"> structural equation models</a>, among others. They provide a powerful tool for understanding complex systems and identifying potential sources of bias, and are increasingly used in both research and practical applications.</p>
+<p>In Causal Wizard, Causal Diagrams are represented by Directed Acyclic Graphs (DAGs). They are used to encode users' <a href="/articles/domain-knowledge/">prior domain knowledge</a>, so it can be incorporated in analysis.</p>
+<h3>How to draw a Causal Diagram</h3>
+<p>When drawing your causal diagram, you should aim to include:</p>
+<ul>
+<li><strong>All variables</strong> materially relevant to the effect you wish to estimate</li>
+<li>You should consider including variables which are not available in your data, if materially relevant. Create them as <a href="/articles/observed-variable/"><strong>unobserved</strong> <strong>variables</strong></a>.</li>
+<li>All <strong>direct</strong>, <strong>causal</strong> relationships between these variables (do not draw arrows representing only <strong>correlation</strong> or <strong>association</strong>)</li>
+<li>You should not draw arrows representing <strong>indirect</strong> relationships, unless intermediate (mediating) variables have no effect or are unobserved.</li>
+</ul>
+<p>As a result of the above, you should have included the <a href="/articles/treatment/">Treatment</a> and <a href="/articles/outcome/">Outcome</a> variables. There may or may not be a directed path between them; if not, the <a href="/articles/causal-effect/">causal effect</a> is zero.</p>
+<p><strong><span style="color: #ba372a;">Remember, omitting a variable or an arrow is just as important as including one.</span></strong></p>
+<h3>What if my Causal Diagram is wrong?</h3>
+<p>What if I don't know what the graph looks like? What if I get the graph wrong? There are many ways to answer these questions.</p>
+<p>We liked this answer:</p>
+<p><a title="How do you know if your causal diagram is correct?" href="https://www.inference.vc/causal-inference-2-illustrating-interventions-in-a-toy-example/" target="_blank" rel="noopener">"you have to accept that your analysis is conditional on the graph you choose, and your conclusions are valid under the assumptions encoded there. In a way, causal inference from observational data is <em>subjective</em>. When you publish a result, you should caveat it with "under these assumptions, this is true". <strong>Readers can then dispute and question your assumptions if they disagree.</strong>"</a></p>
+<p>This means that your Causal Diagram becomes a prior - an assumption - which is clearly documented as part of your research or analysis. Other versions of the Causal Diagram can also be analysed, to help answer questions about what the results would look like under a <strong>different</strong> set of assumptions&nbsp; (see below).</p>
+<p>There is also some <strong>subjectivity</strong> in terms of what to include in a Causal Diagram. Some simplification of the real world is always necessary unless you're going to simulate at a Quantum level. There's also <strong>expediency</strong> - your diagram will be limited by the data which is actually available, although you can include <a href="/articles/observed-variable/"><strong>unobserved variables</strong></a> if they're important.</p>
+<h3>Drawing multiple Causal Diagrams to cover possible scenarios</h3>
+<p>If you are uncertain as to the true or ideal Causal Diagram, we recommend you use Causal Wizard to <em>create multiple diagrams</em> representing each of the possible graphs. Generate estimates from one or more model types on each diagram, and compare the results.</p>
+<p>If your results are unaffected by the different diagrams, you can feel confident in the answer. If your results <strong>are</strong> materially affected by different diagrams, explore whether there are other studies, existing research or other information you can use to resolve the competing hypotheses.</p>

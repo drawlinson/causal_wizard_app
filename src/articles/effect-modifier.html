@@ -1,0 +1,23 @@
+---
+title: "Effect modifier (variable)"
+summary: "In causal inference, an effect modifier variable is a variable that modifies the relationship between a treatment and an outcome."
+keywords: "identification, estimand"
+categorySlugs: ["variables", "causal-inference"]
+---
+<p>Consider the scenario where you are studying the effect of an exposure or treatment variable X on an outcome variable Y.</p>
+<p><a title="Definition of effect modifier" href="https://online.stat.psu.edu/stat507/lesson/3/3.5#paragraph--282" target="_blank" rel="noopener">An effect modifier variable is a third variable, that influences the strength or direction of the association between the exposure and outcome</a>.</p>
+<h3>Effect modifier example</h3>
+<p>For example, let's consider a study investigating the effect of a new drug on blood pressure. The treatment or exposure is whether a patient has received the drug. The outcome is blood pressure after a period of time.</p>
+<p><strong>Age could be an effect modifier variable</strong>, as the <strong>effect</strong> of the drug on blood pressure may differ depending on the age of the patient. In this case, age <strong>modifies</strong> the relationship between the drug exposure and blood pressure outcome.</p>
+<h3>Why effect modifiers are important</h3>
+<p>Identifying effect modifiers is important in causal inference because it helps us to understand how the effect of an exposure on an outcome may differ in different subgroups of the population. This information can be used to tailor interventions and treatments to specific subgroups and improve overall effectiveness.</p>
+<p>In order to identify effect modifiers, statistical techniques such as stratification or interaction analysis may be used. Stratification involves analyzing the effect of the exposure on the outcome within subgroups defined by the effect modifier variable, while interaction analysis tests whether the effect of the exposure on the outcome varies depending on the level of the effect modifier variable.</p>
+<h3>Difference between effect modification and confounding</h3>
+<p>Effect modification and confounding are related but not identical concepts.</p>
+<ul>
+<li>In confounding, the association between exposure or treatment and outcome disappears after stratification</li>
+<li>In effect modification, the association remains, after stratification.</li>
+</ul>
+<p>Effect modification is a reflection of the underlying mechanism at work, whereas confounding is a statistical bias caused by failure to account for a separate, underlying mechanism.</p>
+<p>This YouTube video explains: <a href="https://youtu.be/NgjnvllLNEk?t=657">https://youtu.be/NgjnvllLNEk?t=657</a></p>
+<p><iframe src="https://www.youtube.com/embed/NgjnvllLNEk?t=657" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>

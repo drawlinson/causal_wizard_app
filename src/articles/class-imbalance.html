@@ -1,0 +1,24 @@
+---
+title: "Class Imbalance"
+summary: "Class imbalance means that your classes (also called cohorts, or groups) are not balanced. One group is much larger than the other."
+keywords: "class, cohort, sample size, population"
+categorySlugs: ["statistics", "data"]
+---
+<p>In Machine Learning and statistics, a Class is a group of samples which share the same category, label, or group identity. Similarly, in scientific experiments, a group of subjects is also sometimes called a cohort.</p>
+<p>In Causal Wizard, we are interested in comparing two groups or cohorts:&nbsp;</p>
+<ul>
+<li>The control group</li>
+<li>The treated group</li>
+</ul>
+<p>The treatment is used to determine which group each sample belongs to. We will then compare the outcomes of the two groups.</p>
+<p>Causal Wizard will refuse to proceed if one of these groups is empty (i.e. no samples are classified as Controls or Treated).</p>
+<p>If the ratio of Controls to Treated exceeds 5:1 or 1:5 (either way), Causal Wizard will warn you that these classes are imbalanced (also known as <a title="Class imbalance - definition and description" href="https://developers.google.com/machine-learning/data-prep/construct/sampling-splitting/imbalanced-data" target="_blank" rel="noopener">class-imbalance</a>).</p>
+<p><a title="Effects of class imbalance and strategies to mitigate it" href="https://journalofbigdata.springeropen.com/articles/10.1186/s40537-019-0192-5" target="_blank" rel="noopener">Why worry about imbalanced data? Statistical models will focus on the most common class, whichever that is, and will not model the rare class as accurately. This means your results are likely to be less accurate.</a></p>
+<p>If both classes have thousands of samples, this may be less of a concern. But if your dataset is small, and one of the classes is extremely small, this problem may be severe. It is left to your judgement how severe the impact may be in your case.</p>
+<p>Possible remedies include:</p>
+<ul>
+<li>Obtaining and using more data. This is the best approach, if possible.</li>
+<li>If you already have a lot of samples, reducing the number of samples in the most populous (majority) class, whichever that is. Be careful not to introduce bias when resampling.</li>
+<li>Impute additional samples in the rare (minority) class. This is tricky, because the statistics of the imputed samples are likely to be biased.</li>
+</ul>
+<p><a title="How to handle class imbalance." href="https://medium.com/mlearning-ai/handling-class-imbalance-in-machine-learning-cb1473e825ce" target="_blank" rel="noopener">Read more about how to handle class imbalance here</a>.&nbsp;</p>

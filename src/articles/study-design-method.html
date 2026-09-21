@@ -1,0 +1,52 @@
+---
+title: "Study Design and Method options"
+summary: "The Design and Method of your Study defines the methodology and approach which will be used."
+keywords: "design method study experiment methodology"
+categorySlugs: ["study-design", "causal-wizard-concept", "data"]
+---
+<h3>Introduction</h3>
+<p>Designing an <a title="Observational study design" href="/articles/observational-data/" target="_blank" rel="noopener">observational, causal experiment</a> requires you to make a number of choices. Causal Wizard simplifies this to <strong>two</strong> decisions:</p>
+<ul>
+<li><strong>Method</strong> (or Methodology)</li>
+<li><strong>Design</strong></li>
+</ul>
+<p>In short, Method allows you to choose the Causal Inference <em>methodology</em> which will be used, including the way you will provide your <a title="Using expert knowledge to solve causal inference problem" href="/articles/domain-knowledge/" target="_blank" rel="noopener">domain knowledge</a>, the way <a title="Causal effect" href="/articles/causal-effect/" target="_blank" rel="noopener">Causal Effects</a> are identified and the types of Causal Machine Learning <a title="Machine learning model - explanation and definition" href="/articles/model/" target="_blank" rel="noopener">models</a> available.</p>
+<p>The <em>Design</em> question is about how your data is structured, and whether you have a binary treatment design (e.g. treated and control groups), or a continuous treatment.</p>
+<p>Both aspects are discussed below. You can change these decisions in the edit <a title="Study concept" href="/articles/study/" target="_blank" rel="noopener">Study</a> page.</p>
+<h3>Method(-ology)</h3>
+<p>We now offer&nbsp;<strong>two</strong>&nbsp;methodologies.<span style="color: #ba372a;"> </span><strong><span style="color: #ba372a;">The default methodology is&nbsp;<em>Causal Diagram &amp; Potential Outcomes</em>.</span> </strong>We recently added popular Econometric methods for&nbsp;<em>Panel data</em>, including&nbsp;<a title="Difference in difference method" href="/articles/did/" target="_blank" rel="noopener">Difference-in-Differences</a>. These may be preferred (or used for comparison) if your data is compatible with <a title="Panel data format" href="/articles/panel-data/" target="_blank" rel="noopener">Panel data format</a>. All methods support use of&nbsp;<a title="Using observational data" href="/articles/observational-data/" target="_blank" rel="noopener">observational data</a>.</p>
+<p><strong>Causal Diagram &amp; Potential Outcomes methodology</strong></p>
+<p class="mb-0">This is the default option, and should be selected if you want to draw and analyse a&nbsp;<a title="Causal Diagram" href="/articles/causal-diagram/" target="_blank" rel="noopener">Causal Diagram</a>. This methodology follows the&nbsp;<a title="DoWhy documentation" href="https://www.pywhy.org/dowhy/v0.11.1/user_guide/intro.html" target="_blank" rel="noopener">DoWhy</a>&nbsp;paradigm, which combines Graphical Causal Models (GCMs) and the&nbsp;<a title="Potential Outcomes framework introduction" href="/articles/potential-outcomes/" target="_blank" rel="noopener">Potential Outcomes framework</a>.</p>
+<ul>
+<li>Draw and analyse Causal Diagrams&nbsp;<strong>with or without data</strong>.</li>
+<li>Binary treatment&nbsp;<a title="Case control or binary treatment design" href="/articles/control-and-treated/" target="_blank" rel="noopener">(case / control)</a>&nbsp;study design.</li>
+<li>Explicit causal model defined by expert knowledge.</li>
+<li>Can estimate a range of&nbsp;<a title="Causal Effects" href="/articles/causal-effect/" target="_blank" rel="noopener">Causal Effects</a>, including&nbsp;<a title="Averate Treatment Effect" href="/articles/att/" target="_blank" rel="noopener">Average Treatment Effect (ATE)</a>.</li>
+<li>Variety of Estimators, including&nbsp;<a title="Regression article" href="/articles/regression/" target="_blank" rel="noopener">regression models</a>&nbsp;and&nbsp;<a title="Propensity score methods" href="/articles/propensity-scores/" target="_blank" rel="noopener">Propensity Score methods</a>.</li>
+<li>Does not explicitly model time; recommend present data as snapshots of pre and post-treatment per&nbsp;<a title="Definition of a sample unit or individual sample observation" href="/articles/sample/" target="_blank" rel="noopener">sample-unit</a>. See also&nbsp;<a title="Datasets" href="/articles/dataset/" target="_blank" rel="noopener">Datasets article</a>.</li>
+</ul>
+<p><strong>Panel Data methods</strong></p>
+<p class="mb-0"><a title="Panel data" href="/articles/panel-data/" target="_blank" rel="noopener">Panel data format</a>&nbsp;is commonly used when a group of entities are observed over two or more time-periods. Therefore, the&nbsp;<a title="Difference in differences method" href="/articles/did/" target="_blank" rel="noopener">Difference-in-Differences</a>&nbsp;study design is a special case of Panel Data where there are only two periods (before and after intervention). Numerous methods have been developed to suit this data format.</p>
+<ul class="mb-0">
+<li>Treatment can be&nbsp;<strong>continuous / numerical</strong>&nbsp;or binary&nbsp;<a title="Case/Control or Binary treatment design" href="/articles/control-and-treated/" target="_blank" rel="noopener">(case / control)</a>.</li>
+<li><a title="Fixed effects models" href="/articles/fixed-effects/" target="_blank" rel="noopener">One or Two-Way Fixed Effects (TWFE)</a>&nbsp;models (<strong>Entity</strong> groups and / or <strong>Time</strong>).</li>
+<li>De-meaning approach for fixed effects, allowing a larger number of categorical values.</li>
+<li>Allows additional covariates.</li>
+<li>Estimates&nbsp;<a title="Average Treatment Effect on the Treated (ATT)" href="/articles/att/" target="_blank" rel="noopener">Average Treatment Effect on the Treated (ATT)</a>&nbsp;using Ordinary Least Squares (OLS) regression.</li>
+<li>Suitable for Difference-in-Differences study design.</li>
+<li>Does not require Causal Diagram, but requires data.</li>
+<li><strong>Not appropriate</strong>&nbsp;when time-varying&nbsp;<a title="Confounding variables" href="/articles/confounding/" target="_blank" rel="noopener">confounders</a> are present.</li>
+</ul>
+<h3>Study Design</h3>
+<p>You can select either a <strong>Binary treatment</strong> (<a title="Case control aka Treated / Control design" href="/articles/control-and-treated/" target="_blank" rel="noopener">case / control</a>&nbsp;study design), or a <strong>continuous numerical treatment</strong>. The choice is usually determined by the&nbsp;<a title="Data types" href="/articles/data-type/" target="_blank" rel="noopener">data type</a>&nbsp;of your treatment variable.</p>
+<p><strong>Binary (Case / Control) Treatment</strong></p>
+<ul>
+<li>Use when your Treatment values are catgorical e.g. 0/1, True/False, or some other values which can be divided into&nbsp;<a title="Control and treated groups design" href="/articles/control-and-treated/" target="_blank" rel="noopener">Control and Treated groups</a>.</li>
+<li>Can also be used when your Treatment values are continuous / numerical, but you want to use a threshold value to separate them into Treated and Control groups.</li>
+<li><span style="color: #ba372a;"><strong>Must</strong>&nbsp;be selected when Method is&nbsp;<em>Causal-Diagram &amp; Potential Outcomes</em>, to allow group comparison.</span></li>
+</ul>
+<p><strong>Continuous, numerical Treatment</strong></p>
+<ul class="mb-0">
+<li>Use when your Treatment variable has a&nbsp;<a title="Data types explanation and list of examples" href="/articles/data-type/" target="_blank" rel="noopener">continuous, numerical data type</a>.</li>
+<li>Can only be used with&nbsp;<a title="Panel data format explained" href="/articles/panel-data/" target="_blank" rel="noopener">Panel data methods</a>, such as&nbsp;<a title="Introduction to fixed-effects models" href="/articles/fixed-effects/" target="_blank" rel="noopener">fixed-effects models</a>.</li>
+</ul>

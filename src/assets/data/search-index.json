@@ -1,0 +1,528 @@
+{
+  "articles": [
+    {
+      "slug": "publications",
+      "title": "Academic papers",
+      "keywords": "key, publications, peer-review, works, articles, recommended reading"
+    },
+    {
+      "slug": "adjustment",
+      "title": "Adjustment (Frontdoor, Backdoor)",
+      "keywords": "graph, causal diagram, do-calculus, identification"
+    },
+    {
+      "slug": "assumptions",
+      "title": "Assumptions",
+      "keywords": "assumption constraint criteria rules valid"
+    },
+    {
+      "slug": "ate",
+      "title": "Average Treatment Effect (ATE)",
+      "keywords": "causal effect, hypothesis"
+    },
+    {
+      "slug": "att",
+      "title": "Average Treatment Effect on the Treated (ATT)",
+      "keywords": "causal effect, hypothesis, experiment design"
+    },
+    {
+      "slug": "backdoor-variable",
+      "title": "Backdoor variable",
+      "keywords": "identification, estimand"
+    },
+    {
+      "slug": "bias",
+      "title": "Bias",
+      "keywords": "overfitting, underfitting, performance, accuracy, generalization, generalisation"
+    },
+    {
+      "slug": "bootstrap-validation",
+      "title": "Bootstrap validation",
+      "keywords": "validation, statistics, confidence, robustness, confidence interval"
+    },
+    {
+      "slug": "cardinality",
+      "title": "Cardinality",
+      "keywords": "data, columns, values, dataset, data types"
+    },
+    {
+      "slug": "causal-diagram",
+      "title": "Causal Diagram",
+      "keywords": "graph directed acyclic graph causal diagram domain knowledge"
+    },
+    {
+      "slug": "causal-effect",
+      "title": "Causal Effect",
+      "keywords": "treatment effect, average treatment effect, ate, att"
+    },
+    {
+      "slug": "check",
+      "title": "Check (Verification and Identification)",
+      "keywords": "Check, verify, identify, identification"
+    },
+    {
+      "slug": "class-imbalance",
+      "title": "Class Imbalance",
+      "keywords": "class, cohort, sample size, population"
+    },
+    {
+      "slug": "cohort",
+      "title": "Cohort",
+      "keywords": "samples, group, control, treated"
+    },
+    {
+      "slug": "common-cause",
+      "title": "Common Cause (variable)",
+      "keywords": "Confounder, variable, check"
+    },
+    {
+      "slug": "cate",
+      "title": "Conditional Average Treatment Effect (CATE)",
+      "keywords": "causal effect, treatment, experiment design"
+    },
+    {
+      "slug": "confidence-interval",
+      "title": "Confidence Interval",
+      "keywords": "Confidence interval, probability, CI, limits, bootstrap"
+    },
+    {
+      "slug": "confounding",
+      "title": "Confounding / Confounder (Variable)",
+      "keywords": "bias, effect modifier"
+    },
+    {
+      "slug": "control-and-treated",
+      "title": "Control and Treated values for Treatment variable",
+      "keywords": "treatment, control, treated, treat, values, binary, boolean, threshold"
+    },
+    {
+      "slug": "controlling",
+      "title": "Controlling for and Conditioning on a Variable",
+      "keywords": "controlling, conditioning, variable, statistics"
+    },
+    {
+      "slug": "correlationcausality",
+      "title": "Correlation, Association and Causality",
+      "keywords": "correlation, data, variables, statistics, causality, association"
+    },
+    {
+      "slug": "counterfactual",
+      "title": "Counterfactual",
+      "keywords": "outcome, hypothesis, scenario, hypothetical, alternative"
+    },
+    {
+      "slug": "covariate-balance",
+      "title": "Covariate Balance",
+      "keywords": "positivity assumption covariate balance valid data"
+    },
+    {
+      "slug": "cycle",
+      "title": "Cycle (Graph)",
+      "keywords": "graph acyclic component dag"
+    },
+    {
+      "slug": "data-type",
+      "title": "Data types",
+      "keywords": "data, type, categorical, nominal, ordinal, numerical, text, continuous, discrete, integer, real, string, bool, integer"
+    },
+    {
+      "slug": "dataset",
+      "title": "Dataset (Tabular, Matrix)",
+      "keywords": "data, dataset, matrix, tabular, csv, file, excel"
+    },
+    {
+      "slug": "did",
+      "title": "Difference-in-differences (DID) (method)",
+      "keywords": "causal effect, inference"
+    },
+    {
+      "slug": "dimension",
+      "title": "Dimension (Data)",
+      "keywords": "Data, dimension, variable, column, attribute"
+    },
+    {
+      "slug": "dag",
+      "title": "Directed Acyclic Graph (DAG)",
+      "keywords": "graph, dag, directed, acyclic, component"
+    },
+    {
+      "slug": "distribution",
+      "title": "Distribution (Data)",
+      "keywords": "data, statistics, data types, cardinality"
+    },
+    {
+      "slug": "do-calculus",
+      "title": "do-Calculus",
+      "keywords": "study design, experiment, causality, paradigm"
+    },
+    {
+      "slug": "domain-knowledge",
+      "title": "Domain Knowledge",
+      "keywords": "prior, SME, subject matter expert, expertise, knowledge"
+    },
+    {
+      "slug": "double-ml",
+      "title": "Double ML",
+      "keywords": "doubleml double-ml Frisch-Waugh-Lovell"
+    },
+    {
+      "slug": "effect-modifier",
+      "title": "Effect modifier (variable)",
+      "keywords": "identification, estimand"
+    },
+    {
+      "slug": "estimand",
+      "title": "Estimand",
+      "keywords": "estimand, causal effect, identification, identify"
+    },
+    {
+      "slug": "estimate",
+      "title": "Estimate",
+      "keywords": "estimate, estimation, inference"
+    },
+    {
+      "slug": "estimation",
+      "title": "Estimation",
+      "keywords": "estimate, estimand, quantity, inference"
+    },
+    {
+      "slug": "expected-value",
+      "title": "Expected value",
+      "keywords": "effect, treatment, outcome, statistics, ate"
+    },
+    {
+      "slug": "experiment",
+      "title": "Experiment",
+      "keywords": "rct, randomized controlled trial, design, hypothesis"
+    },
+    {
+      "slug": "exploratory-analysis",
+      "title": "Exploratory Data Analysis",
+      "keywords": "EDA, Exploratory Data Analysis, Histogram, Data quality, missing data, scatter plot, visualisation, feature-selection"
+    },
+    {
+      "slug": "f-statistic",
+      "title": "F-statistic",
+      "keywords": "metric statistic confidence p-value performance validation"
+    },
+    {
+      "slug": "feature-importance",
+      "title": "Feature Importance (Model Explainer tools)",
+      "keywords": "explainable AI, features, covariates, explainer, importance, SHAP"
+    },
+    {
+      "slug": "fixed-effects",
+      "title": "Fixed Effects models",
+      "keywords": "TWFE two way fixed effects regression model"
+    },
+    {
+      "slug": "frontdoor-variable",
+      "title": "Frontdoor variable",
+      "keywords": "identification, estimand"
+    },
+    {
+      "slug": "metrics",
+      "title": "Generalization performance metrics",
+      "keywords": "generalization, performance, accuracy, f1-score, precision, recall, RMSE, r-squared, R2, sensitivity specificity"
+    },
+    {
+      "slug": "graph",
+      "title": "Graph (mathematics)",
+      "keywords": "graph causal diagram"
+    },
+    {
+      "slug": "identification",
+      "title": "Identification",
+      "keywords": "estimand, identify, quantity"
+    },
+    {
+      "slug": "independence",
+      "title": "Independence (Samples and Variables)",
+      "keywords": "independence, causality, association, correlation, bias"
+    },
+    {
+      "slug": "independent-variable",
+      "title": "Independent and Dependent variables",
+      "keywords": "design, experiment, hypothesis"
+    },
+    {
+      "slug": "inference",
+      "title": "Inference (Statistics and Causal Inference)",
+      "keywords": "infer, causal inference, estimate"
+    },
+    {
+      "slug": "iv",
+      "title": "Instrumental Variables (Method)",
+      "keywords": "identification, causal effect"
+    },
+    {
+      "slug": "intervention",
+      "title": "Intervention",
+      "keywords": "retrospective, RCT, randomized controlled trial, variable"
+    },
+    {
+      "slug": "linear",
+      "title": "Linearity and Non-linearity",
+      "keywords": "data, variables, function, linear, nonlinear, non-linear, interaction, association, correlation, causation, relationship"
+    },
+    {
+      "slug": "late",
+      "title": "Local Average Treatment Effect (LATE)",
+      "keywords": "causal effect, hypothesis, experiment design"
+    },
+    {
+      "slug": "machine-learning",
+      "title": "Machine Learning",
+      "keywords": "machine learning, ai, artificial intelligence, estimation"
+    },
+    {
+      "slug": "matching",
+      "title": "Matching (method)",
+      "keywords": "Causal effect, inference"
+    },
+    {
+      "slug": "mediation",
+      "title": "Mediation (process)",
+      "keywords": "experiment, design, variables"
+    },
+    {
+      "slug": "model",
+      "title": "Model (Statistics and Machine Learning)",
+      "keywords": "model, ML, machine learning, estimation"
+    },
+    {
+      "slug": "model-selection",
+      "title": "Model Selection",
+      "keywords": "model, statistics, estimation"
+    },
+    {
+      "slug": "observational-data",
+      "title": "Observational data / studies",
+      "keywords": "experiment design, experimental method, dataset"
+    },
+    {
+      "slug": "observed-variable",
+      "title": "Observed / unobserved variable",
+      "keywords": "observed, unobserved, variable, latent, hidden"
+    },
+    {
+      "slug": "outcome",
+      "title": "Outcome (variable)",
+      "keywords": "outcome, treatment, variable, dependent"
+    },
+    {
+      "slug": "p-value",
+      "title": "p-values (Significance testing)",
+      "keywords": "statistics, significance, hypothesis"
+    },
+    {
+      "slug": "panel-data",
+      "title": "Panel Data format",
+      "keywords": "Panel data format entities groups over time"
+    },
+    {
+      "slug": "parameter",
+      "title": "Parameter",
+      "keywords": "parameter, coefficient, training, learning"
+    },
+    {
+      "slug": "parametric",
+      "title": "Parametric / Non-Parametric (Models)",
+      "keywords": "statistics, estimation, estimate, assumptions"
+    },
+    {
+      "slug": "pending-results",
+      "title": "Pending Results Queue",
+      "keywords": "results, pending, queue, processing"
+    },
+    {
+      "slug": "placebo-treatment",
+      "title": "Placebo treatment refuter",
+      "keywords": "placebo, refutation, validation, refuter"
+    },
+    {
+      "slug": "potential-outcomes",
+      "title": "Potential Outcomes Framework",
+      "keywords": "study design, experiment, causality, paradigm"
+    },
+    {
+      "slug": "prior",
+      "title": "Prior (Statistics)",
+      "keywords": "distribution, density, posterior, inference"
+    },
+    {
+      "slug": "propensity-scores",
+      "title": "Propensity Scores (Method)",
+      "keywords": "estimation, weighting, stratification, matching"
+    },
+    {
+      "slug": "random-common-cause",
+      "title": "Random Common Cause Refuter",
+      "keywords": "validation, refutation, common-cause"
+    },
+    {
+      "slug": "rct",
+      "title": "Randomized Controlled Trial (RCT)",
+      "keywords": "experiment, design, hypothesis, refutation"
+    },
+    {
+      "slug": "random-outcomes",
+      "title": "Randomized Outcomes Refuter",
+      "keywords": "refute, refutation, validation, outcome"
+    },
+    {
+      "slug": "refutation",
+      "title": "Refutation",
+      "keywords": "refute, refutation, validation"
+    },
+    {
+      "slug": "bootstrap-refuters-dowhy",
+      "title": "Refutation and Significance testing in DoWhy",
+      "keywords": "P-values bootstrap refutation test random common cause placebo treatment significance"
+    },
+    {
+      "slug": "regression",
+      "title": "Regression (method)",
+      "keywords": "model, fitting, optimise, optimization, estimation, estimate"
+    },
+    {
+      "slug": "research-question",
+      "title": "Research Question",
+      "keywords": "research question, hypothesis, experimental design"
+    },
+    {
+      "slug": "result",
+      "title": "Result",
+      "keywords": "result, outcome, data"
+    },
+    {
+      "slug": "sample",
+      "title": "Sample (Sample Unit)",
+      "keywords": "sample, individual, entry, data, sample unit, observation unit"
+    },
+    {
+      "slug": "software",
+      "title": "Software used in Causal Wizard",
+      "keywords": "python, library, package, module, source code"
+    },
+    {
+      "slug": "standardized",
+      "title": "Standardisation and normalization",
+      "keywords": "Data, norm, standardized, normalized, normalised, standardised,"
+    },
+    {
+      "slug": "study",
+      "title": "Study",
+      "keywords": "study, problem, hypothesis, research question, experiment"
+    },
+    {
+      "slug": "study-design-method",
+      "title": "Study Design and Method options",
+      "keywords": "design method study experiment methodology"
+    },
+    {
+      "slug": "positivity",
+      "title": "The Positivity Assumption",
+      "keywords": "positivity  assumption"
+    },
+    {
+      "slug": "treatment",
+      "title": "Treatment (variable)",
+      "keywords": "variable, treated, intervention, independent"
+    },
+    {
+      "slug": "tutorial-1",
+      "title": "Tutorial 1",
+      "keywords": "confounding bias, domain knowledge, common cause"
+    },
+    {
+      "slug": "tutorial-2",
+      "title": "Tutorial 2",
+      "keywords": "bias, market research, content marketing, seo, optimisation, optimization"
+    },
+    {
+      "slug": "tutorial-3",
+      "title": "Tutorial 3",
+      "keywords": "multiple confounders"
+    },
+    {
+      "slug": "tutorial-4",
+      "title": "Tutorial 4",
+      "keywords": "tutorial example case study domain knowledge common cause"
+    },
+    {
+      "slug": "tutorial-fixed-effects",
+      "title": "Tutorial: Fixed Effects models",
+      "keywords": "TWFE example tutorial fixed effects model regression two way"
+    },
+    {
+      "slug": "validation",
+      "title": "Validation",
+      "keywords": "validate, bootstrap, generalization, generalisation, overfitting, variance, bias"
+    },
+    {
+      "slug": "variables",
+      "title": "Variables",
+      "keywords": "variable, property, attribute, column"
+    },
+    {
+      "slug": "z-statistic",
+      "title": "z-Statistic",
+      "keywords": "metric statistic confidence p-value performance validation evaluation results"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "causal-effect",
+      "name": "Causal Effect"
+    },
+    {
+      "slug": "causal-inference",
+      "name": "Causal Inference"
+    },
+    {
+      "slug": "causal-wizard-concept",
+      "name": "Causal Wizard Concept"
+    },
+    {
+      "slug": "data",
+      "name": "Data"
+    },
+    {
+      "slug": "graph",
+      "name": "Graph"
+    },
+    {
+      "slug": "independence",
+      "name": "Independence"
+    },
+    {
+      "slug": "method",
+      "name": "Method"
+    },
+    {
+      "slug": "process",
+      "name": "Process"
+    },
+    {
+      "slug": "statistics",
+      "name": "Statistics"
+    },
+    {
+      "slug": "study-design",
+      "name": "Study Design"
+    },
+    {
+      "slug": "tutorial",
+      "name": "Tutorial"
+    },
+    {
+      "slug": "validation",
+      "name": "Validation"
+    },
+    {
+      "slug": "variables",
+      "name": "Variables"
+    }
+  ]
+}

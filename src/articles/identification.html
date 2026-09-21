@@ -1,0 +1,19 @@
+---
+title: "Identification"
+summary: "Identification in causal inference refers to the ability to estimate the causal effect of a treatment or intervention by determining whether valid causal inferences can be made from observational data"
+keywords: "estimand, identify, quantity"
+categorySlugs: ["study-design", "process", "causal-inference", "validation"]
+---
+<p><a title="Identification in causal inference" href="https://causalinference.gitlab.io/causal-reasoning-book-chapter3/" target="_blank" rel="noopener">Identification</a> is a fundamental concept in causal inference that refers to the ability to estimate the causal effect of a particular treatment or intervention on an outcome of interest. It is the process of determining whether it is possible to make valid causal inferences from <a href="/articles/observational-data/">observational data</a>. The result of identification is an <a href="/articles/estimand/">Estimand</a>, a statistical quantity which can be <a href="/articles/estimation/">estimated</a> from the data.</p>
+<p>In order to identify a causal effect, researchers must have a clear definition of the<a href="/articles/treatment/"> treatment, intervention or exposure</a> of interest, as well as a <a href="/articles/control-and-treated/">suitable comparison (control) group</a>. This comparison group should be similar to the treatment group in all relevant characteristics except for the treatment itself, so that any differences in the outcome can be attributed to the treatment rather than to other factors.</p>
+<p>Identification all this prior <a href="/articles/domain-knowledge/">domain knowledge</a> from you, which collectively describes the quantity you wish to estimate. This domain knowledge includes a <a href="/articles/causal-diagram/">Causal Diagram</a>.&nbsp;</p>
+<p>The dependencies and outputs of the identification and estimation processes are:</p>
+<ul>
+<li>Domain knowledge &rarr; <strong>Identification</strong> &rarr; Estimand</li>
+<li>Estimand + Data &rarr; <strong>Estimation</strong> &rarr; Estimate</li>
+</ul>
+<p>Note that the estimand is also a necessary input for <a href="/articles/validation/">Validation</a> and <a href="/articles/refutation/">Refutation</a> of the <a href="/articles/result/">results</a>.</p>
+<p>Various methods have been developed to identify <a href="/articles/causal-effect/">causal effects</a>, including <a href="/articles/rct/">randomized controlled trials</a>, <a href="/articles/experiment/">natural experiments, and observational studies</a> that use statistical techniques such as propensity score matching or instrumental variables. The choice of method will depend on the specific <a href="/articles/research-question/">research question</a>, the available <a href="/articles/dataset/">data</a>, and the ethical and practical considerations of the study.</p>
+<h3>In Causal Wizard</h3>
+<p>Identification is a critical step in causal inference as it ensures that any estimated causal effects are both meaningful and <a href="/articles/bias/">unbiased</a>, and can be used to inform policy and practice.</p>
+<p>In Causal Wizard, Identification is performed automatically when the <strong><a href="/articles/check/">CHECK</a></strong> button is pressed. The result of Identification is the set of possible Estimation methods that are compatible with the identified estimand.</p>

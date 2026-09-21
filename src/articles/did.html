@@ -1,0 +1,48 @@
+---
+title: "Difference-in-differences (DID) (method)"
+summary: "The difference-in-differences (DID) method is a statistical technique used in causal inference to estimate the causal effect of an intervention, policy change, or treatment on an outcome of interest."
+keywords: "causal effect, inference"
+categorySlugs: ["method", "causal-inference"]
+---
+<h3>What is DiD?</h3>
+<p>Difference-in-Differences (DiD) is a Causal Inference method often used in <a title="Observational studies" href="/articles/observational-data/">observational studies</a> where the researcher cannot intervene to randomly assign participants to different <a title="Control and Treated groups" href="/articles/control-and-treated/" target="_blank" rel="noopener">groups</a>.</p>
+<p><a title="Explanation of the Difference-in-Differences method" href="https://dimewiki.worldbank.org/Difference-in-Differences" target="_blank" rel="noopener">The basic idea behind the DID method is to compare changes in the outcome variable over time between a treatment group and a control group</a>. The treatment group receives the intervention or treatment, while the control group does not. By comparing the changes in the <a title="Outcome variable" href="/articles/outcome/" target="_blank" rel="noopener">outcome variable</a> over time between the two groups, we can estimate the causal effect of the intervention.</p>
+<h3>Difference-in-Differences using Causal Wizard</h3>
+<p>Difference-in-Differences analysis is now available in Causal Wizard. The DiD result is obtained using <a title="Fixed effects models in causal wizard" href="/articles/fixed-effects/" target="_blank" rel="noopener">Two-Way Fixed-Effects regression models</a>. You can obtain a DiD result if your data:</p>
+<ul>
+<li><strong>Has two time periods</strong> (pre-treatment, and post-treatment)</li>
+<li><strong>Has two groups of entities</strong> (one group is treated, the other is not)</li>
+<li><strong>Has a variable which indicates when a particular group or sample is treated</strong>&nbsp;(known as an<strong> <a title="interaction term" href="https://theeffectbook.net/ch-DifferenceinDifference.html" target="_blank" rel="noopener">interaction term</a></strong>). This should be true only for the period when treatment is or has occurred, and for the sample[s] which are treated.</li>
+</ul>
+<p>The effect calculated by the regression model will be equal to the DiD result.</p>
+<p>Your groups can contain multiple individuals, or each group can contain just one individual observed at two times.</p>
+<p>To enable the Fixed-Effects analysis, ensure your data is in <strong><a title="Panel Data format" href="/articles/panel-data/" target="_blank" rel="noopener">Panel Data format</a></strong> and set your <a title="Study Design and Method choices" href="/articles/study-design-method/" target="_blank" rel="noopener">Study Method</a> to <strong>Panel Data / Fixed Effects</strong>. Set your Study Design to <a title="Control and treated groups" href="/articles/control-and-treated/" target="_blank" rel="noopener">Binary treatment</a>, because one group must be Treated and the other group must be Controls.</p>
+<p>If your data has additional <strong>time periods</strong> or <strong>entities</strong> (groups), the same model can be used but is no longer equivalent to the DiD method. In fact, the <a title="Two-Way Fixed-Effects model" href="/articles/fixed-effects/" target="_blank" rel="noopener">Two-Way Fixed-Effects model</a> is more powerful and general than Difference-in-Differences, and it shares many of the same assumptions, although some can be relaxed.</p>
+<h3>Important assumptions</h3>
+<p>The DiD method depends on the Equal or "<a title="Validating the Parallel Trends Assumption" href="https://bcallaway11.github.io/did/articles/pre-testing.html" target="_blank" rel="noopener">Parallel Trends Assumption</a>" i.e. that no time-varying difference exist between the treatment and control groups. <a title="Testing the equal trends assumption" href="https://stats.stackexchange.com/questions/160359/difference-in-difference-method-how-to-test-for-assumption-of-common-trend-betw" target="_blank" rel="noopener">This assumption can be tested </a>in your data, to validate it.</p>
+<h3>Difference in Differences analysis</h3>
+<p>To explain the DiD concept, here are the steps for conducting a DID analysis (without using Causal Wizard):</p>
+<ol>
+<li>
+<p>Define the treatment and control <strong>groups </strong>(binary or case-control study design): The treatment group is the group that receives the intervention or treatment, while the control group is a group that is similar to the treatment group but does not receive the intervention.</p>
+</li>
+<li>
+<p>Define the outcome variable: The outcome variable is the variable of interest that we want to measure before and after the intervention.</p>
+</li>
+<li>
+<p>Collect data on the outcome variable before and after the intervention: Collect data on the outcome variable for both the treatment and control groups before and after the intervention.</p>
+</li>
+<li>
+<p>Calculate the difference in the outcome variable between the treatment and control groups before the intervention: This establishes a baseline level of difference in the outcome variable between the two groups.</p>
+</li>
+<li>
+<p>Calculate the difference in the outcome variable between the treatment and control groups <strong>after</strong> the intervention: This shows how the outcome variable changed over time for both groups.</p>
+</li>
+<li>
+<p><strong>Compare the difference in differences:</strong> The difference in differences is calculated by subtracting the difference in the outcome variable between the treatment and control groups after the intervention from the difference in the outcome variable between the two groups before the intervention. If this difference is statistically significant, then it suggests that the intervention had a causal effect on the outcome variable.</p>
+</li>
+</ol>
+<p>The DID method can be a powerful tool for estimating causal effects in observational studies, but it is important to ensure that the treatment and control groups are similar <em>before</em> the intervention and that other factors that could affect the outcome variable are controlled for.</p>
+<h3>Role of Covariates in Difference-in-differences analysis</h3>
+<p>In theory, the role of covariates in typical regression analyses is to help control for the effects of other variables, allowing better estimation of the effect of interest. But in DiD, that role is replaced with an <strong>assumption</strong> that without Treatment, the Control group would have experienced the same change in outcomes. This means that covariates may be unnecessary. However, <a title="What is the purpose of covariates in Difference in differences analysis" href="https://nickchk.substack.com/p/controls-in-difference-in-differences" target="_blank" rel="noopener">identification of covariates can help to verify that the parallel trends assumption does hold true for your data</a>.</p>
+<p>Causal Wizard allows you to add additional covariates to your Fixed-effects models, but bear in mind the potential issues described above.</p>

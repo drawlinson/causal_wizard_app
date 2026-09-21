@@ -1,0 +1,50 @@
+---
+title: "Tutorial 3"
+summary: "Does quitting smoking cause weight gain?"
+keywords: "multiple confounders"
+categorySlugs: ["tutorial"]
+---
+<p>This example is reproduced from Chapter 12 of&nbsp;<a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">Causal Inference: What If (the book)</a>, by Miguel Hernan. The book is a great and thorough course on Causal Inference, and highly recommended for those who want to get deeply into it.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_3_what_if_book.png" alt="" height="200" /></p>
+<p>This case study uses data from the National Health and Nutrition Examination Survey Data Epidemiologic Follow-up Study (NHEFS). It attempts to accurately quantify the effect of smoking cessation on weight gain. In short, do people gain weight after giving up smoking?</p>
+<p>We can see that despite some simplifications to make this tutorial easy, we obtain a result close to the reported value given in the book.</p>
+<h3>Step 1: Create a new Study</h3>
+<ol>
+<li>Click on <strong>Studies</strong> in the menu bar.</li>
+<li>In the Studies list page, click the <strong>Create</strong> button.</li>
+<li>Give the new Study any <strong>name</strong> you like (e.g. Tutorial 3).</li>
+<li>Select the Dataset with the name beginning "<strong>Tutorial 3</strong>"</li>
+<li>Click <strong>Create</strong> and the new Study will be displayed.</li>
+</ol>
+<h3>Step 2: Specify Treatment and Outcome</h3>
+<p>Select variable <strong>Quit Smoking?</strong>&nbsp;as the <strong>Treatment</strong>.</p>
+<p>Select <strong>Change in Weight</strong>&nbsp;as the <strong>Outcome</strong>.</p>
+<p>Causal Wizard automatically detects the data type in the Treatment column and modifies the user interface to match.</p>
+<p>Since quit smoking is provided in the data as a binary value, we don't see the threshold tool this time. Instead, we are asked to specify the value for Control (didn't quit smoking) and Treated (did quit). The defaults are 0 and 1 respectively, which is fine.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_3_setup.png" alt="" height="200" /></p>
+<h3>Step 3: Draw Causal Diagram</h3>
+<p>This case study uses all the numerical variables in the dataset. Create the graph as shown in the picture below (note: nodes are automatically coloured during the check process; verify that the colours are the same after the Check step to be sure you've added all the same edges).&nbsp;</p>
+<p>Basically, every variable is treated as a "confounder" - a cause of both Treatment and Outcome.</p>
+<p>In addition, there's one edge directly from Treatment <strong>Quit Smoking?</strong>&nbsp; to Outcome <strong>Change in Weight.</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_3_graph.png" alt="" height="400" /></strong></p>
+<h3>Step 4: Check the setup</h3>
+<ol>
+<li>Press the <strong>Check</strong> button at the top of the page.&nbsp;</li>
+<li>If something is not right, you'll get some warning messages - follow their instructions to complete or fix the setup.</li>
+<li>If everything went as planned, you'll see a large green block which invites you to select a <strong>Model</strong> type. <strong>Select "Backdoor: Propensity Score-based Inverse Weighting"</strong>. This model is chosen because it was used in the original example in Miguel's book.</li>
+<li>Press the <strong>Calculate</strong> button below the green block.</li>
+<li>Click confirm.</li>
+</ol>
+<h3>Step 5: Reviewing the results</h3>
+<p>You can always come back to earlier results. If you decided to come back later while following this tutorial, you can find your result by:</p>
+<ol>
+<li>Clicking on <strong>Studies</strong> in the menu bar.</li>
+<li>In the Studies list page, click the <strong>Results</strong> button next to your <strong>Tutorial 3</strong>&nbsp;Study.</li>
+<li>You'll now see all Results for this Study. If you've followed this tutorial, you'll only have one. Click the <strong>Open</strong> button.</li>
+</ol>
+<p>Once opened, look at the first row of the findings, which should look something like this:</p>
+<ul>
+<li><strong>The&nbsp;<span id="desired-effect"><a href="/articles/ate/" target="_blank" rel="noopener">Average Treatment Effect (ATE)</a></span>&nbsp;of treatment&nbsp;<span class="variable-treatment">Quit Smoking</span>&nbsp;on outcome&nbsp;<span class="variable-outcome">Change in Weight</span>&nbsp;was estimated as<span style="color: #ba372a;">&nbsp;<span class="findings-effect">3.05</span></span></strong><span style="color: #ba372a;">.&nbsp;(95% Confidence Interval&nbsp;<span class="findings-ci">[2.11, 3.85]</span>&nbsp;)</span></li>
+</ul>
+<p><span style="color: #ba372a;">Note that on Chapter 12, page 158 of "What If" an ATE of 3.4 kg is obtained. This is well within the 95% confidence interval of our simplified model given above.&nbsp;</span></p>
+<p>Another thing worth noting is that the placebo treatment validation test failed - perhaps due to dataset size and noise, but also perhaps due to simplified modelling. These validation tests are quite strict - note that the placebo treatment effect is <em>much</em> smaller, and quite close to zero even though not quite zero.</p>

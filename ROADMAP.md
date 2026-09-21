@@ -56,9 +56,12 @@ JSON that users run against their own data in provided notebooks.
   are hand-edited flat files built by Eleventy — no database, ever, going
   forward. (The DB-backed CMS was only there to make writing easier; flat
   files address that fine at this content volume.)
-- **Client-side search**: prebuilt index (lunr.js or FlexSearch) generated
-  at build time from the article Markdown, replacing the old server
-  endpoint `search.js` used to hit.
+- **Client-side search**: implemented as a small hand-rolled matcher
+  (`src/assets/js/search.js`) against a build-time-generated
+  `assets/data/search-index.json`, not lunr.js/FlexSearch as originally
+  floated — with 94 articles and 13 categories, a substring match over
+  title/keywords (replicating the old server-side query exactly) is plenty,
+  and avoids pulling in a search library for a dataset this small.
 - **Hosting**: GitHub Pages with a custom domain. GitHub Pages supports a
   custom domain natively (`CNAME` file + DNS record to your domain), and
   once configured it automatically redirects the default
@@ -93,12 +96,35 @@ workflow in a few places (a results/report page with a download button and
 a "paid accounts" watermark) — that needs a real rewrite once the new
 wizard → config-JSON → notebook flow exists, not a mechanical fix.
 
-**8.2 — Migrate articles**
-Extract article/category/help content + cross-page associations from
-`backup_final.sql`, convert to static content, bring over `article_images`.
-Replace server search with a client-side index.
-*Deliverable*: all help/article pages exist as static pages with working
-internal links and search.
+**8.2 — Migrate articles** ✅ done
+One-time Python extraction (not committed — throwaway, per plan) parsed
+`inference_article`/`inference_article_categories`/`inference_articlecategory`
+directly out of the plain-text `backup_final.sql` COPY blocks (no Postgres
+needed after all — pg_dump's plain-text format is just tab-separated rows).
+94 articles → one HTML file each at `src/articles/{slug}.html`, YAML
+frontmatter (title/summary/keywords/categorySlugs) + the article body
+as-is — deliberately *not* a single JSON blob, so articles stay easy to
+hand-edit (no escaping, one file per article) per the "no database, ever
+again" decision above. 13 categories → `src/_data/categories.json` (small,
+fixed taxonomy, fine as one file). Category pages and the A-Z/related-articles
+lists are computed from an Eleventy collection (`collections.articles`), not
+precomputed, so adding/removing a category on an article just means editing
+that one file's frontmatter.
+Content transforms applied during extraction: internal article/category
+links (both relative `../../inference/article/x` and absolute
+`causalwizard.app/inference/article/x` forms) → `/articles/x/` /
+`/category/x/`; S3-hosted images (`causal-wizard-app.s3.amazonaws.com/...`)
+→ local `/assets/images/...`; two already-broken image references in the
+source content fixed (obvious typos: missing extension, stray HTML entity).
+External links/images (Wikipedia, YouTube embeds, etc.) untouched.
+Also caught and fixed, while link-checking the whole built site: 6
+hardcoded (non-templated) article links in `news.njk` that stage 8.1 missed
+converting, and a genuine `variable`/`variables` slug typo in `about.njk`
+that was already a dead link on the original site.
+*Known follow-up for 8.7*: article content still describes the old
+Calculate-button/server-results workflow in places (most visibly the
+tutorials) — same "mechanical migration now, content rewrite later" split
+as the static pages.
 
 **8.3 — Migrate dataset / XDA features**
 Port `dataset.js` to work off a client-parsed CSV/XLSX instead of
@@ -155,8 +181,6 @@ handling.
 
 ## Risks / things to watch
 
-- `backup_final.sql` needs Postgres (or careful parsing) to extract article
-  data reliably — extraction tooling is throwaway, never shipped.
 - `driver.js`-based guided help / contextual error messages need to be
   rebuilt against the new client-side wizard state machine.
 - The SSG must never re-render the diagram container after initial load —

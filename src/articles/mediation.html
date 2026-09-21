@@ -1,0 +1,37 @@
+---
+title: "Mediation (process)"
+summary: "Mediation is a statistical technique used in causal inference to understand the mechanisms by which a predictor variable (X) affects an outcome variable (Y)."
+keywords: "experiment, design, variables"
+categorySlugs: ["method", "causal-inference"]
+---
+<p>Mediation is the act of modifying or relaying a causal effect.</p>
+<p>If the effect of a Treatment variable X on an Outcome variable Y occurs indirectly, <strong>through</strong> an intermediate variable (M), then M is known as a <strong>mediator variable</strong>.&nbsp;</p>
+<p>M "mediates" the effect of X on Y.</p>
+<h3>Partial vs full mediators</h3>
+<p>Mediation can be <strong>full</strong> (the entire effect is produced only via M) or <strong>partial</strong> (there are other paths from X to Y not via M, possibly including a direct path from X to Y).</p>
+<h3>Purpose and use of mediation analysis</h3>
+<p>Mediation analysis aims to <a title="Causal mediation analysis - purpose and use" href="https://onlinelibrary.wiley.com/doi/full/10.1111/joes.12452" target="_blank" rel="noopener">disentangle total treatment effects into direct and various indirect effects</a> so that these relationships can be understood. <a title="Use of mediation analysis in observational studies" href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01426-3" target="_blank" rel="noopener">It can also be used in observational studies</a>, and to estimate causal effects.</p>
+<h3>Mediating variables and the Frontdoor Adjustment</h3>
+<p>If a mediating variable fully mediates the effect of Treatment on Outcome, and there is no <strong>backdoor </strong>path from treatment to outcome, the <a href="/articles/adjustment/"><strong>frontdoor adjustment</strong></a> can be used to <a href="/articles/identification/">identify</a> (and consequently estimate) <a href="/articles/causal-effect/">Causal Effects</a>. This is obviously incredibly useful where no backdoor adjustment exists.</p>
+<h3>Detecting and analysing mediation</h3>
+<p>The process of exploring mediation usually involves the following steps:</p>
+<ol>
+<li>
+<p><strong>Identify the causal relationship between X and Y</strong>: Before conducting mediation analysis, it is important to establish a causal relationship between X and Y. This can be done using various causal inference techniques such as randomized controlled trials, natural experiments, or observational studies with appropriate statistical adjustments for confounding variables.</p>
+</li>
+<li>
+<p><strong>Determine if there is a potential mediator</strong>: A mediator is a variable that explains how X influences Y. To determine if there is a potential mediator, one needs to assess whether there is a significant association between X and M, and between M and Y.</p>
+</li>
+<li>
+<p><strong>Test for mediation</strong>: To test for mediation, a statistical model is fitted with X as the predictor variable, Y as the outcome variable, and M as the mediator variable. The total effect of X on Y is decomposed into the direct effect of X on Y and the indirect effect of X on Y through M. The indirect effect is estimated using the product of coefficients method or the difference in coefficients method.</p>
+</li>
+<li>
+<p><strong>Assess the strength of mediation</strong>: The strength of mediation can be assessed using various measures such as the proportion mediated, which is the ratio of the indirect effect to the total effect of X on Y. The strength of mediation can also be assessed using the bootstrap method, which estimates the confidence intervals for the indirect effect.</p>
+</li>
+<li>
+<p><strong>Interpret the results</strong>: The results of mediation analysis can help to understand the mechanism by which X affects Y. If the indirect effect is significant, it suggests that the mediator variable M partially or fully explains the relationship between X and Y. If the indirect effect is not significant, it suggests that there is no evidence of mediation, and X affects Y directly.</p>
+</li>
+</ol>
+<h3>In Causal Wizard</h3>
+<p><strong>In Causal Wizard, Mediator variables may provide a mechanism to identify and estimate a Causal effect via the <a title="Frontdoor variable" href="/articles/frontdoor-variable/">Frontdoor adjustment</a>.</strong> However, mediation analysis (another feature - analysis of the effect of an intermediate variable and its degree of responsibility for the causal effect) is <strong>not</strong> currently supported. <a title="Contact causal wizard" href="/contact/">Let us know</a> if you need this feature!</p>
+<p>In summary, mediation analysis is a useful tool in causal inference to understand the mechanisms by which a predictor variable influences an outcome variable through an intermediate (mediator) variable.</p>

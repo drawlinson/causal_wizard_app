@@ -1,0 +1,62 @@
+---
+title: "Panel Data format"
+summary: "Panel data format tracks the attributes and outcomes of a group of entities over time."
+keywords: "Panel data format entities groups over time"
+categorySlugs: ["study-design", "causal-wizard-concept", "data", "causal-inference"]
+---
+<h3>Datasets</h3>
+<p>Causal Wizard supports two tabular Dataset formats. This article is about a specific format, called Panel Data. See <a title="Dataset design" href="/articles/dataset/" target="_blank" rel="noopener">this article</a> for details of the generic dataset format, and general terminology and concepts for dataset design, such as the definition of a <a title="Sample or Sample Unit" href="/articles/sample/" target="_blank" rel="noopener">Sample or Sample Unit</a>.</p>
+<h3>Panel Data format</h3>
+<p>Each row represents an observation of a specific <strong>Entity</strong> at one moment in <strong>Time</strong>. The concepts of Entities and Time are specific to Panel Data format and are not required to be present in other Causal Wizard Datasets.&nbsp;</p>
+<p>An <strong>Entity</strong> can be an individual participant, or a group of participants who are related in some way that makes you want to model them the same way. So you might want to think of the Entity as a "Unit" or "Group" or "Cohort" instead.</p>
+<p>The <strong>Time</strong> column in your data can have date-time -like values, but can also be anything which has an inherent order, such as integer numbers representing discrete periods.</p>
+<p>Both the Entity and Time columns are optional - you can have neither, one, or both. In all cases you will have access to the <a title="Fixed-Effects models" href="/articles/fixed-effects/" target="_blank" rel="noopener">Fixed-Effects models</a>, but the analysis and results will be slightly different. To access Fixed-Effects models, modify the <a title="Study Method and Design" href="/articles/study-design-method/" target="_blank" rel="noopener">Study Method</a> setting.</p>
+<p><img src="/assets/images/panel_data_format.png" alt="" width="100%" /></p>
+<h3>Columns</h3>
+<p>A Panel Data file should have the following columns:</p>
+<ul>
+<li><strong>Treatment</strong></li>
+<li><strong>Outcome</strong></li>
+<li><strong>Entity</strong> Identifier (optional)</li>
+<li><strong>Time</strong> Identifier (optional; must have natural order)</li>
+<li>Additional <strong>covariates</strong> (optional)</li>
+</ul>
+<h3>Treatment variable &amp; interaction term</h3>
+<p>The Treatment variable should be set to the value which indicates Treated <strong>only in the rows which represent times during or after Treatment</strong>. Do not set Treatment to a "true" value for all rows where the Entity is present. This allows the Treatment variable to act as an "<a title="interaction term in regression difference-in-differences analysis" href="https://theeffectbook.net/ch-DifferenceinDifference.html" target="_blank" rel="noopener">interaction term</a>" which is only true when the Entity is in the Treated group and Treatment has been applied.</p>
+<p>For example, if you have 2 entities A and B which are observed before and after A is treated, the data would look like this:</p>
+<table style="border-collapse: collapse; width: 100.025%;" border="1">
+<tbody>
+<tr>
+<td style="width: 23.9936%;">Entity</td>
+<td style="width: 23.9936%;">Time</td>
+<td style="width: 23.9936%;">Treatment</td>
+<td style="width: 23.9936%;">Outcome</td>
+</tr>
+<tr>
+<td style="width: 23.9936%;">A</td>
+<td style="width: 23.9936%;">1</td>
+<td style="width: 23.9936%;">0</td>
+<td style="width: 23.9936%;">5</td>
+</tr>
+<tr>
+<td style="width: 23.9936%;">A</td>
+<td style="width: 23.9936%;">2</td>
+<td style="width: 23.9936%;"><strong>1</strong></td>
+<td style="width: 23.9936%;">7</td>
+</tr>
+<tr>
+<td style="width: 23.9936%;">B</td>
+<td style="width: 23.9936%;">1</td>
+<td style="width: 23.9936%;">0</td>
+<td style="width: 23.9936%;">3</td>
+</tr>
+<tr>
+<td style="width: 23.9936%;">B</td>
+<td style="width: 23.9936%;">2</td>
+<td style="width: 23.9936%;">0</td>
+<td style="width: 23.9936%;">4</td>
+</tr>
+</tbody>
+</table>
+<p>In the data above, Entity A is Treated and Entity B is a <a title="Control and Treated values" href="/articles/control-and-treated/" target="_blank" rel="noopener">Control</a>.</p>
+<p>&nbsp;</p>

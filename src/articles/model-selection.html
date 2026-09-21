@@ -1,0 +1,46 @@
+---
+title: "Model Selection"
+summary: "Tips on choosing an appropriate model"
+keywords: "model, statistics, estimation"
+categorySlugs: ["study-design", "method", "causal-inference"]
+---
+<h3>Fixed Effects models for Panel Data</h3>
+<p>Causal Wizard provides <a title="Fixed-Effects regression models" href="/articles/fixed-effects/" target="_blank" rel="noopener">Fixed-Effects regression models</a> if your data is in <a title="Panel Data format" href="/articles/panel-data/" target="_blank" rel="noopener">Panel Data format</a>. These methods are less flexible than the various Causal Machine Learning methods available via the Potential Outcomes Framework (described below).</p>
+<p>To enable the Fixed-Effects models for study designs like <a title="Difference-in-Differences" href="/articles/did/" target="_blank" rel="noopener">Difference-in-Differences</a>, follow the instructions in our <a title="Study Method and Design" href="/articles/study-design-method/" target="_blank" rel="noopener">Study Method and Design article</a>. Our default Method and Design will provide models from the DoWhy library, via the <a title="Potential Outcomes Framework" href="/articles/potential-outcomes/" target="_blank" rel="noopener">Potential Outcomes Framework</a> - described below.</p>
+<h3>Potential Outcomes Framework (default)</h3>
+<p>If you use our <a title="Causal Diagram" href="/articles/causal-diagram/" target="_blank" rel="noopener">Causal Diagram</a> editor you'll have the option to Identify a causal effect and estimate it using the Potential Outcomes framework, implemented in <a title="DoWhy (Github)" href="https://github.com/py-why/dowhy" target="_blank" rel="noopener">DoWhy</a>.</p>
+<p>Causal Wizard currently supports the <a title="DoWhy default estimation methods" href="https://www.pywhy.org/dowhy/v0.9.1/user_guide/effect_inference/estimate.html" target="_blank" rel="noopener">default set of methods</a> in <a title="DoWhy - Github" href="https://github.com/py-why/dowhy" target="_blank" rel="noopener">DoWhy</a>. These are listed below, along with considerations when using them. More advanced models will be offered in future.</p>
+<p>In general, Causal Wizard will not offer methods that are not compatible with the <a title="Identifying estimands" href="https://www.psiweb.org/docs/default-source/default-document-library/webinar_110217.pdf?sfvrsn=ae89dfdb_0" target="_blank" rel="noopener">identified estimand</a>. However, just because a method is <em>compatible</em>, doesn't mean it's a good choice.&nbsp;</p>
+<p>Our overall advice is to <strong>compare at least 2 methods</strong> and observe the effect on the results. We also recommend using <strong>Linear Regression </strong>where possibe as one comparison point. The exception would be when the <a title="Check whether a system is linear or nonlinear" href="https://electronics.stackexchange.com/questions/193575/checking-whether-a-system-is-linear-or-non-linear" target="_blank" rel="noopener">system is clearly behaving in a nonlinear way</a>. For nonlinear systems, you can use the <a title="Double ML method" href="/articles/double-ml/">Double ML</a> method. Even in these conditions, we still recommend a linear regression baseline for comparison.</p>
+<p>Given a choice of multiple estimand types (e.g. Backdoor and IV), we recommend to try both, but <em>prefer</em> Backdoor.</p>
+<h3>Backdoor Methods</h3>
+<p>The following methods are available when a <a title="Backdoor estimand explained - Brady Neal (video)" href="https://www.youtube.com/watch?v=U1S8Rq8IcrY" target="_blank" rel="noopener">backdoor estimand</a> has been identified:</p>
+<ul>
+<li><strong><a href="/articles/propensity-scores/">Propensity Score Methods</a></strong>: These are available only if one or more common-cause variables is identified. These methods are often a good choice. <a href="/articles/propensity-scores/">Follow the link</a> to learn about their characteristics.
+<ul>
+<li>Propensity Score-based Inverse Weighting</li>
+<li>Propensity Score Matching</li>
+<li>Propensity Score Stratification</li>
+</ul>
+</li>
+<li><strong>Linear <a href="/articles/regression/">Regression</a></strong>: A good baseline when it is reasonable to expect <a title="Linear function" href="https://en.wikipedia.org/wiki/Linear_function" target="_blank" rel="noopener">linear</a> behaviour from all <a title="Interactions between variables" href="https://en.wikipedia.org/wiki/Interaction_(statistics)" target="_blank" rel="noopener">interactions</a>, and worth comparing to when this assumption is only slightly violated, if only to understand how important the nonlinearities are!</li>
+<li><a title="Description of Generalized Linear Models" href="https://www.mygreatlearning.com/blog/generalized-linear-models/" target="_blank" rel="noopener"><strong>Generalized Linear Models (GLM)</strong></a>: A more powerful model than Linear Regression. The type of GLM model used depends on the cardinality and type of the Outcome variable.&nbsp;&nbsp;
+<ul>
+<li>If the Outcome variable is boolean (True/False) or binary (0/1), the <a title="Binomial regression model" href="https://timeseriesreasoning.com/contents/binomial-regression-model/" target="_blank" rel="noopener">Binomial</a> model is used.</li>
+<li>If the Outcome variable is numeric, the <a title="Explanation of Poisson regression" href="https://personal.psu.edu/abs12/stat504/online/07_poisson/02_poisson_beyond.htm" target="_blank" rel="noopener">Poisson</a> model is used.</li>
+</ul>
+</li>
+</ul>
+<div>
+<h3><a title="Instrumental variables method" href="/articles/iv/">Instrumental Variable (IV)</a> Methods</h3>
+<p>The following methods are available when an <a title="Introduction to instrumental variables" href="http://mchp-appserv.cpe.umanitoba.ca/supp/mchp/protocol/media/Instrumental_variables.pdf" target="_blank" rel="noopener">Instrumental Variable estimand</a> has been identified:</p>
+<ul>
+<li>Instrumental Variables method</li>
+<li><a title="Regression Discontinuity for Instrumental Variables" href="https://scholar.harvard.edu/files/montamat/files/instrumental_variables_and_regression_discontinuity.pdf" target="_blank" rel="noopener">Regression Discontinuity method</a></li>
+</ul>
+<h3>Frontdoor Methods</h3>
+<p>The following methods are available when a <a title="Frontdoor estimand explained - Brady Neal (video)" href="https://www.youtube.com/watch?v=-kWocwaXqlk" target="_blank" rel="noopener">Frontdoor estimand</a> has been identified:</p>
+<ul>
+<li><a title="Two stage regression (introduction)" href="https://repository.upenn.edu/cgi/viewcontent.cgi?article=1380&amp;context=edissertations" target="_blank" rel="noopener">Two-stage regression</a> (note: <a title="Two stage regression - sources of bias" href="https://onlinelibrary.wiley.com/doi/10.1002/sim.4241" target="_blank" rel="noopener">All interactions must be linear</a>; no model is currently supported when interactions are NON-linear and ONLY a Frontdoor estimand has been identified).</li>
+</ul>
+</div>

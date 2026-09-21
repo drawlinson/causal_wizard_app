@@ -1,0 +1,25 @@
+---
+title: "Treatment (variable)"
+summary: "In causal inference, treatment refers to the intervention or manipulation that is being studied, with the aim of determining its causal effect on an outcome of interest."
+keywords: "variable, treated, intervention, independent"
+categorySlugs: ["variables", "causal-wizard-concept", "graph", "causal-inference", "study-design"]
+---
+<h3>Treatment and Outcome</h3>
+<p>In Causal Wizard, you must specify two variables in your data:</p>
+<ol>
+<li>The Treatment variable</li>
+<li>The <a title="Outcome variable" href="/articles/outcome/">Outcome</a> variable</li>
+</ol>
+<p>Usually, <a title="How to regress on the Treatment Variable to measure causal effects" href="https://www.cambridge.org/highereducation/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C/causal-inference-using-regression-on-the-treatment-variable/5EC22DA4A13BFC9A5944C74D713D0408" target="_blank" rel="noopener">you will be wanting to estimate the effect of the Treatment on the Outcome</a>. The effect may be <strong>partial</strong>, or <strong>full</strong>; it may be <strong>direct</strong>, or <strong>indirect</strong>.</p>
+<p>Treatment can take many forms, such as a medication, a behavioral intervention, a policy change, or any other kind of <a title="Intervention" href="/articles/intervention/"><strong>intervention</strong></a>.</p>
+<p>The <strong>treatment</strong> variable is the variable that represents the presence or absence of the treatment in a study. It is usually a binary variable that takes the value 1 or True if the participant received the treatment and 0 or False if they did not. In some cases, the treatment variable can also take on other values, such as different doses or types of treatment (categorical). In causal Wizard, the app will try to establish either specific values or a threshold to divide your samples into Control (did not receive treatment) and Treated groups.</p>
+<h3>Also known as...</h3>
+<p>In some literature, the <a title="Alternative names for Treatment (Exposure, Intervention)" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3805254/" target="_blank" rel="noopener">Treatment may also be described as an <strong>Exposure</strong> (usually if the Treatment occurred incidentally) or <strong>Intervention</strong></a> (if the Treatment was purposeful).</p>
+<h3>Treatment must be different to Outcome</h3>
+<p>The <strong>outcome</strong> variable is the one which is (possibly) affected by the treatment variable. You're using Causal Wizard to try to measure the effect of Treatment on Outcome. Therefore, the outcome variable must not be the same as the treatment variable.&nbsp;</p>
+<h3>Change in a variable over time</h3>
+<p>You <em>can</em> use the value of a variable at time A as the treatment, and the value of the <strong>same</strong> variable at time B as the Outcome, as long as they are represented in your data as different columns (i.e. will be modelled as different variables). A specific method, known as the<a title=" Difference-in-Differences method" href="https://mixtape.scunning.com/09-difference_in_differences" target="_blank" rel="noopener"> Difference-in-Differences method</a>, uses this technique to estimate causal effects.&nbsp;</p>
+<h3>Independent and Dependent variables</h3>
+<p>In experimental design, <a title="Explanation of how in causal inference, independent and dependent variables are treatment and outcome" href="https://nulib-oer.github.io/empirical-methods-polisci/causal-inference-and-the-scientific-method.html#the-fundamental-problem-of-causal-inference" target="_blank" rel="noopener">the <strong>treatment</strong> would be the independent variable, and the <strong>outcome</strong> would be the dependent variable</a>.</p>
+<p>A simple example: A study that investigates the effect of a new medication on reducing blood pressure. In this study, the treatment is the medication, and the treatment variable is a binary variable that indicates whether the participant received the medication or a placebo. Participants who received the medication are coded as 1, and those who received the placebo are coded as 0. The outcome variable is the reduction in blood pressure, and the aim of the study is to determine the causal effect of the medication on this outcome.</p>
+<p>In Causal Wizard, your domain knowledge is used to identify the treatment variable.</p>

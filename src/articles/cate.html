@@ -1,0 +1,16 @@
+---
+title: "Conditional Average Treatment Effect (CATE)"
+summary: "Conditional Average Treatment Effect (CATE) is a statistical concept used in causal inference to estimate the average causal effect of a treatment or intervention on an outcome variable of interest."
+keywords: "causal effect, treatment, experiment design"
+categorySlugs: ["study-design", "causal-effect", "causal-inference"]
+---
+<h3>What is CATE?</h3>
+<p>The CATE is a specific type of <a title="Causal Effect" href="/articles/causal-effect/">causal effect</a>, which you might want to measure. <a title="Explanation of Conditional Average Treatment Effect" href="https://en.wikipedia.org/wiki/Average_treatment_effect#:~:text=A%20per%2Dsubgroup%20ATE%20is,if%20SUTVA%20does%20not%20hold." target="_blank" rel="noopener"><strong>CATE</strong> stands for "<strong>Conditional</strong> Average Treatment Effect"</a> i.e. the average effect of the treatment or exposure <strong>on a sub-group</strong>. The validity of the estimate is <strong>conditional</strong> on being part of this subgroup. This is distinct from other causal effects such as the <strong>ATE</strong>, the <a title=" Average Treatment Effect " href="/articles/ate/">Average Treatment Effect </a>[on the entire population studied].</p>
+<p>In particular, CATE refers to the difference in the expected value of the outcome variable between two groups of individuals who differ only in their treatment status, but are otherwise similar in terms of their observed characteristics or covariates. <strong>The conditional aspect of CATE refers to the fact that the treatment effect may vary across different subgroups of the population, depending on their covariate values.</strong></p>
+<p>To estimate CATE, one typically uses a statistical model that relates the outcome variable to the treatment status and the covariates, and then compares the predicted outcomes for the treated and untreated groups within each subgroup defined by the covariates. This can be done using techniques such as regression analysis, propensity score matching, or machine learning algorithms.</p>
+<h3>Why is CATE used?</h3>
+<p>The CATE is a useful concept because it allows researchers to identify the specific subgroups of individuals who are most likely to benefit from a treatment or intervention, and to tailor the treatment to their individual needs. It also helps to identify potential heterogeneity in treatment effects, which can inform policy decisions and resource allocation.</p>
+<p>If there are no <a title="Effect modifier variable" href="/articles/effect-modifier/">effect modifiers</a>, then CATE should be equal to ATE (<a title="When CATE equal to ATE" href="https://stats.stackexchange.com/questions/376758/conditional-treatment-effect-and-average-treatment-effect-under-no-unmeasured-co" target="_blank" rel="noopener">see discussion here</a>).</p>
+<p>This video provides a great introduction:</p>
+<p><a href="https://www.youtube.com/watch?v=2CSSwKFE7iQ">https://www.youtube.com/watch?v=2CSSwKFE7iQ</a>&nbsp;</p>
+<p><iframe src="https://www.youtube.com/embed/2CSSwKFE7iQ" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>

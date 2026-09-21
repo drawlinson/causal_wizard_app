@@ -1,0 +1,24 @@
+---
+title: "Study"
+summary: "A Study is a combination of Data and your domain knowledge: Causal Inference research question or experiment to be conducted."
+keywords: "study, problem, hypothesis, research question, experiment"
+categorySlugs: ["study-design", "causal-wizard-concept", "graph", "data"]
+---
+<p>A Study is a concept in Causal Wizard for the combination of two things:</p>
+<ol>
+<li>A selected <a title="Dataset" href="/articles/dataset/">Dataset</a>, and</li>
+<li>Your domain knowledge, which includes:
+<ul>
+<li>The selection of <a title="Treatment" href="/articles/treatment/">Treatment</a> and <a title="Outcome" href="/articles/outcome/">Outcome</a> variables</li>
+<li>Identification of <a title="Control and Treated cohorts" href="/articles/control-and-treated/">Control and Treated cohorts</a></li>
+<li>The <a title="Causal Diagram" href="/articles/causal-diagram/">Causal Diagram</a> that captures possible causal relationships between variables</li>
+</ul>
+</li>
+</ol>
+<p>When editing a Study, all the properties above can be changed. You can also give each Study a unique and memorable name, especially if you have many similar analyses.</p>
+<h3>Studies without a Dataset or data file</h3>
+<p>You can create a Study without uploading any data; however, you will need to define all variables in the Causal Diagram, as there are no Data Columns for Causal Wizard to examine.</p>
+<h3>Results</h3>
+<p><a title="Results" href="/articles/result/">Results</a> are always associated with a Study, although note that since a Study may change over time, <strong>each Result includes a copy of the Study at the time the Result was requested</strong>.</p>
+<p>Each Study may have many Results.&nbsp;</p>
+<p>Think of the Study as the definition of an experiment. You can use the Study to define a variety of related experiments, and request results for them all. It is often helpful to request Results using a variety of different estimation methods, or with slightly different versions of the Causal Diagram, so the effects of these changes on the results can be evaluated.</p>

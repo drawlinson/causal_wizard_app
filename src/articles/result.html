@@ -1,0 +1,23 @@
+---
+title: "Result"
+summary: "The result of a causal inference estimation task, including validation and all Study configuration."
+keywords: "result, outcome, data"
+categorySlugs: ["study-design", "causal-wizard-concept", "process", "validation"]
+---
+<h3>Getting Results</h3>
+<p>Causal inference <a title="Estimation process" href="/articles/estimation/">estimation</a> and <a title="validation process" href="/articles/validation/">validation</a> requires repeatedly training many <a title="Machine-Learning" href="https://en.wikipedia.org/wiki/Machine_learning">Machine-Learning</a> models on your data. The validation step also includes <a title="refutation process" href="/articles/refutation/">refutation</a>. These processes are designed to provide detailed information about the stability, significance and magnitude of the causal effect you're investigating. This takes time, so it's done behind the scenes for you.&nbsp;</p>
+<p>To generate a Result, <strong>edit</strong> a Study and ensure everything is configured correctly. <strong>Press the <a title="Check process" href="/articles/check/">CHECK</a> button</strong> and ensure all the issues have been resolved. Then, the <strong>Calculate</strong> button will become enabled - it will change from red to green.&nbsp;</p>
+<p>The Result may take some time to calculate and you might also have to wait in a queue for compute to become available. If you're editing the Study, a popup will inform you that the Result is now available.</p>
+<h3>Finding your results</h3>
+<p>Results are also available from the Studies page. Click the "Results" button next to a Study, to see all Results associated with that particular Study.</p>
+<h3>Features included in Results</h3>
+<p>Results include:</p>
+<ul>
+<li>Everything about the configuration of the Study at the time the Result was requested - this means you can edit your Study while a Result is pending.</li>
+<li>The core Causal Inference estimation Result, including confidence interval</li>
+<li>Statements about the implications of the Result</li>
+<li>Key validation results, including the outcome of refutation tests, to allow you to assess confidence in the Result</li>
+<li>Some plots showing the estimated causal effect against the outcomes of the "Control" and "Treated" cohorts</li>
+<li>A list of necessary assumptions</li>
+<li>The Causal Diagram used</li>
+</ul>

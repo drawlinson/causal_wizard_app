@@ -1,0 +1,27 @@
+---
+title: "Refutation"
+summary: "Statistical refutation is a method of using statistical evidence to test and refute hypotheses, including those related to causal inference."
+keywords: "refute, refutation, validation"
+categorySlugs: ["method", "process", "causal-inference", "validation"]
+---
+<p>NOTE: Please read this <a title="Bootstrap statistical significance testing in DoWhy" href="/articles/bootstrap-refuters-dowhy/">article</a> for a detailed guide to refutation and statistical significance testing in DoWhy, a Python library used in Causal Wizard.</p>
+<h3>The importance of Refutation</h3>
+<p><a title="Importance of refutation or falisification and reproducibility of science" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener">Refutation</a> is a key concept in causal inference, which refers to the process of testing a hypothesis by attempting to prove it <a title="Prove the falseness of a hypothesis" href="https://en.wikipedia.org/wiki/Falsifiability" target="_blank" rel="noopener">false</a>.&nbsp;</p>
+<p>Falsifying or refuting an outcome should not been seen as a disappointment:</p>
+<p><a title="Importance of refutation." href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener"><em>"The number of scientific papers published every year continues to increase, but scientific knowledge is not progressing at the same rate. Here we argue that a greater emphasis on falsification &ndash; the direct testing of strong hypotheses &ndash; would lead to faster progress by allowing well-specified hypotheses to be eliminated."</em></a></p>
+<p>Strict refutation helps to ensure - but does not guarantee - that results are sound and trustworthy.</p>
+<h3>How Refutation can help you filter out untrustworthy results</h3>
+<p>Statistical refutation is a process of testing a hypothesis or a claim using statistical methods to determine whether the evidence contradicts or refutes it. In other words, it involves assessing the likelihood of the observed data under the<a title="Null hypothesis" href="https://en.wikipedia.org/wiki/Null_hypothesis" target="_blank" rel="noopener"> null hypothesis</a>, and if the probability of obtaining such data is very low, the null hypothesis is rejected in favor of an alternative hypothesis (i.e. the experimental hypothesis).</p>
+<p>In the context of causal inference, statistical refutation is often used to test whether a hypothesized causal relationship between two variables is supported by the available data, or not. For example, suppose we hypothesize that smoking causes lung cancer. We can test this hypothesis using statistical methods by collecting data on a large group of people, some of whom smoke and some of whom do not, and analyzing the relationship between smoking and lung cancer incidence.</p>
+<p>If our analysis finds a significant association between smoking and lung cancer incidence, we can infer that smoking is a causal factor in lung cancer. On the other hand, if we fail to find a significant association, we can conclude that there is no evidence to support the hypothesis that smoking causes lung cancer, and the hypothesis is refuted.</p>
+<p>In summary, statistical refutation is a powerful tool for testing hypotheses and claims using statistical evidence. In the context of causal inference, it is used to evaluate the strength of evidence supporting or contradicting a hypothesized causal relationship between two variables.</p>
+<h3>Refutation in Causal Wizard</h3>
+<p>Causal Wizard automatically applies a set of refutation tests after each Estimation request, and includes the refutation outcomes in your Results. We do this because we believe it's important to apply these good practices to every analysis and every answer.</p>
+<p>Causal Wizard uses the DoWhy library, which <a title="DoWhy refuter methods" href="https://www.pywhy.org/dowhy/v0.9.1/user_guide/effect_inference/refute.html" target="_blank" rel="noopener">implements several refutation mechanisms</a>. Some of these methods make very few assumptions about your data and the system being modelled, which means we can safely use them in a wide range of problems.</p>
+<p>Specifically, Causal Wizard uses:</p>
+<ul>
+<li><a title="Bootstrap random outcomes (statistical significance test)" href="/articles/random-outcomes/" target="_blank" rel="noopener">Bootstrap outcome permutation</a> (statistical significance test): Measures the probability that the observed effect would occur if the outcomes were random</li>
+<li><a title="Placebo Treatment refutation" href="/articles/placebo-treatment/">Placebo Treatment Refuter</a>: Verifies the effect disappears when the Treatment is replaced with a placebo.</li>
+<li><a title="Random Common Cause Refuter" href="/articles/random-common-cause/">Random Common Cause Refuter</a>: Measures the stability of the observed effect given a random common cause of both treatment and outome.</li>
+</ul>
+<p>&nbsp;</p>

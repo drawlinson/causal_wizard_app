@@ -1,0 +1,28 @@
+---
+title: "Instrumental Variables (Method)"
+summary: "The instrumental variables method is a statistical technique used to identify causal effects, generating an estimand."
+keywords: "identification, causal effect"
+categorySlugs: ["study-design", "method", "causal-inference"]
+---
+<h3>What is the Instrumental Variables method?</h3>
+<p><a title="Explanation of IV method" href="https://www.statisticshowto.com/instrumental-variable/" target="_blank" rel="noopener">The instrumental variables (IV) method</a> is a statistical technique used to identify causal effects in situations where there may be unobserved <a title="Confounding variables" href="/articles/confounding/">confounding</a> variables that bias the estimated effect of interest. Recall that a causal effect is the effect of a treatment or exposure variable, on an outcome variable.</p>
+<p><a title="Introduction to instrumental variables" href="http://mchp-appserv.cpe.umanitoba.ca/supp/mchp/protocol/media/Instrumental_variables.pdf" target="_blank" rel="noopener">The basic idea behind the IV method</a> is to use an "instrumental variable" that is <strong>correlated</strong> with the treatment but not directly with the outcome, in order to obtain an unbiased estimate of the causal effect.</p>
+<h3>Why is the Instrumental Variables method useful?</h3>
+<p>The instrumental variables <a href="https://en.wikipedia.org/wiki/Instrumental_variables_estimation">method</a> is useful because it can be applied in circumstances when other identification methods, such as the Backdoor and Frontdoor <a title="Adjustment to identify causal effect" href="/articles/adjustment/">adjustment</a>, are not applicable. In particular, <a title="When to use Instrumental variables method" href="https://www.rebeccabarter.com/blog/2018-05-23-instrumental_variables" target="_blank" rel="noopener">it can still be used when you have an unobserved confounding variable</a> in your Causal Diagram, which would otherwise prevent estimation of the causal effect.</p>
+<h3>How does the Instrumental Variables method work?</h3>
+<p>The IV method works as follows:</p>
+<ol>
+<li>
+<p>Identify a variable, called the<strong> instrumental variable</strong>, that is correlated with the exposure or treatment of interest but not directly with the outcome variable.</p>
+</li>
+<li>
+<p>Use the instrumental variable to create an estimate of the treatment variable that is independent of the unobserved confounding variables. This is known as the first stage regression, which predicts the treatment variable from the instrumental variable.</p>
+</li>
+<li>
+<p>Use the estimated exposure variable in a second stage regression to estimate the effect of the exposure variable on the outcome variable, adjusting for any observed confounding variables. This second stage regression provides an estimate of the causal effect of interest.</p>
+</li>
+</ol>
+<p><strong>The key assumption of the IV method is that the instrumental variable affects the outcome only through its effect on the exposure variable, and not through any other pathways.</strong> <a title="Assumptions required for instrumental variables method" href="https://ete-online.biomedcentral.com/articles/10.1186/s12982-018-0069-7" target="_blank" rel="noopener">This is known as the exclusion restriction assumption</a>.</p>
+<p>The IV method is widely used in econometrics and other social sciences, and has been applied in a variety of settings, including health policy, education, and finance. However, the method requires careful consideration of the validity of the assumptions, and it may not be appropriate or applicable in all situations.</p>
+<h3>In Causal Wizard</h3>
+<p>The Instrumental Variables method is included in Causal Wizard and will be automatically offered after the<a title="Check process" href="/articles/check/"> Check process</a>, if applicable.</p>

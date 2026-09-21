@@ -1,0 +1,41 @@
+---
+layout: base.njk
+title: Categories
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight">
+    <div style="margin-right:1em;">
+      <h2>Categories</h2>
+    </div>
+    <div>
+      <div class="btn-group" role="group" aria-label="Page options">
+        <a type="button" class="btn btn-outline-primary mx-1" href="/articles/">Search articles</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Article categories</h5>
+      <ul>
+        {% for category in categories %}
+        <li>
+          <h5><a href="/category/{{ category.slug }}/">{{ category.name }}</a></h5>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h5>A-Z list of articles</h5>
+      <ul>
+        {% for article in collections.articles %}
+        <li>
+          <h5><a href="{{ article.url }}">{{ article.data.title }}</a></h5>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

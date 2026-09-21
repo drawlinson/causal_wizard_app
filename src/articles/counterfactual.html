@@ -1,0 +1,20 @@
+---
+title: "Counterfactual"
+summary: "A counterfactual is a hypothetical scenario that describes the Outcome if the Treatment status had been different."
+keywords: "outcome, hypothesis, scenario, hypothetical, alternative"
+categorySlugs: ["statistics", "study-design", "causal-effect", "causal-inference"]
+---
+<h3>Definition of a Counterfactual</h3>
+<p>Counterfactuals are hypothetical scenarios that describe what <em>would</em> have happened in a given situation, if certain factors had been different. In causal inference, counterfactuals are used to estimate the causal effect of an intervention or treatment. Essentially, the counterfactual is the outcome that would have occurred if the treatment status were different - for example, if treatment had not been administered to a participant in the "treated" group, so it serves as a comparison to the actual observed outcome after the treatment.</p>
+<p>Counterfactual is an overloaded and non-specific term, used to describe a variety of related situations that meet the description above. <a title="Counterfactual examples and definition" href="https://www.inference.vc/causal-inference-3-counterfactuals/" target="_blank" rel="noopener">This article</a> gives some nice additional examples and discusses use of the term.</p>
+<p>It has been argued that<a title="Need for counterfactual modelling for interventional healthcare" href="https://www.nature.com/articles/s42256-020-0197-y" target="_blank" rel="noopener"> it is desirable to have a model capable of counterfactual predictions </a>when evaluating or recommending <a title="interventions" href="/articles/intervention/">interventions</a>. Counterfactual models typically have the ability to predict all potential outcomes, and use the <a title="Potential outcomes for describing counterfactuals" href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/1471-2288-5-28">potential-outcomes</a> paradigm to represent them.</p>
+<h3>Example</h3>
+<p>Here's an example: Suppose a researcher wants to estimate the effect of a new medication on reducing the risk of heart attacks. The study randomly assigns participants to receive either the medication or a placebo. After a year, the researcher finds that the group that received the medication had a lower incidence of heart attacks than the group that received the placebo.</p>
+<p>To estimate the causal effect of the medication, the researcher needs to compare what would have happened if the participants had not received the medication. The counterfactual outcome for each participant is the probability of having a heart attack if they had received the placebo instead of the medication.</p>
+<p>By comparing the observed outcomes (the incidence of heart attacks in the medication group) to the counterfactual outcomes (the incidence of heart attacks in the placebo group), the researcher can estimate the causal effect of the medication on reducing the risk of heart attacks.</p>
+<h3>More information</h3>
+<p>These two videos by Brady Neal provide a great introduction to the use of Counterfactuals in causal inference:</p>
+<p><a href="https://www.youtube.com/watch?v=f8PEpthLlN4">https://www.youtube.com/watch?v=f8PEpthLlN4</a> (part 1)</p>
+<p><iframe src="https://www.youtube.com/embed/f8PEpthLlN4" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
+<p><a href="https://www.youtube.com/watch?v=wuYda40rqgo">https://www.youtube.com/watch?v=wuYda40rqgo</a> (part 2)</p>
+<p><iframe src="https://www.youtube.com/embed/wuYda40rqgo" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>

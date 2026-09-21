@@ -1,0 +1,31 @@
+---
+title: "Standardisation and normalization"
+summary: "Standardization and normalization are two common techniques used in the preprocessing of data in machine learning and statistics. While they are related, they have distinct purposes and methods."
+keywords: "Data, norm, standardized, normalized, normalised, standardised,"
+categorySlugs: ["data"]
+---
+<h3>Standardization</h3>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>The main goal of standardization is to rescale the features so that they have a <strong>mean</strong> of 0 and a <strong>standard deviation</strong> of 1.</li>
+<li>It is particularly useful when the features in the dataset have different units or scales.</li>
+<li>In some models, such as linear regression, it enables comparison of coefficients (parameters determining the effect of specific input features).</li>
+</ul>
+<p><strong>Effect:</strong></p>
+<ul>
+<li>After standardization, the features will have a similar <strong>scale</strong>, making it easier for algorithms that rely on distance metrics (such as k-nearest neighbors or support vector machines) to perform well. This may also enhance learning and assist interpretability of features as described above.</li>
+<li>It does <strong>not</strong> guarantee that the data is within a specific range.</li>
+</ul>
+<h3>Normalization</h3>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Normalization, on the other hand, aims to scale the features in a dataset to a specific <strong>range</strong>, usually between 0 and 1.</li>
+<li>It is beneficial when the features have different ranges or when the algorithm used is sensitive to (or relies on) the magnitude of the features.</li>
+</ul>
+<p><strong>Effect:</strong></p>
+<ul>
+<li>After normalization, all features will be constrained to a specific range, making it particularly useful for algorithms that require input values to be within a certain interval, like neural networks.</li>
+</ul>
+<h3>Summary</h3>
+<p>Both standardization and normalization are preprocessing techniques that aim to make the data more suitable for machine learning algorithms. The choice between them depends on the specific requirements of the algorithm being used and the characteristics of the data.</p>
+<p><span style="color: #ba372a;">If wishing to intrepret the relative magnitude of input features in Causal Wizard results, you should ensure your data is standardised before uploading it.&nbsp;</span></p>

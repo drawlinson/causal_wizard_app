@@ -1,0 +1,20 @@
+---
+title: "Causal Effect"
+summary: "A causal effect refers to the change in an outcome that is directly caused by a particular treatment, intervention, or exposure."
+keywords: "treatment effect, average treatment effect, ate, att"
+categorySlugs: ["study-design", "causal-effect", "causal-inference"]
+---
+<h3>What is a causal effect?</h3>
+<p><a title="Introduction to treatment effects" href="https://theeffectbook.net/ch-TreatmentEffects.html" target="_blank" rel="noopener">A Causal Effect (also known as a Treatment Effect)</a> is <strong>a specific type of effect estimate</strong>, you may want to obtain.</p>
+<p>Causal effect refers to a change in an outcome that is directly caused by a particular treatment, intervention, or exposure (the latter all being interchangeable names).</p>
+<p>In causal inference, the goal is to estimate the causal effect of a <strong>treatment</strong> on an <strong>outcome</strong> variable, while accounting for other potential confounding factors that may also affect the outcome. But how should this effect be measured? This is defined by the effect specified.</p>
+<h3>Types of Causal Effect</h3>
+<p>A common measure of causal effect is the <a title="average treatment effect (ATE)" href="/articles/ate/">average treatment effect (ATE)</a>, which represents the <strong>difference in the mean outcome</strong> between the treatment group and the control group. This measures the <strong>average</strong> difference in outcome that can be attributed to the treatment, assuming that all other factors are equal.</p>
+<p>For example, consider a study that investigates the effect of a new drug on blood pressure. The study randomly assigns some participants to receive the drug (treatment group) while others receive a placebo (control group). The outcome variable of interest is the change in blood pressure after a certain period of time.</p>
+<p>The ATE in this case would be the difference in the mean change in blood pressure between the treatment group and the control group. If the mean change in blood pressure for the treatment group is lower than the mean change for the control group, we can conclude that the drug has a causal effect on reducing blood pressure. However, we must account for other potential confounding factors, such as age, sex, and baseline blood pressure, that could also affect the outcome. Causal inference methods, such as randomized controlled trials or propensity score matching, can be used to estimate the ATE while controlling for these confounding factors.</p>
+<p>Other common types of causal effect include:</p>
+<ul>
+<li><a title="Average effect of Treatment on the Treated (ATT)" href="/articles/att/">ATT (Affect of Treatment on the Treated)</a></li>
+<li><a title="CATE (Conditional Average Treatment Effect)" href="/articles/cate/">CATE (Conditional Average Treatment Effect)</a></li>
+<li><a title="LATE (Local Average Treatment Effect)" href="/articles/late/">LATE (Local Average Treatment Effect)</a></li>
+</ul>

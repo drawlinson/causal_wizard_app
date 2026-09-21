@@ -1,0 +1,17 @@
+---
+title: "Directed Acyclic Graph (DAG)"
+summary: "A directed acyclic graph is a type of graph that contains directed edges, and does not contain cycles (loops)."
+keywords: "graph, dag, directed, acyclic, component"
+categorySlugs: ["variables", "graph", "data", "causal-inference", "study-design", "independence"]
+---
+<p>A <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph (DAG)</a> is a type of causal diagram that represents the causal relationships between variables in a directed and acyclic manner. In other words, a DAG is a graph with directed edges where the edges do not form any <a href="/articles/cycle/">cycles</a>.</p>
+<p>In a Directed Graph, an edge from A to B is not equivalent to an edge from B to A. Edges have a defined <strong>direction</strong>.</p>
+<p>DAGs are commonly used in fields such as epidemiology, economics, and social sciences to model complex systems and understand the causal relationships between different variables. They are also used in machine learning algorithms such as Bayesian networks to represent probabilistic models.</p>
+<h3>Causal Diagram</h3>
+<p>In a DAG used as a <a href="/articles/causal-diagram/">Causal Diagram</a>, each node represents a <a href="/articles/variables/">variable</a>, and the directed edges represent the causal relationships between the variables. For example, if variable A causes variable B, there would be a directed edge pointing from A to B. The absence of an edge between two variables indicates that there is no direct causal relationship between them.</p>
+<p>DAGs provide a powerful tool for analyzing and understanding complex systems and can be used to identify causal relationships between variables, test hypotheses, and make predictions. However, they also require careful consideration and validation to ensure that they accurately represent the causal relationships between variables and avoid biases or confounding factors.</p>
+<h3>Treatment and Outcome Variables</h3>
+<p>Since we are investigating the effect of a <a href="/articles/treatment/">Treatment</a> variable on an <a href="/articles/outcome/">Outcome</a> variable, both treatment and outcome variables <strong>must</strong> be present in the Causal Diagram you create.&nbsp;</p>
+<h3>Directed Paths</h3>
+<p>A <strong>path</strong> is a sequence of edges between nodes which are not directly connected. For example, from A to B and then from B to C.</p>
+<p>In Causal Wizard, there must be a directed path between the Treatment and Outcome variables. <strong>If this path doesn't exist, it means the Causal Effect</strong>&nbsp;<strong>must be zero (i.e. no effect).</strong> This is a valid result, but it's probably not the one you intended. Therefore, Causal Wizard will warn you if this occurs, allowing you to accept the conclusion or modify your causal diagram.</p>

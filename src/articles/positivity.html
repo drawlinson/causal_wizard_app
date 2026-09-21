@@ -1,0 +1,15 @@
+---
+title: "The Positivity Assumption"
+summary: "The validity of Causal Inference results depends on an assumption about the data, known as Positivity."
+keywords: "positivity  assumption"
+categorySlugs: ["study-design", "data", "causal-inference", "validation"]
+---
+<h3>What is Positivity?</h3>
+<p>The <strong><a title="positivity assumption" href="https://causalpython.io/#positivity" target="_blank" rel="noopener">positivity assumption</a></strong>, also known as the "positivity condition" or "common support assumption," is an important concept in causal inference. Remember, Causal inference is the process of drawing conclusions about the causal relationships between variables based on observed data.</p>
+<h3>Why is it important?</h3>
+<p>The positivity assumption is a fundamental assumption that is <strong>necessary</strong> for causal inference methods to produce unbiased and meaningful results. It states that, in the observed data, there must be a non-zero probability of every individual or unit receiving any level of the treatment or exposure variable. In other words, there should be some diversity in the treatment assignment across the study population.</p>
+<p>This assumption ensures that there are individuals in the study with different characteristics who both receive and do not receive the treatment. If the positivity assumption is violated, meaning that certain groups have no chance of receiving the treatment, it can lead to <a title="Why positivity is important" href="https://medium.com/@EpiEllie/positivity-what-it-is-and-why-it-matters-for-data-science-d5e9c0bc1fcb" target="_blank" rel="noopener">issues such as model instability, biased estimates, or difficulty in generalizing the study findings to a broader population</a>.</p>
+<h3>How can I check Positivity?</h3>
+<p>Researchers often check for positivity during the study design phase and may need to make adjustments or choose different statistical methods if the assumption is not met. Common <a title="Methods for detecting positivity violations" href="https://blog.dataiku.com/evaluating-positivity-methods-in-causal-inference" target="_blank" rel="noopener">methods for assessing positivity</a> include examining the <a title="Evaluating covariate balance between treatment groups" href="https://hesscl.com/data-viz-workshop/case-a-covariate-balance.html" target="_blank" rel="noopener">distribution of covariates across treatment groups</a> and using <strong>propensity score models</strong> to ensure that there is overlap in the propensity scores between treated and untreated groups (propensity distribution analysis). Causal Wizard provides <strong>both</strong> these checks when you choose a Propensity Score method for your analysis.</p>
+<p>Here is an example of a propensity score distribution plot from CausalWizard, broken down by Treated and Control groups so that you can verify both groups are present for all propensity values:</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/features-propensity-score-distribution.png" alt="" width="80%" /></p>

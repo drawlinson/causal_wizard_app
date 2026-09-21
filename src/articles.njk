@@ -1,0 +1,65 @@
+---
+layout: base.njk
+title: Articles
+extraScripts:
+  - /assets/js/search.js
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight mb-3" id="highlight-create">
+    <div style="margin-right:1em;">
+      <h2>Search for articles</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form id="search-form" onsubmit="return false;">
+        <div class="input-group mb-3" style="width:100%;">
+          <input type="text" id="search-query" class="form-control" placeholder="Search articles and categories&hellip;" />
+          <input type="submit" value="Search" class="btn btn-success">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- search results - dynamic -->
+  <div class="card card-body mb-3" style="display:none;" id="search-results">
+    <div class="row">
+      <div class="col">
+        <h5>Matching articles</h5>
+        <ul id="search-articles">
+        </ul>
+      </div>
+      <div class="col">
+        <h5>Categories</h5>
+        <ul id="search-categories">
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" id="topics">
+    <div class="col-md-6">
+      <h5>Categories</h5>
+      <ul>
+        {% for category in categories %}
+        <li>
+          <h5><a href="/category/{{ category.slug }}/">{{ category.name }}</a></h5>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h5>A-Z list of articles</h5>
+      <ul>
+        {% for article in collections.articles %}
+        <li>
+          <h5><a href="{{ article.url }}">{{ article.data.title }}</a></h5>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

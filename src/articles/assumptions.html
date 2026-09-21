@@ -1,0 +1,52 @@
+---
+title: "Assumptions"
+summary: "Understanding the assumptions used in modelling ensures you can understand when results are trustworthy, and when they may be misleading."
+keywords: "assumption constraint criteria rules valid"
+categorySlugs: ["statistics", "study-design", "causal-inference"]
+---
+<p>Causal Wizard uses <a title="Key causal inference assumptions" href="https://blog.dataiku.com/causal-inference-on-observational-data-its-all-about-the-assumptions" target="_blank" rel="noopener">techniques which make numerous assumptions</a>. The most important assumptions are described here. Some assumptions depend on the method of <a href="/articles/identification/">identification</a> or <a href="/articles/estimation/">estimation</a> used to generate a <a href="/articles/result/">result</a>; others are more or less universal.</p>
+<h3>General Assumptions</h3>
+<ul>
+<li><strong>Data:</strong>&nbsp;The data is a representative and unbiased sample of the real-world population being studied.&nbsp;<a class="" href="/articles/bias/" target="_blank" rel="noopener">Learn more about bias and confounding</a>.</li>
+<li><strong>Modelling:</strong> The chosen <a href="/category/method/">Estimation methods and models</a> are capable of capturing variables' interactions. If unsure, <a href="/articles/model-selection/">compare results using various methods</a> in Causal Wizard.</li>
+<li><strong>Domain knowledge:</strong> It is assumed that your Study setup accurately captures all material and relevant causal interactions. If you have drawn a Causal Diagram, it should include all relevant variables, without omitting any variables or edges. You might also know this as the <strong>Ignorability, unconfoundedness, conditional independence, or selection on observables assumption</strong>.&nbsp;<a class="" title="Domain knowledge" href="/articles/domain-knowledge/" target="_blank" rel="noopener">Learn about why this is important and how to capture all key interactions</a>. If you are using a Fixed-Effects model, this assumption means you should include all relevant covariates and fixed effects. Unlike the Causal Diagram method, there is no <em>principled</em> way to define which variables are "relevant"!</li>
+<li><strong>Large Sample Size</strong>: Statistical estimators rely on <a title="asymptotic - Wikipedia" href="https://en.wikipedia.org/wiki/Asymptotic_analysis" target="_blank" rel="noopener">asymptotic</a> properties for valid inference. Therefore, having a large <a title="Sample / sampling" href="/articles/sample/">sample size</a> is often necessary to ensure that the estimated coefficients are consistent and asymptotically normally distributed.</li>
+</ul>
+<h3>Potential Outcomes method Assumptions</h3>
+<p>The following assumptions apply specifically to results generated using the <a href="/articles/potential-outcomes/">Potential Outcomes framework:</a></p>
+<ul>
+<li><strong><a title="Positivity assumption explained" href="https://causalpython.io/#positivity" target="_blank" rel="noopener">Positivity</a></strong>: There must be sufficient Treated samples which are collectively representative of the Control samples, with the exception of Treated status. This is not merely that there&nbsp;<strong>are&nbsp;</strong>Treated samples, but also that<em> </em>the values of the variables of those Treated samples must be representative of the range and combinations of values among the Control samples.</li>
+<li><strong><a href="https://stats.stackexchange.com/questions/474616/strong-ignorability-confusion-on-the-relationship-between-outcomes-and-treatmen">Ignorability</a> </strong>(also known as Exchangeability): All variables which might affect both the Treatment and the Outcome are <a href="/articles/observed-variable/">observable</a> and controlled for. This is achieved during Identification, if your Causal Diagram is complete and accurate.</li>
+<li><a href="https://blogs.iq.harvard.edu/violations_of_s"><strong>SUTVA</strong> (Stable Unit Treatment Value Assumption)</a>: The treatment of one <a href="/articles/sample/">sample unit</a> must not affect the outcome of another <a href="/articles/sample/">sample unit</a>. The samples must not interfere with each other.</li>
+<li><strong>Consistency</strong>: This assumption states that an individual's <em>observed</em> outcome under a particular treatment condition corresponds to the <em>potential</em> outcome for that individual under that treatment condition. In other words, if an individual receives treatment, their observed outcome is equal to their potential outcome under treatment; similarly, if they do not receive treatment, their observed outcome is equal to their potential outcome under no treatment.</li>
+<li><strong>No Unmeasured Confounding</strong>: This assumption asserts that there are no unobserved variables that confound the relationship between treatment assignment and potential outcomes. While it's often impossible to completely ensure the absence of unmeasured confounding, researchers typically strive to include as many relevant covariates as possible to mitigate this concern. However, it's also important to only include the&nbsp;<em>right&nbsp;</em>variables in your model. The <a href="/articles/identification/">identification process</a> ensures this, if your Causal Diagram is sufficiently correct and complete.</li>
+</ul>
+<h3>Panel Data / Fixed-Effects method Assumptions</h3>
+<p>Causal Wizard now offers a range of Fixed-Effects methods which apply to Panel Data. Panel Data tracks a set of <strong>entities</strong> over <strong>time</strong>. Due to these concepts these models, including <a href="/articles/did/">Difference-in-Differences</a>&nbsp;(DiD), make their own assumptions:</p>
+<ul>
+<li>
+<p><strong>Time-invariant Unobserved Heterogeneity</strong>: Fixed effects models assume that any unobserved factors that are constant over time and may affect both the treatment assignment and the outcome variable are adequately captured by the fixed effects. This assumption helps control for potential omitted variable bias due to unobserved individual-level characteristics.</p>
+</li>
+<li>
+<p><a title="Exogeneity - statistics" href="https://www.statisticshowto.com/exogeneity/" target="_blank" rel="noopener"><strong>Strict Exogeneity</strong></a>: This assumption requires that the covariates included in the model are uncorrelated with the error term in the regression equation. In the context of fixed effects models, this means that time-varying factors that affect both treatment assignment and the outcome variable are adequately controlled for through the fixed effects or included as covariates in the model.</p>
+</li>
+<li>
+<p><strong>No Perfect <a title="Explanation of collinearity" href="https://www.sciencedirect.com/topics/mathematics/collinearity" target="_blank" rel="noopener">Collinearity</a></strong>: Fixed effects models require that there is no perfect collinearity (correlation or linear association) between the fixed effects and other covariates included in the model. Perfect collinearity would make it impossible to estimate the coefficients of the fixed effects and other covariates separately.</p>
+</li>
+<li>
+<p><strong>Homoscedasticity and Independence of Errors</strong>: Like traditional regression models, fixed effects models assume that the errors are homoscedastic (constant variance) and independent across observations. Violations of these assumptions can lead to biased standard errors and incorrect statistical inference.</p>
+</li>
+<li><strong>No Serial Correlation</strong>: Measurement errors in one period are not correlated with the errors in another period.</li>
+<li>
+<p><strong>Common Time Trends</strong>: Fixed effects models often assume that there are common time trends across individuals or entities in the absence of treatment. This assumption helps ensure that any observed changes in the outcome variable over time are not solely due to time trends common to all individuals or entities.</p>
+</li>
+<li>
+<p><a title="Parallel Trends Assumption" href="https://en.wikipedia.org/wiki/Difference_in_differences#Assumptions" target="_blank" rel="noopener"><strong>Parallel Trends Assumption</strong></a> (specific to DiD): In the absence of treatment, the trends in the outcome variables for the treatment group and the control group would have followed parallel paths over time. In other words, any <em>differences</em> in trends between the two groups before the treatment are solely due to random variation and other factors unrelated to the treatment.</p>
+</li>
+<li>
+<p><strong>Common Trend Assumption</strong>: Related to the parallel trends assumption, this assumes that there are no differential trends between the treatment and control groups in the pre-treatment period.</p>
+</li>
+<li>
+<p><strong>No Spillover or Contamination Effects</strong>: While not as strict as SUTVA, DiD assumes that the treatment effect is isolated to the treated group and does not spill over to the control group or vice versa.</p>
+</li>
+</ul>

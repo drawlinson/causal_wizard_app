@@ -1,0 +1,7 @@
+{
+  "layout": "article.njk",
+  "tags": [
+    "articles"
+  ],
+  "templateEngineOverride": false
+}

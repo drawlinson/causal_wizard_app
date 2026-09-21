@@ -1,0 +1,19 @@
+---
+title: "Random Common Cause Refuter"
+summary: "One method of refutation in causal inference involves adding a random common cause of both Treatment and Outcome, to see how this affects the estimated effect."
+keywords: "validation, refutation, common-cause"
+categorySlugs: ["statistics", "study-design", "causal-inference", "validation"]
+---
+<p>NOTE: Please read this <a title="Bootstrap statistical significance testing in DoWhy" href="/articles/bootstrap-refuters-dowhy/">article</a> for a detailed guide to refutation and statistical significance testing in DoWhy, a Python library used in Causal Wizard.</p>
+<h3>The importance of Refutation</h3>
+<p><a title="Importance of refutation or falisification and reproducibility of science" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener">Refutation</a> is a key concept in causal inference, which refers to the process of testing a hypothesis by attempting to prove it <a title="Prove the falseness of a hypothesis" href="https://en.wikipedia.org/wiki/Falsifiability" target="_blank" rel="noopener">false</a>. One way to do this is by adding a random common cause to the model.</p>
+<p>Falsifying or refuting an outcome should not been seen as a disappointment:</p>
+<p><a title="Importance of refutation." href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener"><em>"The number of scientific papers published every year continues to increase, but scientific knowledge is not progressing at the same rate. Here we argue that a greater emphasis on falsification &ndash; the direct testing of strong hypotheses &ndash; would lead to faster progress by allowing well-specified hypotheses to be eliminated."</em></a></p>
+<p>Strict refutation helps to ensure - but does not guarantee - that results are sound and trustworthy.</p>
+<h3>How Random Common Cause Refuter works</h3>
+<p>In causal inference, refutation refers to the process of testing a causal hypothesis by attempting to reject it using available data.&nbsp;</p>
+<p>A common cause is a variable that affects both the cause and the effect of a relationship, making it appear as if there is a causal link between them. By adding a random common cause, we introduce a new variable that is unrelated to both the cause and the effect, but that affects them both.</p>
+<p><a title="Blog article giving an example of use of random common cause refuter" href="https://medium.com/data-science-at-microsoft/causal-inference-part-3-of-3-model-validation-and-applications-c84764156a29" target="_blank" rel="noopener">If the original causal hypothesis is correct, then adding a random common cause should not change the relationship between the cause and the effect. However, if the hypothesis is incorrect, then adding a random common cause may reveal a new relationship between the cause and the effect that was previously hidden.</a></p>
+<p>For example, suppose we want to test the hypothesis that smoking causes lung cancer. We might start by looking at the relationship between smoking and lung cancer in a population. If we find a strong association between the two, we might conclude that smoking causes lung cancer.</p>
+<p>However, we could also add a random common cause, such as a person's height, to the model. If height is unrelated to smoking and lung cancer, but affects both, then we can use it to test the causal hypothesis. If the relationship between smoking and lung cancer remains the same after controlling for height, then we have stronger evidence that smoking causes lung cancer. However, if the relationship changes, then we may need to reconsider the causal hypothesis.</p>
+<p>See <a title="Example of common cause refuter use" href="https://onlinelibrary.wiley.com/doi/full/10.1002/suco.202200525" target="_blank" rel="noopener">this paper</a> for a worked example of the common cause refuter.</p>

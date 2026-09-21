@@ -1,0 +1,18 @@
+---
+title: "Frontdoor variable"
+summary: "A frontdoor variable is a mediator variable that blocks the effect of confounding variables on the relationship between a treatment and an outcome."
+keywords: "identification, estimand"
+categorySlugs: ["variables", "causal-inference"]
+---
+<p>In causal inference, a<a title="Adjustment to identify frontdoor and backdoor variables" href="/articles/adjustment/"> frontdoor variable</a> is a variable that<a title="What is a mediator variable and mediation process?" href="/articles/mediation/"> mediates</a> the relationship between a treatment or exposure variable and an outcome variable, while also blocking the effect of any confounding variables that may influence the treatment-outcome relationship.</p>
+<p>A key benefit of the frontdoor variable is that they provide an alternative method to identify the causal effect when <a title="Backdoor variable" href="/articles/backdoor-variable/">backdoor</a> and <a title="Instrumental variables" href="/articles/iv/">Instrumental Variables</a> approaches are not applicable.</p>
+<p>An excellent and detailed introduction to the Frontdoor variable and its uses in causal inference can be found in "<a title="The Paper of How: Estimating Treatment Effects Using the Front-Door Criterion" href="https://www.canr.msu.edu/afre/events/Bellemare%20and%20Bloem%20(2020).pdf" target="_blank" rel="noopener">The Paper of How: Estimating Treatment Effects Using the Front-Door Criterion</a>" by Bellemare and Bloem.</p>
+<p>A quick and intuitive explanation of the use of Frontdoor variables for identification can be found in this video by Brady Neal:</p>
+<p><a href="https://www.youtube.com/watch?v=-kWocwaXqlk">https://www.youtube.com/watch?v=-kWocwaXqlk</a></p>
+<p><iframe src="https://www.youtube.com/embed/-kWocwaXqlk" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
+<h3>Example of a Frontdoor variable</h3>
+<p>To illustrate this concept, consider a hypothetical scenario where researchers want to investigate the effect of a new medication on reducing the risk of heart attacks. They gather data on patients who either received the medication or a placebo, and also record their age and smoking status as potential confounding variables that could affect the treatment-outcome relationship.</p>
+<p>In this scenario, age and smoking status are potential <a title="Confounding" href="/articles/confounding/">confounding</a> variables, meaning they are associated with both the treatment (medication) and the outcome (heart attack). However, a frontdoor variable could be a variable that <strong>mediates</strong> the relationship between the medication and heart attack risk, while also being influenced by age and smoking status.</p>
+<p>For example, suppose researchers found that the medication reduced the risk of blood clots, which in turn decreased the risk of heart attacks. Blood clots could be considered a frontdoor variable in this scenario, as they mediate the effect of the medication on heart attack risk, while also being influenced by age and smoking status.</p>
+<p>By identifying and adjusting for a frontdoor variable, researchers can potentially isolate the direct effect of the treatment on the outcome, while also controlling for any confounding variables that may influence the treatment-outcome relationship.</p>
+<p>In Causal Wizard, frontdoor variables are automatically detected during the <a title="Check process in causal wizard - identification and validation" href="/articles/check/">Check process</a>.</p>

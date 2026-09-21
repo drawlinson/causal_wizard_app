@@ -1,0 +1,38 @@
+---
+layout: base.njk
+---
+<div class="container">
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2>{{ title }}</h2>
+      <p><a href="/categories/">Categories</a>
+        &rarr;
+        {% for slug in categorySlugs %}{% if not loop.first %}, {% endif %}<a href="/category/{{ slug }}/">{{ slug | categoryName(categories) }}</a>{% endfor %}
+      </p>
+      <p><b>{{ summary }}</b></p>
+      {{ content | safe }}
+    </div>
+    <div class="col-md-3">
+      <h5>Related articles</h5>
+      <ul>
+        {% for related in collections.articles %}
+        {% if related.url != page.url and (related.data.categorySlugs | sharesSlug(categorySlugs)) %}
+        <li>
+          <h5><a href="{{ related.url }}">{{ related.data.title }}</a></h5>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      <h5>In categories</h5>
+      <ul>
+        {% for slug in categorySlugs %}
+        <li>
+          <h5><a href="/category/{{ slug }}/">{{ slug | categoryName(categories) }}</a></h5>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

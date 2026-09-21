@@ -1,0 +1,16 @@
+---
+title: "Backdoor variable"
+summary: "In causal inference, a backdoor variable is a variable that can create a spurious association between the treatment and the outcome by being related to both."
+keywords: "identification, estimand"
+categorySlugs: ["variables", "causal-inference"]
+---
+<p>In causal inference, a backdoor variable is a variable that is <strong>not in the causal pathway between the treatment and the outcome</strong>, but is causes both the treatment and the outcome (by other paths). This variable can create a spurious association between the treatment and the outcome, known as <strong>confounding</strong>, which can make it difficult to draw accurate causal inferences.</p>
+<p>Backdoor variables are also known as confounders.</p>
+<h3>Backdoor variable example</h3>
+<p>For example, suppose we want to determine whether a new drug is effective in reducing the risk of heart disease. We randomly assign some patients to receive the drug and others to receive a placebo, and we measure the incidence of heart disease in each group.</p>
+<p>However, we find that there is a strong association between age and the risk of heart disease, and the patients who received the drug are on average younger than those who received the placebo. This creates a backdoor path between the treatment and the outcome, as age is related to both the treatment and the outcome, and it can confound our estimate of the causal effect of the drug.</p>
+<h3>Handling backdoor variables</h3>
+<p>To address this issue, we can use techniques such as <strong>stratification</strong>, <strong>matching</strong>, or <a title="How to control for confounding variables using regression model" href="https://stats.stackexchange.com/questions/538477/causal-inference-difference-between-blocking-a-backdoor-path-and-adding-a-vari" target="_blank" rel="noopener"><strong>regression</strong> adjustment</a> to adjust for the effect of the backdoor variable and estimate the causal effect of the treatment on the outcome without confounding. By doing so, we can obtain more accurate estimates of the causal effect and avoid making incorrect conclusions based on spurious associations.</p>
+<p><a title="Example of backdoor variable" href="https://stats.stackexchange.com/questions/350267/a-layman-understanding-of-the-difference-between-back-door-and-front-door-adjust" target="_blank" rel="noopener">This StackExchange post</a> gives a clear definition and example.</p>
+<p>In Causal Wizard, backdoor variables are automatically detected during the <a title="Check process in causal wizard" href="/articles/check/">Check</a> process.</p>
+<p>&nbsp;</p>

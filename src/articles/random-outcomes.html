@@ -1,0 +1,16 @@
+---
+title: "Randomized Outcomes Refuter"
+summary: "Randomizing the outcomes allows quantification of the chance of observing the effect by chance."
+keywords: "refute, refutation, validation, outcome"
+categorySlugs: ["statistics", "causal-effect", "validation"]
+---
+<p>NOTE: Please read this <a title="Bootstrap statistical significance testing in DoWhy" href="/articles/bootstrap-refuters-dowhy/">article</a> for a detailed guide to refutation and statistical significance testing in DoWhy, a Python library used in Causal Wizard.</p>
+<h3>The importance of Refutation</h3>
+<p><a title="Importance of refutation or falisification and reproducibility of science" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener">Refutation</a> is a key concept in causal inference, which refers to the process of testing a hypothesis by attempting to prove it <a title="Prove the falseness of a hypothesis" href="https://en.wikipedia.org/wiki/Falsifiability" target="_blank" rel="noopener">false</a>. One way to do this is by using a randomized outcome.&nbsp;</p>
+<p>Falsifying or refuting an outcome should not been seen as a disappointment:</p>
+<p><a title="Importance of refutation." href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9398444/" target="_blank" rel="noopener"><em>"The number of scientific papers published every year continues to increase, but scientific knowledge is not progressing at the same rate. Here we argue that a greater emphasis on falsification &ndash; the direct testing of strong hypotheses &ndash; would lead to faster progress by allowing well-specified hypotheses to be eliminated."</em></a></p>
+<p>Strict refutation helps to ensure - but does not guarantee - that results are sound and trustworthy.</p>
+<h3>How Randomized Outcomes Refuter works</h3>
+<p>Randomizing the outcomes should destroy any causal effect, because the outcome is no longer affected by the treatment at all.</p>
+<p>Causal Wizard adopts a <a title="Parametric vs non-parametric" href="https://www.ibm.com/docs/en/db2woc?topic=procedures-statistics-parametric-nonparametric" target="_blank" rel="noopener">non-parametric (i.e. not needing assumptions about data distribution)</a> statistical significance test of the core causal result by <a title="Bootstrap method in statistics" href="https://en.wikipedia.org/wiki/Bootstrapping_(statistics)" target="_blank" rel="noopener">repeatedly permuting the outcomes and re-fitting the model - this is known as the bootstrap method</a>. <a title="Permutation explained" href="https://en.wikipedia.org/wiki/Permutation" target="_blank" rel="noopener">Permutation</a> is used to do this (rather than <em>creating</em> "random" outcomes) because it's an easy way to generate a set of statistically realistic outcome values.</p>
+<p>We then look at how often a causal effect as strong as the original estimate is obtained from models fitted to these datasets with no causal effect. If an equally strong causal effect is very rare with permuted outcomes, this suggests there was a causal effect in the original data. The frequency of effects as strong as the original causal effect being observed under the condition of randomized outcomes is used to generate a p-value.</p>

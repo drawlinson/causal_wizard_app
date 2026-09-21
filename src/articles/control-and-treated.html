@@ -1,0 +1,36 @@
+---
+title: "Control and Treated values for Treatment variable"
+summary: "Control and Treated values of the Treatment variable assign samples to control and treated cohorts respectively."
+keywords: "treatment, control, treated, treat, values, binary, boolean, threshold"
+categorySlugs: ["variables", "causal-wizard-concept", "causal-inference", "study-design"]
+---
+<h3>Control and Treated groups</h3>
+<p>In causal inference, the terms <a title="definition of control groups" href="https://www.scribbr.com/methodology/control-group/" target="_blank" rel="noopener"><strong>control</strong>&nbsp;and <strong>treated</strong> are used to describe two groups of subjects</a> (also known as sample-units or observations) that differ in terms of their exposure to a particular <strong>treatment</strong> or intervention. For example, the control group could be the group of subjects who do <strong>not</strong> receive the treatment, then the treated group would be the group of subjects who <em>did</em> receive the treatment.</p>
+<p>In other words, the control group serves as a comparison or reference group to the treated group, allowing us to assess the effect of the treatment by comparing the outcomes of the two groups. <a title="Estimating counterfactuals using causal inference and control treated groups" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2943670/" target="_blank" rel="noopener">The control group provides an estimate of what would have happened in the absence of the treatment</a>, while the treated group provides an estimate of what happens when the treatment is applied.</p>
+<p>For example, suppose we are studying the effect of a new drug on blood pressure. We might randomly assign some participants to receive the drug (treated group) while others receive a placebo (control group). By comparing the changes in blood pressure between the two groups, we can estimate the causal effect of the drug on blood pressure.</p>
+<h3><img src="/assets/images/separate-cohorts.png" alt="" width="100%" /></h3>
+<h3>Separating the Control and Treated groups</h3>
+<p>In Causal Wizard, while editing your Study you must define the values of the Treatment variable which define which group to assign each sample unit / subject / participant to.&nbsp;</p>
+<ul>
+<li>If the Treatment variable is <strong>Binary</strong> (0/1) or <strong>Boolean</strong> (True/False), you must specify which value corresponds to Control and Treated groups</li>
+<li>If a greater range of numerical values is present, you must specify a <strong>threshold</strong> to separate the two groups.
+<ul>
+<li>Values &lt;= threshold will become <strong>Controls</strong></li>
+<li>Values &gt; threshold will become <strong>Treated</strong></li>
+</ul>
+</li>
+</ul>
+<p>When you click the <strong>Define Groups</strong> button in the <strong>Wizard page</strong>, you will see one of two different views depending on the <a href="/articles/data-type/">data type</a> of your <a href="/articles/treatment/">Treatment variable</a>.</p>
+<ul>
+<li>If your treatment variable is <strong>numerical</strong>, you'll see the <strong>Threshold view</strong> to pick a threshold. <strong>Enter a value in the box</strong> and press <strong>Enter</strong>. The graph will update to confirm your selection. Press Save to close the dialog and remember your threshold value.</li>
+<li>If your treatment variable is <strong>categorical</strong>, you'll see a <strong>Categorical value selection</strong> view. Assign specific values to <strong>Treated</strong> and <strong>Control</strong> groups by typing them in the boxes provided, and clicking Add. Press Save to close the view and save your changes.</li>
+</ul>
+<h3>Threshold view</h3>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_boolean_as_numerical.png" alt="" width="50%" /></p>
+<h3>Categorical value selection view</h3>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_boolean_as_categorical.png" alt="" width="50%" /></p>
+<h3><span style="color: #ba372a;">Change variable type</span></h3>
+<p><span style="color: #ba372a;">Note that <strong>you can change the variable type</strong> by clicking it in the Causal Diagram editor. You'll see a dialog which has a <strong>Variable type</strong> dropdown. This will change the way control and treated groups are defined and the view displayed to you.</span></p>
+<p><span style="color: #ba372a;"><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_4_change_variable_type.png" alt="" width="50%" /></span></p>
+<h3>Summary</h3>
+<p>In summary, the control and treated values of the treatment variable represent the two groups of subjects or observations that differ in their exposure to the treatment, and are used to estimate the causal effect of the treatment.</p>

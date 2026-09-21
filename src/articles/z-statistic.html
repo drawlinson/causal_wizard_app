@@ -1,0 +1,20 @@
+---
+title: "z-Statistic"
+summary: "The z-statistic quantifies the distance of an observation from the mean, providing a measure of how unusual or significant the observation is, within a normal distribution."
+keywords: "metric statistic confidence p-value performance validation evaluation results"
+categorySlugs: ["statistics", "validation"]
+---
+<h3>Explanation of the z-statistic</h3>
+<p>The z-statistic is a fundamental tool in statistics used to assess the deviation of a data point from the mean, in terms of standard deviations. It is calculated by subtracting the population mean from the observed value and dividing the result by the standard deviation of the population. This statistic assumes the population data for the relevant value follows a normal distribution.</p>
+<p><a title="z-statistic method (z-score)" href="https://statisticsbyjim.com/basics/z-score/" target="_blank" rel="noopener">The z-statistic is also sometimes called the z-score</a>.</p>
+<h3>How unusual is my value?</h3>
+<p>When the data conforms to a normal distribution, approximately <strong>68% of the data lies within one standard deviation</strong> of the mean, about <strong>95% lies within two standard deviations</strong>, and <strong>nearly all (99.7%) lies within three standard deviations</strong>.</p>
+<p>The z-statistic provides a quantifiable <strong>measure of how unusual or significant a particular observation is</strong> within the context of the distribution it belongs to, enabling statisticians to make inferences about the data based on standard deviations.</p>
+<h3>Use in Regression analysis</h3>
+<p>In regression analysis, the z-statistic is commonly used to assess the significance of individual <strong>coefficients</strong> in the model. In a regression model, there will be a coefficient for each numerical input feature (potentially more for encoded, categorical variables used as model input features). <strong>This means that assessing the significance of the coefficient tells you about the significance of the associated variable, or variable-values</strong> (if categorical one-hot encoded).</p>
+<p>Assessing significance involves testing whether the estimated coefficient for a predictor variable is <strong>significantly different from zero</strong>. The z-statistic for a coefficient is calculated by dividing the estimated coefficient by its standard error. If the absolute value of the z-statistic exceeds a critical value (typically determined based on a chosen significance level, such as 0.05), then the coefficient is considered statistically significant, indicating that there is evidence to reject the null hypothesis that the coefficient is equal to zero. If the "true" or accurate value for the coefficient is zero, it implies the variable has no effect on the outcome. If the true value is nonzero, this implies the variable <em>does</em> affect the outcome.</p>
+<p>In this way, the z-statistic provides insights into whether a particular predictor variable has a meaningful effect on the outcome variable, helping researchers identify important relationships between variables in a regression model. You can read and watch more about this analysis <a title=" Understanding Regression analysis and z-statistic z-score Output" href="https://www.zstatistics.com/regression" target="_blank" rel="noopener">here</a>.</p>
+<h3>Use in Causal Wizard</h3>
+<p>If you generate a result from a <a title="Fixed-effects model" href="/articles/fixed-effects/" target="_blank" rel="noopener">Fixed-Effects model</a> in CausalWizard, we will calculate the z-statistic for each of the variables provided as input to the model, including the Treatment variable. The purpose is as described above, to allow you to assess whether other variables affect the outcome, or not.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

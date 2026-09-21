@@ -1,0 +1,13 @@
+---
+title: "Common Cause (variable)"
+summary: "A variable which influences two or more variables, such as the Treatment and Outcome variables."
+keywords: "Confounder, variable, check"
+categorySlugs: ["statistics", "variables", "study-design", "validation"]
+---
+<h3>What is a Common-cause variable?</h3>
+<p>In causal inference, a <a title="Common cause variables in causal inference" href="https://www.sciencedirect.com/science/article/abs/pii/B9780444518620500253" target="_blank" rel="noopener">common cause is a variable that influences two or more other variables that are being studied for their causal relationship.</a> The presence of a common cause can make it appear that two variables are causally related, when in fact they are not.</p>
+<p>In particular, a common cause may be a <a title="Confounding variable" href="/articles/confounding/">confounder</a> variable, when it influences both the treatment and the outcome variables.</p>
+<h3>Example of a Common-Cause variable</h3>
+<p>For example, let's say we want to study the relationship between smoking and lung cancer. If we only consider smoking as a potential cause of lung cancer, we might conclude that smoking causes lung cancer. However, there could be a common cause that influences both smoking and lung cancer, such as exposure to air pollution. In this case, it's possible that air pollution is the actual cause of both smoking and lung cancer, making it appear that smoking causes lung cancer when in fact it does not.</p>
+<p>Identifying and accounting for common causes is important in causal inference, as it helps to <a title="Bias due to common cause variable" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5545051/#:~:text=Confounding%20is%20a%20bias%20due,to%20both%20exposure%20and%20outcome." target="_blank" rel="noopener">avoid making false conclusions about the causal relationships between variables</a>. One common way to account for common causes is to use statistical techniques such as regression analysis, which can help to identify and control for potential confounding variables.</p>
+<p>Causal Wizard will identify common cause confounders during the <a title="Check process" href="/articles/check/">Check process</a>.</p>

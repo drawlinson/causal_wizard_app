@@ -1,0 +1,40 @@
+---
+layout: base.njk
+pagination:
+  data: categories
+  size: 1
+  alias: category
+permalink: "/category/{{ category.slug }}/"
+eleventyComputed:
+  title: "Category: {{ category.name }}"
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight mb-3" id="highlight-create">
+    <div style="margin-right:1em;">
+      <h2>Category: {{ category.name }}</h2>
+    </div>
+    <div>
+      <div class="btn-group" role="group" aria-label="Page options">
+        <a type="button" class="btn btn-outline-primary mx-1" href="/articles/">Search articles</a>
+        <a type="button" class="btn btn-outline-primary mx-1" href="/categories/">List categories</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h5>Articles in this category</h5>
+      <ul>
+        {% for article in collections.articles %}
+        {% if article.data.categorySlugs | hasSlug(category.slug) %}
+        <li>
+          <h5><a href="{{ article.url }}">{{ article.data.title }}</a></h5>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
