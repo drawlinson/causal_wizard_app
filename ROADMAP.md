@@ -126,11 +126,76 @@ Calculate-button/server-results workflow in places (most visibly the
 tutorials) — same "mechanical migration now, content rewrite later" split
 as the static pages.
 
-**8.3 — Migrate dataset / XDA features**
-Port `dataset.js` to work off a client-parsed CSV/XLSX instead of
-server-processed data; store results in the browser.
-*Deliverable*: user can upload a CSV/Excel file and see the same
-exploratory stats/plots as today, entirely client-side.
+**8.3 — Migrate dataset / XDA features** ✅ done
+Rewritten from scratch against the old feature set, not ported — the old
+server-side implementation was explicitly flagged as poor quality. New
+architecture, all in `src/assets/js/datasets/`:
+- **Storage**: `db.js`, IndexedDB. Each dataset record holds the raw file
+  Blob plus a cached schema (column types/stats), so the list page doesn't
+  need to re-parse just to show row/column counts.
+- **Parsing**: `parse.js`. A fast peek (PapaParse `preview`/SheetJS
+  `sheetRows`, ~200 rows) for instant feedback on upload, and a full
+  background parse into columnar arrays for everything else - CSV via
+  PapaParse's built-in worker mode (off the main thread), XLSX via SheetJS
+  (blocks the main thread - no streaming API available, so the upload page
+  warns that CSV is recommended for very large files).
+- **Type sniffing**: `types.js`. Materially better than the old pandas-dtype
+  heuristic: detects boolean-like strings (yes/no, y/n, true/false, 1/0),
+  date strings, and splits categorical vs. free-text by cardinality ratio -
+  plus flags constant and near-unique (ID-like) columns, neither of which
+  the old site surfaced at all. User can override the detected type per
+  column on the **Columns** tab.
+- **Stats**: `stats.js`. Structural stats (row/missing/unique counts,
+  min/max/mean/std) computed over the **full** dataset, not sampled - see
+  the "full scan" decision below. Visualization uses a 1000-row sample
+  (same as the old site), keeping the old site's trick of always including
+  each numeric column's extrema so plots don't look artificially truncated.
+  Pearson/Spearman correlation and group-by (for balance/covariate tables)
+  are hand-rolled here, same approach the old client-side `sample.js` used.
+- **Charts**: `charts.js`, Plotly - histogram, category bar, scatter+trend,
+  contour, violin, heatmap, all-numeric correlation heatmap.
+
+Pages: `/data/` (list, upload, rename, delete) and `/data/view/?id=` (one
+dataset - Table/Columns/Univariate/Bivariate/Treatment Balance/Covariates/
+Correlations tabs). Every analysis tab carries inline explanatory copy plus
+a "learn more" link into the article library, opening in a new tab, per
+your request that someone with no causal-inference background can use this
+unassisted - turned out the old site's article library already covered
+almost everything needed (`exploratory-analysis`, `positivity`,
+`class-imbalance`, `covariate-balance`, `confounding`, `correlationcausality`,
+`data-type`, `cardinality`, `control-and-treated`), so no new articles were
+needed for this pass.
+
+Beyond straight parity, four enhancements were added (all agreed before
+building): a treatment-group balance check with a positivity warning below
+5% group share; a pre-hoc covariate-balance table (mean/std or top-category
+share per covariate, split by treatment group - the old site only showed
+this *after* running an estimation, not during XDA); a consolidated
+data-quality view (missing %, cardinality, constant/near-unique flags, all
+columns at once); and an all-numeric-columns correlation heatmap (the old
+site only did on-demand pairwise correlation).
+
+**Sampling decision** (confirmed before building): type-sniffing peek on
+upload ~200 rows; full-dataset scan (not sampled) for row/missing/unique
+counts and confirmed dtypes, since these are cheap even at hundreds of
+thousands of rows in a Worker and are exactly the numbers someone relies on
+to judge whether a column is usable; 1000-row sample (with extrema always
+included) for plots/visualization only, where exactness doesn't matter and
+speed does.
+
+Tested end-to-end in Chrome: upload → type inference → all 7 tabs → rename
+→ delete, plus an 8000-row synthetic dataset to confirm the full-scan-vs-
+1000-sample split actually holds at scale (missing/unique counts exact,
+scatter plot capped at exactly 1000 points). Caught and fixed one real bug
+in testing: `Number("")` evaluates to `0` in JS, not `NaN`, so missing
+numeric values were silently becoming zeros in every stat/plot until
+`parseNumeric()` was fixed to guard on empty strings explicitly.
+
+*Known gaps, not done this pass*: no "replace file" on an existing dataset
+(delete + re-upload covers it); outcome-over-time plot and outlier/
+duplicate-row flags were proposed but not confirmed in scope, so deferred;
+datetime columns are treated as categorical for bivariate plot-type
+selection (no time-series-aware plotting yet).
 
 **8.4 — Migrate wizard / causal diagram editor**
 Port `graph.js` (Cytoscape diagram), `wizard.js`, `treatment.js`,

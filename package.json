@@ -21,6 +21,7 @@
   "homepage": "https://github.com/drawlinson/causal_wizard_app#readme",
   "private": "true",
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.6"
+    "@11ty/eleventy": "^3.1.6",
+    "papaparse": "^5.7.0"
   }
 }

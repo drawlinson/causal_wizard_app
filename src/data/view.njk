@@ -1,0 +1,187 @@
+---
+layout: base.njk
+title: Dataset
+extraScripts:
+  - /assets/js/papaparse.min.js
+  - /assets/js/xlsx.full.min.js
+  - /assets/js/plotly-2.20.0.min.js
+extraBodyScripts:
+  - /assets/js/data-view.js
+---
+<div class="container">
+<div class="card-body">
+
+  <p><a href="/data/">&larr; Your Datasets</a></p>
+
+  <div id="dv-loading" class="alert alert-info">Loading dataset&hellip;</div>
+  <div id="dv-error" class="alert alert-danger" hidden></div>
+
+  <div id="dv-content" hidden>
+    <div class="d-flex flex-row bd-highlight mb-3">
+      <div style="margin-right:1em;">
+        <h2 id="dv-name"></h2>
+        <p id="dv-summary" class="text-muted"></p>
+      </div>
+    </div>
+
+    <div id="dv-scan-progress" class="alert alert-info" hidden></div>
+
+    <ul class="nav nav-tabs mb-3" id="dv-tabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-table" type="button">Table</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-columns" type="button">Columns</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-univariate" type="button">Univariate</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-bivariate" type="button">Bivariate</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-balance" type="button">Treatment Balance</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-covariates" type="button">Covariates</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-correlations" type="button">Correlations</button></li>
+    </ul>
+
+    <div class="tab-content">
+
+      <!-- Table -->
+      <div class="tab-pane fade show active" id="tab-table" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-sm" id="dv-table"><thead></thead><tbody></tbody></table>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-sm btn-outline-secondary" id="dv-table-prev">&laquo; Prev</button>
+          <span id="dv-table-page-label"></span>
+          <button class="btn btn-sm btn-outline-secondary" id="dv-table-next">Next &raquo;</button>
+        </div>
+      </div>
+
+      <!-- Columns / data quality -->
+      <div class="tab-pane fade" id="tab-columns" role="tabpanel">
+        <p>
+          Confirm each column's data type &mdash; we guess automatically, but
+          you can override it. <b>Constant</b> columns (only one value) and
+          <b>near-unique</b> columns (almost every value is different, e.g.
+          an ID) are flagged since they're rarely useful as a treatment,
+          outcome or covariate. See
+          <a href="/articles/data-type/" target="_blank">Data type</a> and
+          <a href="/articles/cardinality/" target="_blank">Cardinality</a>
+          for background.
+        </p>
+        <div class="table-responsive">
+          <table class="table table-sm" id="dv-columns-table">
+            <thead>
+              <tr><th>Column</th><th>Type</th><th>Missing</th><th>Unique values</th><th>Flags</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Univariate -->
+      <div class="tab-pane fade" id="tab-univariate" role="tabpanel">
+        <p>
+          Look at one column at a time to spot bad, missing, or unexpectedly
+          distributed values before you build a study. See
+          <a href="/articles/exploratory-analysis/" target="_blank">Exploratory Data Analysis</a>
+          for a full guide to reading these plots.
+        </p>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label" for="dv-uni-column">Column</label>
+            <select class="form-select" id="dv-uni-column"></select>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" id="dv-uni-log">
+              <label class="form-check-label" for="dv-uni-log">Log y-axis</label>
+            </div>
+          </div>
+        </div>
+        <div id="dv-uni-plot" style="height:400px;"></div>
+        <div id="dv-uni-stats"></div>
+      </div>
+
+      <!-- Bivariate -->
+      <div class="tab-pane fade" id="tab-bivariate" role="tabpanel">
+        <p>
+          Look for association between two variables &mdash; a first check
+          on whether a relationship you suspect (e.g. between a treatment
+          and an outcome) shows up in the data. Remember that
+          <a href="/articles/correlationcausality/" target="_blank">correlation isn't causation</a>:
+          use this as a sanity check, not proof. Computed on a sample of up
+          to 1000 rows (always including the extreme values) for speed.
+        </p>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label" for="dv-biv-x">Column A</label>
+            <select class="form-select" id="dv-biv-x"></select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="dv-biv-y">Column B</label>
+            <select class="form-select" id="dv-biv-y"></select>
+          </div>
+          <div class="col-md-4" id="dv-biv-contour-toggle" hidden>
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" id="dv-biv-contour">
+              <label class="form-check-label" for="dv-biv-contour">Show as density contour</label>
+            </div>
+          </div>
+        </div>
+        <div id="dv-biv-plot" style="height:450px;"></div>
+        <div id="dv-biv-stats"></div>
+      </div>
+
+      <!-- Treatment balance -->
+      <div class="tab-pane fade" id="tab-balance" role="tabpanel">
+        <p>
+          Pick the variable you're considering as a <b>treatment</b> (the
+          thing whose effect you want to measure). Causal estimates need
+          every group to have a reasonable number of samples &mdash; this is
+          the <a href="/articles/positivity/" target="_blank">positivity</a>
+          assumption. See also
+          <a href="/articles/class-imbalance/" target="_blank">Class imbalance</a>
+          and <a href="/articles/control-and-treated/" target="_blank">Control and treated groups</a>.
+        </p>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label" for="dv-treatment-column">Treatment / grouping column</label>
+            <select class="form-select" id="dv-treatment-column"></select>
+          </div>
+        </div>
+        <div id="dv-balance-warning"></div>
+        <div class="table-responsive">
+          <table class="table table-sm" id="dv-balance-table">
+            <thead><tr><th>Group</th><th>Count</th><th>% of total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Covariate balance -->
+      <div class="tab-pane fade" id="tab-covariates" role="tabpanel">
+        <p>
+          For each other column, compare its distribution across your
+          treatment groups (chosen in the <b>Treatment Balance</b> tab).
+          Large differences here are a warning sign of
+          <a href="/articles/confounding/" target="_blank">confounding</a>
+          &mdash; you may want that column in your causal diagram as a
+          common cause. See
+          <a href="/articles/covariate-balance/" target="_blank">Covariate balance</a>
+          for how to read this table.
+        </p>
+        <div class="table-responsive">
+          <table class="table table-sm" id="dv-covariates-table"></table>
+        </div>
+      </div>
+
+      <!-- Correlations -->
+      <div class="tab-pane fade" id="tab-correlations" role="tabpanel">
+        <p>
+          Pairwise correlation across all numeric columns at once &mdash; a
+          quick way to spot variables that move together, which can hint at
+          confounders or redundant covariates. Again,
+          <a href="/articles/correlationcausality/" target="_blank">correlation isn't causation</a>.
+        </p>
+        <div id="dv-corr-plot" style="height:500px;"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>

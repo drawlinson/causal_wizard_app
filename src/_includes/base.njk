@@ -135,6 +135,10 @@ product research, market research, user research, and industrial process optimiz
   </div>
 
   {{ content | safe }}
+
+  {% if extraBodyScripts %}{% for src in extraBodyScripts %}
+  <script type="module" src="{{ src }}"></script>
+  {% endfor %}{% endif %}
 </body>
 
 </html>

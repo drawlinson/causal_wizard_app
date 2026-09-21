@@ -79,6 +79,23 @@ then upload the contents of `_site/` to wherever you're hosting (Netlify,
 Cloudflare Pages, S3, etc. — anything that serves static files works,
 since there's nothing server-side to configure).
 
+## Vendored libraries
+
+No bundler — third-party JS is vendored as plain browser builds in
+`src/assets/js/` and loaded via `<script>` tags, same as jQuery/Bootstrap.
+To update:
+
+- **PapaParse** (CSV parsing): `npm install --save-dev papaparse@<version>`,
+  then copy `node_modules/papaparse/papaparse.min.js` over the vendored copy.
+- **SheetJS/xlsx** (Excel parsing): **not** installed via npm — the
+  npm-published `xlsx` package is frozen at 0.18.5 with an unpatched
+  prototype-pollution/ReDoS advisory (SheetJS moved patched releases to
+  their own CDN). Get the current version from
+  `https://cdn.sheetjs.com/xlsx-<version>/package/dist/xlsx.full.min.js`
+  (check [docs.sheetjs.com](https://docs.sheetjs.com/docs/getting-started/installation/standalone)
+  for the current version number) and copy it over the vendored file.
+- **Plotly.js**: carried over from the old site's vendored copy as-is.
+
 ## Repo layout
 
 ```

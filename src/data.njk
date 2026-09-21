@@ -1,0 +1,84 @@
+---
+layout: base.njk
+title: Data
+extraScripts:
+  - /assets/js/papaparse.min.js
+  - /assets/js/xlsx.full.min.js
+extraBodyScripts:
+  - /assets/js/data-list.js
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <div style="margin-right:1em;">
+      <h2>Your Datasets</h2>
+    </div>
+  </div>
+
+  <p>
+    Upload a CSV or Excel file to explore it and build a causal study. Your
+    data is processed entirely in your browser and stored locally on this
+    device &mdash; it's never uploaded anywhere. See
+    <a href="/articles/dataset/" target="_blank">what a Dataset is</a> and
+    <a href="/articles/exploratory-analysis/" target="_blank">how to explore your data</a>
+    for background.
+  </p>
+
+  <div class="card card-body mb-4">
+    <h5>Upload a new dataset</h5>
+    <form id="upload-form">
+      <div class="mb-3">
+        <label for="dataset-name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="dataset-name" placeholder="e.g. Sales 2024" />
+      </div>
+      <div class="mb-3">
+        <label for="dataset-file" class="form-label">File (CSV or Excel)</label>
+        <input type="file" class="form-control" id="dataset-file" accept=".csv,.txt,.xlsx,.xls" />
+        <div class="form-text">
+          Large files: CSV is processed in the background and stays
+          responsive. Excel files are read in one go and may briefly freeze
+          the page for very large workbooks &mdash; CSV is recommended above
+          a hundred thousand rows or so.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success" id="upload-button">Upload</button>
+      <span id="upload-status" class="ms-2"></span>
+    </form>
+  </div>
+
+  <div id="dataset-list-empty" class="alert alert-secondary" hidden>
+    No datasets yet &mdash; upload one above to get started.
+  </div>
+
+  <table class="table" id="dataset-table" hidden>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Rows</th>
+        <th>Columns</th>
+        <th>Modified</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="dataset-table-body"></tbody>
+  </table>
+</div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete dataset?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>This removes <strong id="delete-modal-name"></strong> and its data from this browser. This can't be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
