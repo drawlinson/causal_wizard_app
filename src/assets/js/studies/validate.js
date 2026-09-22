@@ -70,16 +70,23 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema, resol
   const issues = [];
   if (!outcomeUsable) issues.push("excessive_cardinality_outcome");
 
+  // A numeric treatment can be marked "continuous" (see treatment-widget.js
+  // - only numeric columns offer that choice) instead of thresholded into
+  // Control/Treated groups - in that case there are no groups to validate.
+  const isContinuousTreatment = treatmentSpec?.kind === "numeric" && treatmentSpec?.design === "continuous";
+
   let groupCounts = null;
-  if (!treatmentSpec) {
-    issues.push("treatment_group_undefined");
-  } else {
-    groupCounts = checkTreatmentGroups(treatmentSpec, datasetColumns[treatment]);
-    if (groupCounts.control === 0) issues.push("treatment_zero_control");
-    if (groupCounts.treated === 0) issues.push("treatment_zero_treated");
-    if (groupCounts.control > 0 && groupCounts.treated > 0) {
-      const minShare = Math.min(groupCounts.control, groupCounts.treated) / groupCounts.total;
-      if (minShare < 0.05) issues.push("class_imbalance");
+  if (!isContinuousTreatment) {
+    if (!treatmentSpec) {
+      issues.push("treatment_group_undefined");
+    } else {
+      groupCounts = checkTreatmentGroups(treatmentSpec, datasetColumns[treatment]);
+      if (groupCounts.control === 0) issues.push("treatment_zero_control");
+      if (groupCounts.treated === 0) issues.push("treatment_zero_treated");
+      if (groupCounts.control > 0 && groupCounts.treated > 0) {
+        const minShare = Math.min(groupCounts.control, groupCounts.treated) / groupCounts.total;
+        if (minShare < 0.05) issues.push("class_imbalance");
+      }
     }
   }
 

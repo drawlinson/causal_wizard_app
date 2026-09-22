@@ -595,6 +595,57 @@ errors on either page. Production build and the internal-link checker
 both pass clean (same pre-existing `/project/*` placeholders, unrelated
 to this page).
 
+**8.4 revision 5 — grouped/continuous choice restored, correctly scoped this time** ✅ done
+Revision 4 removed the grouped/continuous radio as redundant, reasoning
+that the type selector (Numerical/Categorical) already captured the
+distinction. That reasoning was wrong: a *numerical* treatment still has
+two legitimate readings - thresholded into Control/Treated groups, or
+passed through as a continuous value - and only the type selector
+(categorical vs numerical) was actually redundant with anything. The
+decision is a 2-stage tree: categorical treatments are always grouped (no
+choice to offer); numerical treatments choose grouped-vs-continuous, and
+that choice affects the applicable estimation methods, so it belongs to
+the study, not the dataset.
+
+This time the choice lives *inside* the shared `treatment-widget.js`
+component instead of as a page-level row in `view.njk`, gated behind a
+new `allowContinuous` option on `renderTreatmentWidget()`:
+- `defaultSpecFor()`'s numeric spec now carries `design: "grouped" |
+  "continuous"`, alongside `control`/`treated` - living inside the spec
+  (rather than a separate top-level `question.treatmentDesign`, which is
+  what caused revision 4's "widget disappears" bug: a field independent
+  of the spec/type that didn't reset when either changed) means it
+  naturally resets to a fresh default whenever the treatment or its type
+  changes, since `treatmentSpec` itself gets nulled out in both cases.
+- `study-view.js` passes `allowContinuous: true` (only numerical
+  treatments even reach `renderNumericEditor()`, so this radio is never
+  offered for a categorical one). `data-view.js` (the dataset page's
+  Treatment/balance tab) doesn't pass it, so that page is unaffected and
+  always gets the grouped editor - a continuous treatment doesn't have
+  a Control/Treated split to compute SMD/balance against, so that page
+  was never a candidate for this choice.
+- When `design === "continuous"`, `renderNumericEditor()` replaces the
+  range inputs, histogram, and summary table with a plain "Continuous
+  treatment." line - the radio itself stays visible so it's a one-click
+  switch back. `drawNumericPreview()` is skipped in this case (there's no
+  `#tw-numeric-plot` element to draw into).
+- `validate.js`'s `runCheck()` skips the Control/Treated group-size checks
+  entirely when `treatmentSpec.kind === "numeric" && treatmentSpec.design
+  === "continuous"` - restoring the "continuous, skip groups" behavior
+  revision 4 removed, but reading the flag from inside `treatmentSpec`
+  instead of a separate schema field.
+
+Verified in-browser: the radio appears for a numerical treatment (both
+options selectable, defaults to grouped) and is absent for a categorical
+one; switching to continuous replaces the editor with the placeholder
+text and persists `treatmentSpec.design: "continuous"`; Check succeeds
+with a continuous treatment and no group thresholds defined; switching
+back to grouped restores the full editor; the dataset page's Treatment
+tab confirmed to never show the radio, on the same `purchase` column
+used on the study page. No console errors on either page. Production
+build and the internal-link checker both pass clean (same pre-existing
+`/project/*` placeholders, unrelated to this page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for

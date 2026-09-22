@@ -496,6 +496,11 @@ function renderTreatmentGroupWidget() {
     sampleValues: sampledColumn(q.treatment),
     topCategories: categoryCounts(values, 50),
     initialSpec: q.treatmentSpec,
+    // Whether a numeric treatment gets thresholded into Control/Treated or
+    // passed through continuously affects which methods/analyses apply -
+    // that choice only matters here, not on the dataset page's balance tab
+    // (which always needs a group split to compute anything).
+    allowContinuous: true,
     onChange: (spec) => {
       q.treatmentSpec = spec;
       persist();

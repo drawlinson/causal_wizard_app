@@ -20,6 +20,11 @@ export function defaultSpecFor(columnType, topCategories) {
   if (columnType === "numeric" || columnType === "datetime") {
     return {
       kind: "numeric",
+      // "grouped" (thresholded into Control/Treated, as below) or
+      // "continuous" (used as-is; see allowContinuous on
+      // renderTreatmentWidget). Only meaningful for numeric columns - a
+      // categorical treatment has no continuous reading.
+      design: "grouped",
       control: { min: null, minOp: ">=", max: null, maxOp: "<" },
       treated: { min: null, minOp: ">=", max: null, maxOp: "<" },
     };
@@ -159,13 +164,51 @@ function binCounts(xs, edges) {
   return counts;
 }
 
-function renderNumericEditor(container, spec, onChange) {
+function numericDesignRadioHtml(design) {
+  return `
+    <div class="mb-3">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="tw-design" id="tw-design-grouped" value="grouped" ${design !== "continuous" ? "checked" : ""}>
+        <label class="form-check-label" for="tw-design-grouped">Split into Control / Treated groups</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="tw-design" id="tw-design-continuous" value="continuous" ${design === "continuous" ? "checked" : ""}>
+        <label class="form-check-label" for="tw-design-continuous">Use as a continuous value (e.g. effect per unit increase)</label>
+      </div>
+    </div>`;
+}
+
+/** allowContinuous: whether to offer the grouped/continuous choice at all -
+ * only the study page's identification/estimation flow cares about that
+ * distinction, so the dataset page's Treatment/balance tab (which always
+ * needs a Control/Treated split to compute anything) omits it and always
+ * gets the grouped editor, regardless of `spec.design`. */
+function renderNumericEditor(container, spec, allowContinuous, onChange) {
+  const continuous = allowContinuous && spec.design === "continuous";
   container.innerHTML = `
-    ${numericGroupHtml("control", "Control", spec.control)}
-    ${numericGroupHtml("treated", "Treated", spec.treated)}
-    <p class="text-muted">Values matching neither range are excluded (shown in grey below). Leave a group's bounds empty to disable it.</p>
-    <div id="tw-numeric-plot" style="height:300px;"></div>
-    <div id="tw-summary"></div>`;
+    ${allowContinuous ? numericDesignRadioHtml(spec.design) : ""}
+    ${
+      continuous
+        ? `<p class="text-muted mb-0">Continuous treatment.</p>`
+        : `
+      ${numericGroupHtml("control", "Control", spec.control)}
+      ${numericGroupHtml("treated", "Treated", spec.treated)}
+      <p class="text-muted">Values matching neither range are excluded (shown in grey below). Leave a group's bounds empty to disable it.</p>
+      <div id="tw-numeric-plot" style="height:300px;"></div>
+      <div id="tw-summary"></div>`
+    }`;
+
+  if (allowContinuous) {
+    container.querySelectorAll('input[name="tw-design"]').forEach((el) => {
+      el.addEventListener("change", (e) => {
+        spec.design = e.target.value;
+        renderNumericEditor(container, spec, allowContinuous, onChange);
+        onChange(spec);
+      });
+    });
+  }
+
+  if (continuous) return;
 
   function readGroup(prefix) {
     const num = (el) => (el.value.trim() === "" ? null : Number(el.value));
@@ -177,7 +220,7 @@ function renderNumericEditor(container, spec, onChange) {
     };
   }
 
-  container.querySelectorAll("input, select").forEach((el) => {
+  container.querySelectorAll("[data-role]").forEach((el) => {
     el.addEventListener("change", () => {
       spec.control = readGroup("control");
       spec.treated = readGroup("treated");
@@ -281,11 +324,12 @@ function renderSummary(container, values, spec) {
 
 /**
  * @param {HTMLElement} container
- * @param {object} opts { columnType, values (full column), sampleValues (for the numeric preview plot), topCategories, initialSpec, onChange(spec) }
+ * @param {object} opts { columnType, values (full column), sampleValues (for the numeric preview plot), topCategories, initialSpec, onChange(spec), allowContinuous }
+ * @param {boolean} [opts.allowContinuous] offer the grouped/continuous choice for numeric columns - see renderNumericEditor()
  * @returns {{getSpec: () => object}}
  */
 export function renderTreatmentWidget(container, opts) {
-  const { columnType, values, sampleValues, topCategories } = opts;
+  const { columnType, values, sampleValues, topCategories, allowContinuous = false } = opts;
   const spec = opts.initialSpec || defaultSpecFor(columnType, topCategories);
 
   const notify = (updatedSpec) => {
@@ -294,11 +338,12 @@ export function renderTreatmentWidget(container, opts) {
   };
 
   if (spec.kind === "numeric") {
-    renderNumericEditor(container, spec, (updatedSpec) => {
+    renderNumericEditor(container, spec, allowContinuous, (updatedSpec) => {
       notify(updatedSpec);
       drawNumericPreview();
     });
     var drawNumericPreview = () => {
+      if (allowContinuous && spec.design === "continuous") return; // nothing to plot - no #tw-numeric-plot element either
       const classify = classifierFromSpec(spec);
       const xs = sampleValues.map(parseNumeric).filter((v) => v !== null);
       const control = [];
