@@ -113,6 +113,11 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
       outcome: null,
       treatmentDesign: "grouped",
       treatmentSpec: null,
+      // Per-study type overrides, keyed by column name - resolves the
+      // dataset's sniffed/overridden type, the diagram node's type, and
+      // the treatment/outcome type selectors into one consistent model.
+      // See effectiveVariableType()/setVariableType() in study-view.js.
+      variableTypes: {},
       effect: "ate",
       splitTestPc: 20,
       panelData: { entity: null, time: null, covariates: [] },

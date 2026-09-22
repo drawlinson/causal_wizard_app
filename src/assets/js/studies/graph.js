@@ -101,6 +101,22 @@ export class StudyGraph {
     this.onTopologyChanged?.();
   }
 
+  findNodeBySrc(src) {
+    let found = null;
+    this.cy.nodes().forEach((n) => {
+      if (n.data("src") === src) found = n;
+    });
+    return found;
+  }
+
+  /** Sets a node's type without triggering onTopologyChanged - used when
+   * the caller (study-view.js's setVariableType) already owns persisting
+   * and re-rendering, to avoid redundant double-persists. */
+  setNodeTypeQuiet(src, type) {
+    const node = this.findNodeBySrc(src);
+    if (node) node.data("type", type);
+  }
+
   deleteEdge(id) {
     this.cy.$(`#${id}`).remove();
     this.onTopologyChanged?.();

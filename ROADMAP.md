@@ -360,7 +360,91 @@ than exhaustively validated against DoWhy's own edge cases - the notebook
 re-identifies everything independently regardless, per the original
 in-browser-identification decision.
 
-**8.5 — Remove user account features**
+**8.4 revision — variable-type model, treatment widget UX, legend, Check modal** ✅ done
+A detailed round of hands-on feedback on the Studies/wizard page, covering
+eight points:
+- **One consistent "effective type" model.** Previously the study page
+  recomputed each column's type by sniffing raw data only, ignoring the
+  dataset page's Columns-tab type overrides entirely - a numeric-looking
+  column a user had already told the dataset page was categorical (e.g.
+  `toy_panel.csv`'s `purchase`) silently reverted to numeric here. Added
+  `effectiveVariableType()`/`setVariableType()` in `study-view.js` as the
+  single resolution/mutation path: study-level `question.variableTypes`
+  override &rarr; dataset-level `typeOverrides` &rarr; sniffed default. All
+  three places a type can be set - the diagram node-edit modal, and new
+  small type `<select>` elements below the treatment/outcome pickers -
+  now read and write through this one path, so they always agree.
+  `validate.js` takes a `resolveType` callback instead of reading dataset
+  schema types directly, for the same reason.
+- **Treatment-groups widget is now collapsible**, behind a "Treatment
+  groups" button below the treatment type select (Bootstrap `collapse`),
+  auto-expanding when the treatment variable changes. It was previously
+  always open and pushed the causal diagram - the actual point of this
+  page - below the fold.
+- **Outcome type selector** added, mirroring the treatment one, resolved
+  through the same effective-type model.
+- **Check button moved inline** with the "Causal diagram" heading instead
+  of sitting below it; dropped the redundant `<hr>` under the diagram
+  (it already has its own card outline).
+- **Legend restored to the original image** (`graph-legend.png`, copied
+  back from the old site - it had been deleted during 8.1's unreferenced-
+  image cleanup, which didn't yet know the wizard would need it) and now
+  shown by default rather than behind a toggle. The CSS-badge legend it
+  replaced was missing the numeric/categorical iconography and the
+  mediator/collider fill+outline conventions.
+- **Treatment/outcome selects are now colour-coded** to match their node
+  colour in the diagram (inline `background-color`, cleared when unset).
+- **Check modal restructured**: the "Next: run the analysis" content
+  (model picker, config download, numbered how-to-run-the-notebook steps)
+  used to live in a separate page section below the diagram, visible only
+  after a successful Check and easy to miss. It's now built directly into
+  the Check-result modal, which is 85vw wide. The steps use numbered
+  badges instead of a plain `<ol>`; step 2 links to the dataset's XDA page
+  (opens in a new tab) instead of just naming it.
+- **Bug fix**: changing the treatment or outcome selector recoloured the
+  node in the diagram only on the *next* topology change (e.g. drawing an
+  edge), not immediately - both `change` handlers were missing a direct
+  call to `updateGraphClasses()`, relying on a call further down that
+  only fired for other reasons. Fixed by calling it explicitly in both
+  handlers.
+
+Two more bugs turned up during this pass, unrelated to the 8 feedback
+points but caught while re-testing the whole page end-to-end:
+- **Mediator/collider highlighting was never wired up at all** - the CSS
+  classes existed but nothing computed or passed `mediatorVariables`/
+  `colliderVariables` to the graph. Added `findMediators`/`findColliders`
+  to `dag.js` and a `deriveStructuralRoles()` in `study-view.js` that
+  runs off pure graph structure (independent of a successful Check,
+  unlike backdoor/frontdoor/IV roles).
+- **A blank CSV header column** (e.g. `toy_panel.csv`'s
+  `,mkt_costs,purchase,city` - a pandas row-index export artifact)
+  produced a column named `""`, indistinguishable from "nothing selected"
+  in every `<select>` that lists dataset columns - it silently became the
+  default/first option, so an unrelated "add unobserved node" action
+  could save with the wrong `src`. Fixed at the source in
+  `datasets/parse.js` (`sanitizeFieldNames()`/`remapRows()`): a blank
+  header becomes `column_N`, applied consistently across the peek and
+  full-parse paths for both CSV and XLSX.
+
+Verified via a from-scratch scenario built on `toy_panel.csv`: type
+override respected as the study-page default; treatment-groups widget
+auto-expands/collapses; outcome type selector resolves correctly; Check
+button inline with the diagram heading, no stray `<hr>`; full legend
+image shown by default; treatment/outcome selects colour-matched to their
+diagram nodes; treatment node recolours immediately on selection, no edge
+draw required; a 5-node/7-edge graph (`city &rarr; purchase &rarr;
+mkt_costs`, with an unobserved mediator on the purchase&rarr;mkt_costs
+path and an unobserved collider fed by both) correctly highlighted the
+mediator (grey fill, dark red border) and collider (dark red border) per
+the restored legend; Check modal at 85vw with numbered steps and a
+working dataset link. No console errors. Production build and the
+internal-link checker both pass clean (the only findings are the
+pre-existing `/project/*` nav placeholders, out of scope until 8.7).
+
+*Skipped by request*: 8.5 (below) - the greenfield site never grew user
+account features, so there's nothing to remove.
+
+**8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for
 export/import instead of a server lookup.

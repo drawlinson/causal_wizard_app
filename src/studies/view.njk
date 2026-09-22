@@ -41,10 +41,17 @@ extraBodyScripts:
       <div class="col-md-4">
         <label class="form-label" for="sv-treatment">Treatment</label>
         <select class="form-select" id="sv-treatment"></select>
+        <select class="form-select form-select-sm mt-1 w-auto" id="sv-treatment-type"></select>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#sv-treatment-collapse" id="sv-treatment-collapse-toggle" hidden>
+            Treatment groups
+          </button>
+        </div>
       </div>
       <div class="col-md-4">
         <label class="form-label" for="sv-outcome">Outcome</label>
         <select class="form-select" id="sv-outcome"></select>
+        <select class="form-select form-select-sm mt-1 w-auto" id="sv-outcome-type"></select>
       </div>
     </div>
 
@@ -62,9 +69,8 @@ extraBodyScripts:
       </div>
     </div>
 
-    <div id="sv-treatment-widget-wrapper" hidden>
-      <h5>Treatment groups</h5>
-      <div id="sv-treatment-widget"></div>
+    <div class="collapse mb-3" id="sv-treatment-collapse">
+      <div id="sv-treatment-widget" class="card card-body"></div>
     </div>
 
     <!-- Panel data fields -->
@@ -89,9 +95,11 @@ extraBodyScripts:
       </div>
     </div>
 
-    <hr class="my-4" />
-
-    <h5>Causal diagram</h5>
+    <div class="d-flex flex-row align-items-center mb-2 mt-4 gap-2 flex-wrap">
+      <h5 class="mb-0 me-2">Causal diagram</h5>
+      <button class="btn btn-primary btn-sm" id="sv-check-button">Check</button>
+      <span id="sv-check-status"></span>
+    </div>
     <p class="text-muted">
       Click empty space to add a node. Click a node to edit it. Switch to
       "Draw edges" and drag from one node to another to connect them; click
@@ -110,58 +118,15 @@ extraBodyScripts:
         <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-out">Zoom out</button>
         <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-fit">Fit</button>
       </div>
-      <button class="btn btn-outline-secondary btn-sm" id="sv-legend-toggle">Legend</button>
+      <button class="btn btn-outline-secondary btn-sm active" id="sv-legend-toggle" aria-pressed="true">Legend</button>
       <button class="btn btn-outline-danger btn-sm" id="sv-graph-clear">Clear diagram</button>
     </div>
 
-    <div id="sv-legend" class="card card-body mb-2" hidden>
-      <div class="d-flex flex-wrap gap-3">
-        <span><span class="badge" style="background:#bfd9ff;color:#05419c;">&nbsp;&nbsp;</span> Treatment</span>
-        <span><span class="badge" style="background:#d0fcdc;color:#184925;">&nbsp;&nbsp;</span> Outcome</span>
-        <span><span class="badge" style="background:#fab5a5;color:#f03a11;">&nbsp;&nbsp;</span> Adjusted for (backdoor)</span>
-        <span><span class="badge" style="background:#f2ccff;color:#cc33ff;">&nbsp;&nbsp;</span> Instrumental variable</span>
-        <span><span class="badge" style="background:#ffe6cc;color:#cc6600;">&nbsp;&nbsp;</span> Frontdoor mediator</span>
-        <span><span class="badge" style="background:#cccccc;color:#980000;">&nbsp;&nbsp;</span> Mediator</span>
-        <span>Dashed border = unobserved</span>
-      </div>
+    <div id="sv-legend" class="card card-body mb-2">
+      <img src="/assets/images/graph-legend.png" alt="Diagram legend: numerical/categorical node icons, treatment (blue), outcome (green), unobserved (dashed), backdoor (orange-red fill), frontdoor (pale orange fill), instrumental variable (purple fill), collider (dark red outline only), mediator (grey fill, dark red outline)." style="max-width:100%;" />
     </div>
 
     <div id="sv-graph" style="width:100%; height:450px; border:1px solid #ccc;"></div>
-
-    <hr class="my-4" />
-    <button class="btn btn-primary" id="sv-check-button">Check</button>
-    <span id="sv-check-status" class="ms-2"></span>
-
-    <div id="sv-export-section" class="mt-4" hidden>
-      <div class="card card-body">
-        <h5>Next: run the analysis</h5>
-        <p>
-          This site doesn't run the actual estimation &mdash; that happens in a
-          notebook, on your own computer or in Colab, using the same data you
-          already have. Nothing about your data changes; you're just moving
-          the last step somewhere with full Python statistics tooling.
-        </p>
-        <div class="mb-3">
-          <label class="form-label" for="sv-model-select">Model</label>
-          <select class="form-select w-auto d-inline-block" id="sv-model-select"></select>
-        </div>
-        <ol>
-          <li>Download your study configuration: <button class="btn btn-sm btn-success" id="sv-download-config">Download config JSON</button></li>
-          <li>Make sure you have your data file handy (the one you uploaded here).</li>
-          <li>
-            Open the notebooks &mdash;
-            <a id="sv-colab-link" href="#" target="_blank" class="btn btn-sm btn-outline-primary">Open in Colab &#8599;</a>
-            or clone the <a id="sv-notebooks-repo-link" href="#" target="_blank">notebooks repository</a> to run locally.
-          </li>
-          <li>When the notebook asks for your config file and data file, provide the two files above.</li>
-        </ol>
-        <p class="text-muted">
-          The notebook re-checks everything independently (it doesn't just
-          trust this page), so if anything here turns out to be a poor fit
-          for your data, it'll tell you there too.
-        </p>
-      </div>
-    </div>
 
   </div>
 </div>
@@ -203,7 +168,7 @@ extraBodyScripts:
 
 <!-- Check results modal -->
 <div class="modal fade" id="check-modal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog" style="max-width:85vw;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Check results</h5>

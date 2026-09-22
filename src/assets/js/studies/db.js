@@ -12,6 +12,7 @@
 //     treatment, outcome,                 // column names
 //     treatmentDesign: "grouped" | "continuous",
 //     treatmentSpec,                       // treatment-widget.js spec, when grouped
+//     variableTypes: { [columnName]: "numerical" | "categorical" },  // per-study override
 //     effect, targetUnit,
 //     splitTestPc,
 //     panelData: { entity, time, covariates: [] },  // pd+fe only

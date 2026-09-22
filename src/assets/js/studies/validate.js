@@ -4,19 +4,21 @@
 // outcome usability -> treatment group sizes -> covariate cardinality ->
 // method-specific identification (CD+PO graph identification, or PDFE
 // panel-structure checks).
+//
+// Variable types are resolved via `resolveType(name)` (study-view.js's
+// effectiveVariableType - see its docs), not read directly off the dataset
+// schema, so a user's "treat this numeric column as categorical" override
+// is respected everywhere a type matters, not just in the diagram.
 
 import { identifyEffect } from "./identify.js";
 import { classifierFromSpec } from "../treatment-widget.js";
 import { getCompatibleModels, ESTIMAND_TYPE } from "./causal-methods.js";
 
-function outcomeUsability(outcomeCol) {
+function outcomeUsability(outcomeCol, effectiveType) {
   if (!outcomeCol) return { usable: false, cardinality: null };
-  if (outcomeCol.type === "numeric") return { usable: true, cardinality: null };
-  if (outcomeCol.type === "boolean") return { usable: true, cardinality: 2 };
-  if (outcomeCol.type === "categorical" && outcomeCol.uniqueCount === 2) {
-    return { usable: true, cardinality: 2 };
-  }
-  return { usable: false, cardinality: outcomeCol.uniqueCount ?? null };
+  if (effectiveType === "numerical") return { usable: true, cardinality: null };
+  // categorical: only usable if binary
+  return { usable: outcomeCol.uniqueCount === 2, cardinality: outcomeCol.uniqueCount ?? null };
 }
 
 function checkTreatmentGroups(treatmentSpec, values) {
@@ -32,14 +34,14 @@ function checkTreatmentGroups(treatmentSpec, values) {
   return { control, treated, total };
 }
 
-function checkCovariateCardinality(graph, treatment, outcome, schemaColumns) {
+function checkCovariateCardinality(graph, treatment, outcome, schemaColumns, resolveType) {
   for (const node of graph.nodes) {
     if (node === treatment || node === outcome) continue;
     if (node.startsWith("u") || node.startsWith("x")) continue; // no data to check
     const col = schemaColumns.find((c) => c.name === node);
-    if (col && (col.type === "categorical" || col.type === "text") && col.uniqueCount > 10) {
-      return false;
-    }
+    if (!col) continue;
+    const isCategorical = resolveType ? resolveType(node) === "categorical" : col.type === "categorical" || col.type === "text";
+    if (isCategorical && col.uniqueCount > 10) return false;
   }
   return true;
 }
@@ -49,9 +51,11 @@ function checkCovariateCardinality(graph, treatment, outcome, schemaColumns) {
  * @param graph the study's `graph` object ({nodes, edges, variableTypes})
  * @param datasetColumns columnar dataset values, keyed by column name
  * @param datasetSchema the dataset's full-scan schema (from datasets/db.js)
+ * @param resolveType (name) => "numerical" | "categorical" - the same
+ *   resolution used to drive the diagram/type selectors
  * @returns {{valid: boolean, issues?: string[], estimands?: object[], groupCounts?: object}}
  */
-export function runCheck({ question, graph, datasetColumns, datasetSchema }) {
+export function runCheck({ question, graph, datasetColumns, datasetSchema, resolveType }) {
   const { treatment, outcome, method, treatmentDesign, treatmentSpec, panelData } = question;
 
   if (!treatment || !outcome) return { valid: false, issues: ["treatment_or_outcome_missing"] };
@@ -59,8 +63,9 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema }) {
 
   const schemaColumns = datasetSchema?.columns || [];
   const outcomeCol = schemaColumns.find((c) => c.name === outcome);
-  const { usable: outcomeUsable, cardinality: outcomeCardinality } = outcomeUsability(outcomeCol);
-  const outcomeType = outcomeCol?.type;
+  const outcomeEffectiveType = resolveType ? resolveType(outcome) : outcomeCol?.type === "numeric" ? "numerical" : "categorical";
+  const { usable: outcomeUsable, cardinality: outcomeCardinality } = outcomeUsability(outcomeCol, outcomeEffectiveType);
+  const outcomeType = outcomeEffectiveType === "numerical" ? "numeric" : "categorical";
 
   const issues = [];
   if (!outcomeUsable) issues.push("excessive_cardinality_outcome");
@@ -80,7 +85,7 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema }) {
     }
   }
 
-  if (!checkCovariateCardinality(graph, treatment, outcome, schemaColumns)) {
+  if (!checkCovariateCardinality(graph, treatment, outcome, schemaColumns, resolveType)) {
     issues.push("excessive_cardinality");
   }
 

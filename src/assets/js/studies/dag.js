@@ -224,3 +224,26 @@ export function findInstrumentalVariables(x, y, nodes, edges, observable) {
     return dSeparated(z, y, new Set(), nodes, edgesNoZOut); // not confounded with y
   });
 }
+
+/**
+ * All variables lying on some directed path from x to y (excluding x, y
+ * themselves) - a general "is this a mediator of the treatment effect"
+ * check, for diagram highlighting. Broader than findFrontdoorSet's
+ * mediator set, which additionally requires the whole set to satisfy
+ * Pearl's frontdoor conditions.
+ */
+export function findMediators(x, y, nodes, edges) {
+  const xDesc = descendants(x, edges);
+  const yAnc = ancestors(y, edges);
+  return nodes.filter((n) => n !== x && n !== y && xDesc.has(n) && yAnc.has(n));
+}
+
+/**
+ * Colliders: nodes with two or more parents (a common effect of separate
+ * causes) - conditioning on one can open a spurious association between
+ * its causes, so these are flagged for the diagram regardless of whether
+ * they're on a treatment-outcome path.
+ */
+export function findColliders(nodes, edges) {
+  return nodes.filter((n) => parents(n, edges).length >= 2);
+}
