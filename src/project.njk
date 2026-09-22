@@ -1,0 +1,69 @@
+---
+layout: base.njk
+title: AI/ML Projects
+extraBodyScripts:
+  - /assets/js/project-list.js
+---
+<div class="container">
+<div class="card-body">
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <div style="margin-right:1em;">
+      <h2>Your AI/ML Projects</h2>
+    </div>
+  </div>
+
+  <p>
+    A free tool &mdash; a kind of
+    <a href="https://en.wikipedia.org/wiki/Business_Model_Canvas" target="_blank">Business Model Canvas</a>
+    for AI/ML projects &mdash; to help you design a project <em>before</em>
+    you get to the point of collecting and analyzing data. Not sure where
+    to start? Read the
+    <a href="/project/1/">background tips</a> for each section first.
+  </p>
+
+  <div class="card card-body mb-4">
+    <h5>Start a new project</h5>
+    <form id="create-form">
+      <div class="mb-3">
+        <label for="project-name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="project-name" placeholder="e.g. Predictive maintenance for Fleet X" />
+      </div>
+      <button type="submit" class="btn btn-success">Create</button>
+    </form>
+  </div>
+
+  <div id="project-list-empty" class="alert alert-secondary" hidden>
+    No projects yet &mdash; create one above to get started.
+  </div>
+
+  <table class="table" id="project-table" hidden>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Progress</th>
+        <th>Modified</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="project-table-body"></tbody>
+  </table>
+</div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete project?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>This removes <strong id="delete-modal-name"></strong> from this browser. This can't be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="delete-modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

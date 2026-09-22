@@ -1,0 +1,35 @@
+---
+layout: base.njk
+title: Project summary
+extraScripts:
+  - /assets/js/html2pdf.bundle.min.js
+extraBodyScripts:
+  - /assets/js/project-view.js
+---
+<div class="container">
+<div class="card-body">
+
+  <p><a href="/project/">&larr; Your AI/ML Projects</a></p>
+
+  <div id="pv-loading" class="alert alert-info">Loading project&hellip;</div>
+  <div id="pv-error" class="alert alert-danger" hidden></div>
+
+  <div id="pv-content" hidden>
+    <div class="d-flex flex-row bd-highlight mb-3 align-items-center gap-2 flex-wrap">
+      <h2 class="mb-0 me-2" id="pv-name"></h2>
+      <button class="btn btn-sm btn-success" id="pv-download">Download PDF</button>
+      <a class="btn btn-sm btn-outline-secondary" id="pv-edit-link" href="#">Edit</a>
+    </div>
+
+    <div id="pv-pdf-content">
+      <h1 id="pv-pdf-title" class="mb-4"></h1>
+      <div id="pv-sections"></div>
+      <p class="text-muted mt-4">
+        This document was created with the
+        <a href="https://causalwizard.app">Causal Wizard AI/ML project designer tool</a>.
+      </p>
+    </div>
+  </div>
+
+</div>
+</div>

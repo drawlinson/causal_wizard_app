@@ -5,8 +5,8 @@
 // recipe for version-conflict bugs.
 
 const DB_NAME = "causal-wizard";
-const DB_VERSION = 2;
-export const STORES = { DATASETS: "datasets", STUDIES: "studies" };
+const DB_VERSION = 3;
+export const STORES = { DATASETS: "datasets", STUDIES: "studies", PROJECTS: "projects" };
 
 export function openDb() {
   return new Promise((resolve, reject) => {

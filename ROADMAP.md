@@ -843,12 +843,101 @@ effect help link now points at `/articles/causal-effect/`. No console
 errors. Production build and the internal-link checker both pass clean
 (same pre-existing `/project/*` placeholders, unrelated to this page).
 
-**8.5 — Remove user account features** (skipped - not applicable, see above)
+**8.5 — Remove user account features** (auth-removal half skipped - not
+applicable, see above; project-builder-port half done, see "8.5 revision"
+below) ✅ done
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for
 export/import instead of a server lookup.
 *Deliverable*: no auth surface anywhere; project builder answers persist in
 the browser and can be exported/imported as a file.
+
+**8.5 revision — migrate the AI/ML Project Designer, redesigned as a wizard** ✅ done
+The old site's `/project/` app (a separate "brainstorm your AI/ML project
+before you touch data" tool - not part of the causal-inference wizard) was
+originally scoped as a straight port under 8.5 ("no auth surface"), but the
+user asked for a redesign at the same time: the old UI put all 30 questions
+on screen at once (7 Bootstrap tabs), each behind an identical "Read more"
+collapse box regardless of whether it had real content - "too static...
+empty boxes and large Read more boxes." Requested instead: a wizard with
+Next/Prev and "chapter skip" between the 7 sections, and a single-page
+read-only summary at the end for download.
+
+**Content recovery.** The old site's `Project`/`ProjectQuestion` Django
+models hold no relational answer rows - `ProjectQuestion` (section,
+sequence, objective, prompt, more_info - DB-seeded via TinyMCE) is the
+actual question bank, and `Project.answers` is a flat JSON dict keyed by
+`"<section>_<sequence>"` (e.g. `"1_1"`). The SQL dump (`backup_final.sql`,
+sibling to both `cw/` and this repo) has full schema for both tables but
+no `COPY` data block for either - a deliberate exclusion that swept up the
+question bank along with the (actually sensitive) per-user answers. All 32
+question prompts, "Additional context & tips" bodies, section titles/
+intros, and embedded links were instead recovered verbatim from the live
+site (`causalwizard.app/project/section/1..7`, which render everything
+uncollapsed) via browser automation - see the file this was assembled
+into, `src/_data/projectQuestions.js`. Recovery also turned up 5
+illustrative images (`denormalization_for_ml.png`,
+`supervised_learning_classification_vs_regression.png`,
+`optimisation_reinforcement_learning_unsupervised_learning.png`,
+`create_dataset_for_ml.png`, `bias_concept.png`) referenced from question
+`more_info` content, all still present under `cw/cw/static/images/` with
+their original filenames and copied across as-is (one, `bias_concept.png`,
+turned out to already be vendored and in use by `articles/bias.html` -
+same illustration, same file, confirmed by matching checksum). Three
+`more_info` links also turned out to already point at articles that exist
+on this site (`/articles/bootstrap-validation/`, `/articles/bias/`,
+`/articles/sample/`) - found only by inspecting live DOM `<a>` hrefs, since
+they're embedded in rich-text DB content invisible to a static grep of the
+old templates.
+
+**Single source of truth, not duplicated.** The user specifically asked to
+keep the old site's separate read-only "tips" pages (`/project/1/` through
+`/project/7/`, static article-style reading of a section's questions with
+no input boxes - already stubbed as nav links) without duplicating all the
+question content a second time for them. `src/_data/projectQuestions.js`
+is that single source: Eleventy's data cascade feeds it directly to
+`src/project/tips.njk` (one template, `pagination.data` over the 7
+sections, `permalink: "/project/{{ section.number }}/"` - generates all 7
+pages from one file), and a small `.11ty.js` template
+(`src/project-questions.11ty.js`) republishes the exact same object as a
+static JSON asset at `/assets/data/project-questions.json` for client-side
+JS (the builder wizard, the list page's progress counts, the summary/view
+page) to `fetch()` - same data, two consumers, zero duplication either way.
+
+**Data model**: one new IndexedDB store, `projects` (`src/assets/js/
+projects/db.js`, `ProjectStore` - same list/get/put/delete/newId shape as
+`StudyStore`/`DatasetStore`). A `Project` record is just `{id, name,
+answers: {uid: text}, currentSection, createdAt, modifiedAt}` - no login,
+no `prid` magic-link sharing (unlike the old site, everything here is
+already local-only IndexedDB, so there was never a server to need a
+share-link workaround for).
+
+**Pages**: `/project/` (list + create, mirrors `studies.njk`/
+`study-list.js`, with a progress column computed from the fetched question
+count); `/project/builder/?id=` (the wizard - one section/"chapter" per
+screen, chapter-skip pills across the top showing each section's answered/
+total count, Next/Prev between sections, "Finish" on the last section
+linking to the summary page; each question's tips render inline,
+unconditionally expanded, only when `more_info` is non-empty - directly
+fixing the empty-box complaint, since there's no collapse mechanism left
+at all); `/project/view/?id=` (read-only summary of every section/
+question/answer in one page, "Not answered" shown in muted italic for
+blanks, "Download PDF" via a vendored `html2pdf.bundle.min.js` - same
+library the old site used, rendering the visible summary div client-side,
+no server involved).
+
+Verified in-browser end-to-end: created a project, answered one question,
+confirmed the chapter-nav badge and IndexedDB record updated within the
+400ms debounce, chapter-skip and Prev/Next both navigate correctly,
+"Finish" from section 7 lands on the summary page showing the one answer
+and 31 "Not answered", PDF download completes without error, the list
+page shows "1 / 32 answered", and both recovered images (one on the tips
+page, one inside the wizard's inline tips) load with a real
+`naturalWidth`, not broken. No console errors anywhere in the flow.
+Production build + a full clean rebuild (`rm -rf _site`) both succeed, and
+the internal-link checker is fully clean for the first time this project -
+the `/project/*` placeholders that were "out of scope until 8.7" in every
+previous stage's link-check note are now real, working pages.
 
 **8.6 — Make notebooks**
 Refactor the `cw/inference` Python package (`causal_methods.py`,

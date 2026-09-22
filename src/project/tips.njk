@@ -1,0 +1,62 @@
+---
+layout: base.njk
+pagination:
+  data: projectQuestions.sections
+  size: 1
+  alias: section
+permalink: "/project/{{ section.number }}/"
+eleventyComputed:
+  title: "{{ section.title }}"
+---
+<div class="container">
+<div class="card-body">
+
+  <p><a href="/project/">&larr; AI/ML Projects</a></p>
+
+  <div class="alert alert-warning">
+    <p class="mb-2"><b>Causal Wizard is designed to help people apply Causal Machine Learning to real world problems</b></p>
+    <p>
+      These articles about <b>AI and ML project design</b> are intended to
+      address the real difficulties people experience when trying to
+      define and scope their projects.
+    </p>
+    <p>
+      <a href="https://www.sciencedirect.com/science/article/pii/S1877050921022134" target="_blank">Project design issues are widely regarded as a key cause of project failure</a>.
+      So to have the best chance of success, read our tips before you
+      start, and review them regularly during your project.
+    </p>
+    <p>
+      These articles are organised as a set of questions you should ask
+      yourself about each aspect of your project. <b>Most importantly,
+      you do not need to be an AI or ML expert to answer the questions.</b>
+    </p>
+    <p class="mb-0">
+      We also provide a free tool &mdash; a kind of
+      <a href="https://en.wikipedia.org/wiki/Business_Model_Canvas" target="_blank">Business Model Canvas</a>
+      for AI and ML projects:
+      <a class="btn btn-sm btn-primary" href="/project/builder/">Project designer</a>
+      Using the tool, you can record your answers to these questions.
+    </p>
+  </div>
+
+  <div class="btn-toolbar mb-4 gap-2 flex-wrap" role="toolbar">
+    {% for s in projectQuestions.sections %}
+      <a class="btn btn-sm {{ 'btn-primary' if s.number == section.number else 'btn-outline-secondary' }}" href="/project/{{ s.number }}/">{{ s.navLabel }}</a>
+    {% endfor %}
+  </div>
+
+  <h2>{{ section.title }}</h2>
+  <p class="text-muted">{{ section.subtitle }}</p>
+
+  {% for q in section.questions %}
+    <hr class="my-4" />
+    <h5>Q{{ section.number }}.{{ loop.index }} {{ q.objective }}</h5>
+    <div>{{ q.prompt | safe }}</div>
+    {% if q.moreInfo %}
+      <h6 class="cw-faint mt-3">Additional context &amp; tips</h6>
+      <div>{{ q.moreInfo | safe }}</div>
+    {% endif %}
+  {% endfor %}
+
+</div>
+</div>

@@ -1,0 +1,45 @@
+---
+layout: base.njk
+title: Project builder
+extraBodyScripts:
+  - /assets/js/project-builder.js
+---
+<div class="container">
+<div class="card-body">
+
+  <p><a href="/project/">&larr; Your AI/ML Projects</a></p>
+
+  <div id="pb-loading" class="alert alert-info">Loading project&hellip;</div>
+  <div id="pb-error" class="alert alert-danger" hidden></div>
+
+  <div id="pb-content" hidden>
+    <div class="d-flex flex-row bd-highlight mb-3 align-items-center gap-2 flex-wrap">
+      <h2 class="mb-0 me-2" id="pb-name"></h2>
+      <a class="btn btn-sm btn-outline-secondary ms-auto" id="pb-view-link" href="#" target="_blank">View / Download &#8599;</a>
+    </div>
+
+    <p class="text-muted">
+      Answer as many questions as you can, but you don't have to complete
+      them all. Read the <a href="/project/1/" target="_blank">background tips</a>
+      for a fuller explanation of each section.
+    </p>
+
+    <div class="btn-toolbar mb-3 gap-2 flex-wrap" role="toolbar" id="pb-chapter-nav"></div>
+
+    <div class="card card-body mb-3">
+      <h3 id="pb-section-title"></h3>
+      <p class="text-muted" id="pb-section-subtitle"></p>
+      <p id="pb-section-intro"></p>
+
+      <div id="pb-questions"></div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <button class="btn btn-outline-secondary" id="pb-prev">&larr; Previous</button>
+      <span id="pb-progress" class="text-muted"></span>
+      <button class="btn btn-primary" id="pb-next">Next &rarr;</button>
+    </div>
+  </div>
+
+</div>
+</div>

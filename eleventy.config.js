@@ -20,6 +20,13 @@ export default function (eleventyConfig) {
   // Do two slug arrays share at least one entry?
   eleventyConfig.addFilter("sharesSlug", (slugsA, slugsB) => slugsA.some((s) => slugsB.includes(s)));
 
+  // Serialize a value as JSON for inlining into a page (e.g. the project
+  // question bank, read by the builder wizard's JS) - escapes "<" so a
+  // "</script>" substring anywhere in the data can't break out of the
+  // <script> tag it's embedded in. json.parse() decodes < back to "<"
+  // fine, since it's just JSON string-escaping, not HTML-escaping.
+  eleventyConfig.addFilter("json", (obj) => JSON.stringify(obj).replace(/</g, "\\u003c"));
+
   return {
     dir: {
       input: "src",
