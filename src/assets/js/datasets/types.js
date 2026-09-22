@@ -69,7 +69,11 @@ export function sniffType(values) {
     uniqueCount,
     missingCount,
     isConstant: uniqueCount <= 1,
-    isNearUnique: present.length > 20 && uniqueCount / present.length >= 0.95,
+    // Only meaningful for categorical/text columns (e.g. a customer-id
+    // string) - a numeric column is expected to be almost all-unique for
+    // any continuous measurement (age, income, a GPS coordinate...), so
+    // flagging it here would just be noise, not a sign of an ID column.
+    isNearUnique: type !== "numeric" && present.length > 20 && uniqueCount / present.length >= 0.95,
   };
 }
 

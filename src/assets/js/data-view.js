@@ -416,7 +416,11 @@ function renderBivariateTab() {
       statsEl.innerHTML = "";
     } else {
       const { pearson, spearman } = plotScatter("dv-biv-plot", xs, ys, { xTitle: xName, yTitle: yName });
-      statsEl.innerHTML = `<p>Pearson correlation: <b>${pearson?.toFixed(3) ?? "n/a"}</b> &middot; Spearman correlation: <b>${spearman?.toFixed(3) ?? "n/a"}</b></p>`;
+      statsEl.innerHTML = `<p>
+        <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank">Pearson correlation coefficient</a> (linear): <b>${pearson?.toFixed(3) ?? "n/a"}</b>
+        &middot;
+        <a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient" target="_blank">Spearman's rank correlation coefficient</a>: <b>${spearman?.toFixed(3) ?? "n/a"}</b>
+      </p>`;
     }
   } else if (xKind === "categorical" && yKind === "categorical") {
     contourToggle.hidden = true;

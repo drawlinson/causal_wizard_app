@@ -241,6 +241,36 @@ hung on "Loading dataset..." with no console error, since the browser's
 module loader just refused the entire graph. Root-caused via
 `read_network_requests` (a 503 on the wrong path), not the console.
 
+**8.3 revision 2 — small dataset-page usability fixes** ✅ done
+Three small fixes from later hands-on testing:
+- Renamed the "Treatment" tab to **"Covariate balance"** - the tab's own
+  content already used that name for its second half (the balance table),
+  and it better describes what the tab is actually for on this page (the
+  assignment widget here is just the input to the balance comparison, not
+  an end in itself - that's the study page's job).
+- **Bivariate tab**: linked "Pearson correlation" and "Spearman
+  correlation" to their Wikipedia articles, matching the old site (`cw/
+  static/js/dataset.js`'s `getJointStatistics()` rendering) which linked
+  both terms next to their computed values.
+- **Columns tab's "near-unique (ID-like)" flag no longer fires for
+  numeric columns.** It was true-but-useless there: any continuous
+  numeric measurement (age, income, a GPS coordinate) is naturally almost
+  all-unique, so the flag fired on essentially every numeric column,
+  numeric ID or not - it's only actually informative for categorical/text
+  columns, where near-uniqueness really does suggest an identifier.
+  `sniffType()` in `datasets/types.js` now gates `isNearUnique` on `type
+  !== "numeric"`. This is the only other column-quality flag besides
+  `isConstant` ("constant" badge) - there isn't a broader flag system to
+  extend here, just these two.
+
+Verified: a from-scratch Node check of `sniffType()` against a 100-row
+numeric ID column, a 100-row numeric measurement column, and a 100-row
+text ID column confirms only the text column still gets `isNearUnique:
+true`. Confirmed in-browser: tab renamed, Bivariate stats line renders
+both correlation coefficients as working Wikipedia links, no console
+errors. Production build and the internal-link checker both pass clean
+(same pre-existing `/project/*` placeholders, unrelated to this page).
+
 **8.4 — Migrate wizard / causal diagram editor** ✅ done
 Renamed "the wizard" to **Studies** throughout (nav already said Studies).
 Both old methods in scope (CD+PO and PD+FE, by request — the old site
