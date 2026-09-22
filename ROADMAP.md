@@ -333,6 +333,40 @@ console errors. Production build and the internal-link checker both pass
 clean (same pre-existing `/project/*` placeholders, unrelated to this
 page).
 
+**8.3 revision 5 — correlation heatmap axes broken by numeric-looking column names** ✅ done
+User-reported: on a 13,199-row/39-column file, the Correlations tab's
+heatmap showed numeric axes running up to over 1,000,000 instead of a
+39x39 grid of column names. Root cause: Plotly's `heatmap` trace
+auto-detects axis type from the tick values it's given, and switches from
+"category" to "linear" (numeric) if every value parses as a number - which
+column *names* can easily do (e.g. numeric IDs, years, or column indices
+as headers). Once that happens, tiles are positioned at their literal
+numeric value instead of one evenly-spaced tile per column, producing a
+huge, mostly-empty numeric axis with only a few visible cells crammed
+together - exactly the reported symptom.
+
+This is a general Plotly gotcha, not unique to the correlation heatmap -
+any chart passing category-like values as x/y without forcing the axis
+type is vulnerable the same way if those values happen to look numeric
+(a numeric-coded categorical column, for instance). Added an explicit
+`type: "category"` to every chart in `datasets/charts.js` that plots
+discrete categories on an axis: `plotCorrelationHeatmap` (both axes -
+the one actually reported), `plotHeatmap` (bivariate categorical x
+categorical, both axes), `plotCategoryBar` (univariate category counts),
+and `plotViolin` (categorical x-axis).
+
+Verified the mechanism directly in the browser first (a 4x4 heatmap with
+numeric-string column names reproduced the bug exactly - axis type
+"linear", range `[1000.5, 1004.5]`; adding `type: "category"` fixed it to
+range `[-0.5, 3.5]`), then end-to-end with a synthetic 200-row/10-column
+CSV whose headers are `1000000`-`1000009`: the Correlations tab now
+renders a clean 10x10 grid with `xaxis.type: "category"` and range
+`[-0.5, 9.5]`, correct column-name tick labels, no numeric blow-up.
+Re-verified a normal (non-numeric-header) dataset's Correlations and
+Univariate tabs still render correctly (no regression). No console
+errors. Production build and the internal-link checker both pass clean
+(same pre-existing `/project/*` placeholders, unrelated to this page).
+
 **8.4 — Migrate wizard / causal diagram editor** ✅ done
 Renamed "the wizard" to **Studies** throughout (nav already said Studies).
 Both old methods in scope (CD+PO and PD+FE, by request — the old site

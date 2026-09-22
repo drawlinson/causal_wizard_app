@@ -24,7 +24,11 @@ export function plotCategoryBar(elementId, topCategories, { title } = {}) {
   Plotly.newPlot(
     elementId,
     [{ x: topCategories.map((c) => c.value), y: topCategories.map((c) => c.count), type: "bar" }],
-    baseLayout({ title }),
+    // Force a category axis - Plotly otherwise auto-detects axis type from
+    // the tick values, and switches to a numeric axis (spacing bars by
+    // literal value, not evenly by rank) if the category labels happen to
+    // look like numbers (e.g. numeric category codes).
+    baseLayout({ title, xaxis: { type: "category" } }),
     PLOTLY_CONFIG
   );
 }
@@ -100,7 +104,9 @@ export function plotViolin(elementId, categoryValues, numericValues, { xTitle, y
         points: false,
       },
     ],
-    baseLayout({ xaxis: { title: xTitle }, yaxis: { title: yTitle } }),
+    // x is categorical (see xCats/yCats below for the other heatmap) - same
+    // "don't let Plotly guess a numeric axis from category labels" concern.
+    baseLayout({ xaxis: { title: xTitle, type: "category" }, yaxis: { title: yTitle } }),
     PLOTLY_CONFIG
   );
 }
@@ -116,7 +122,11 @@ export function plotHeatmap(elementId, xValues, yValues, { xTitle, yTitle } = {}
   Plotly.newPlot(
     elementId,
     [{ x: xCats, y: yCats, z: matrix, type: "heatmap", colorscale: "Blues" }],
-    baseLayout({ xaxis: { title: xTitle }, yaxis: { title: yTitle } }),
+    // Force category axes - both xCats/yCats are just column values coerced
+    // to strings, which can easily look numeric (e.g. numeric category
+    // codes), and Plotly would otherwise switch to a numeric axis and
+    // space/skew the tiles by literal value instead of one per category.
+    baseLayout({ xaxis: { title: xTitle, type: "category" }, yaxis: { title: yTitle, type: "category" } }),
     PLOTLY_CONFIG
   );
 }
@@ -155,7 +165,13 @@ export function plotCorrelationHeatmap(elementId, columns, numericColumnNames) {
         reversescale: true,
       },
     ],
-    baseLayout({ xaxis: { tickangle: -45 }, yaxis: { autorange: "reversed" } }),
+    // Force category axes - `names` are column names, which can easily look
+    // numeric (e.g. columns named by a numeric ID/index/year). Without this,
+    // Plotly auto-detects a numeric axis from tick values that all parse as
+    // numbers, and positions/spaces the tiles by literal numeric value
+    // instead of one evenly-spaced tile per column - producing a huge,
+    // mostly-empty numeric axis instead of an NxN grid.
+    baseLayout({ xaxis: { tickangle: -45, type: "category" }, yaxis: { autorange: "reversed", type: "category" } }),
     PLOTLY_CONFIG
   );
 }
