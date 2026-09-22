@@ -111,23 +111,52 @@ function numericGroupHtml(prefix, label, group) {
 
 /** Plotly auto-bins each histogram trace independently by default, so the
  * Control/Treated/Excluded traces (each a different subset of the data)
- * get different bin edges - the last "Control" bar can visually overrun
- * the actual threshold (e.g. reaching 7.9 for a "< 7" cutoff) purely
- * because that trace's own auto-binning rounded up, not because any
- * control-classified value is actually that high. Computing one shared
- * bin grid from the full column and applying it to all three traces
- * keeps the bars honest about where the cutoff actually falls. */
-function sharedBins(xs) {
-  const min = Math.min(...xs);
-  const max = Math.max(...xs);
-  if (min === max) return { start: min - 0.5, end: max + 0.5, size: 1 };
+ * get different bin edges - even a uniform shared grid isn't enough, since
+ * a bin can still straddle a group's own cutoff (e.g. a bin covering
+ * [6.5, 7.2) makes a "< 7" Control cutoff and a ">= 7" Treated cutoff look
+ * like they overlap at that bar, even though no value is double-counted).
+ * This builds bin edges that always land exactly on every finite group
+ * threshold in `spec`, with a "nice enough" number of sub-bins filling in
+ * the space between thresholds so the plot still looks like a histogram. */
+function thresholdAwareBins(xs, spec) {
+  const dataMin = Math.min(...xs);
+  const dataMax = Math.max(...xs);
+  if (dataMin === dataMax) return [dataMin - 0.5, dataMax + 0.5];
+
+  const thresholds = [spec.control.min, spec.control.max, spec.treated.min, spec.treated.max].filter(
+    (v) => v !== null && v !== undefined && v > dataMin && v < dataMax
+  );
+  const breakpoints = Array.from(new Set([dataMin, ...thresholds, dataMax])).sort((a, b) => a - b);
+
   const TARGET_BINS = 30;
-  const rawSize = (max - min) / TARGET_BINS;
-  const magnitude = Math.pow(10, Math.floor(Math.log10(rawSize)));
-  const norm = rawSize / magnitude;
-  const niceNorm = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10;
-  const size = niceNorm * magnitude;
-  return { start: Math.floor(min / size) * size, end: Math.ceil(max / size) * size, size };
+  const totalSpan = dataMax - dataMin;
+  const edges = [breakpoints[0]];
+  for (let i = 0; i < breakpoints.length - 1; i++) {
+    const segStart = breakpoints[i];
+    const segEnd = breakpoints[i + 1];
+    const span = segEnd - segStart;
+    if (span <= 0) continue;
+    const nBins = Math.max(1, Math.round((span / totalSpan) * TARGET_BINS));
+    const step = span / nBins;
+    for (let j = 1; j <= nBins; j++) edges.push(segStart + step * j);
+  }
+  return edges;
+}
+
+/** Counts how many values fall in each [edges[i], edges[i+1]) bin (last bin
+ * is closed on both ends, so the max value isn't dropped). */
+function binCounts(xs, edges) {
+  const counts = new Array(edges.length - 1).fill(0);
+  for (const v of xs) {
+    for (let i = 0; i < edges.length - 1; i++) {
+      const isLast = i === edges.length - 2;
+      if (v >= edges[i] && (v < edges[i + 1] || (isLast && v <= edges[i + 1]))) {
+        counts[i] += 1;
+        break;
+      }
+    }
+  }
+  return counts;
 }
 
 function renderNumericEditor(container, spec, onChange) {
@@ -281,19 +310,33 @@ export function renderTreatmentWidget(container, opts) {
         else if (bucket === "treated") treated.push(v);
         else excluded.push(v);
       }
-      const bins = sharedBins(xs);
-      const xbins = { start: bins.start, end: bins.end, size: bins.size };
+      // Plotly's histogram trace can only bin on a uniform grid, so the
+      // bars are built by hand from thresholdAwareBins()/binCounts() and
+      // rendered as a "bar" trace instead - the only way to guarantee a
+      // bin edge sits exactly on each group's cutoff.
+      const edges = thresholdAwareBins(xs, spec);
+      const widths = edges.slice(1).map((e, i) => e - edges[i]);
+      const centers = edges.slice(1).map((e, i) => (e + edges[i]) / 2);
+      const bar = (data, name, color, opacity) => ({
+        x: centers,
+        y: binCounts(data, edges),
+        width: widths,
+        name,
+        type: "bar",
+        opacity,
+        marker: { color },
+      });
       Plotly.newPlot(
         "tw-numeric-plot",
         [
           // Full/excluded distribution first and pale, so Control/Treated
           // stand out on top of it - by default (no ranges set) this is
           // the whole column, letting you see what you're picking from.
-          { x: excluded, name: "Excluded", type: "histogram", opacity: 0.5, marker: { color: "#c8c8c8" }, autobinx: false, xbins },
-          { x: control, name: "Control", type: "histogram", opacity: 0.7, marker: { color: "#3D85C6" }, autobinx: false, xbins },
-          { x: treated, name: "Treated", type: "histogram", opacity: 0.7, marker: { color: "#e03e2d" }, autobinx: false, xbins },
+          bar(excluded, "Excluded", "#c8c8c8", 0.5),
+          bar(control, "Control", "#3D85C6", 0.7),
+          bar(treated, "Treated", "#e03e2d", 0.7),
         ],
-        { barmode: "overlay", margin: { t: 20, r: 20, b: 40, l: 40 }, xaxis: { title: "Value" } },
+        { barmode: "overlay", bargap: 0, margin: { t: 20, r: 20, b: 40, l: 40 }, xaxis: { title: "Value" } },
         { responsive: true, displaylogo: false }
       );
     };

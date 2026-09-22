@@ -160,19 +160,24 @@ function effectiveVariableType(name) {
  * override, keeps the diagram node (if any) in sync, and refreshes every
  * bit of UI that shows a type for this variable. */
 function setVariableType(name, type, { skipNodeSync = false } = {}) {
-  state.study.question.variableTypes[name] = type;
-  if (!skipNodeSync) state.graph.setNodeTypeQuiet(name, type);
-  persist();
-
   const q = state.study.question;
+  q.variableTypes[name] = type;
+  if (!skipNodeSync) state.graph.setNodeTypeQuiet(name, type);
+
   if (name === q.treatment) {
     syncTypeSelect(document.getElementById("sv-treatment-type"), name);
-    updateDesignVisibility();
+    // The treatment-groups widget's editor kind (numeric range vs per-value
+    // table) is derived from this type, so a spec built for the other kind
+    // no longer applies - drop it and let the widget re-derive a default.
+    q.treatmentSpec = null;
+    updateTreatmentGroupsVisibility();
+    renderTreatmentGroupWidget();
   }
   if (name === q.outcome) {
     syncTypeSelect(document.getElementById("sv-outcome-type"), name);
   }
   updateGraphClasses();
+  persist();
 }
 
 function typeSelectOptionsHtml(name, selected) {
@@ -345,7 +350,6 @@ function render() {
   document.getElementById("sv-method-help").textContent = METHOD_HELP[q.method];
   populateSelect(document.getElementById("sv-treatment"), state.columnNames, q.treatment, { placeholder: true });
   populateSelect(document.getElementById("sv-outcome"), state.columnNames, q.outcome, { placeholder: true });
-  document.getElementById(q.treatmentDesign === "continuous" ? "sv-design-continuous" : "sv-design-grouped").checked = true;
 
   if (q.treatment) syncTypeSelect(document.getElementById("sv-treatment-type"), q.treatment);
   else document.getElementById("sv-treatment-type").innerHTML = "";
@@ -362,7 +366,7 @@ function render() {
   document.getElementById("sv-split-test-pc").value = q.splitTestPc;
 
   updateMethodVisibility();
-  updateDesignVisibility();
+  updateTreatmentGroupsVisibility();
   renderTreatmentGroupWidget();
 }
 
@@ -377,14 +381,14 @@ function updateMethodVisibility() {
   document.getElementById("sv-diagram-heading").textContent = isPanel ? "Study design" : "Causal diagram";
 }
 
-function updateDesignVisibility() {
+/** The treatment-groups toggle/widget just needs a treatment column picked
+ * - the widget itself (numeric range editor vs per-value table) follows
+ * the treatment's effective type, so there's no separate "how should the
+ * treatment be used" choice to gate this on. */
+function updateTreatmentGroupsVisibility() {
   const q = state.study.question;
-  const isNumeric = q.treatment && effectiveVariableType(q.treatment) === "numerical";
-  document.getElementById("sv-design-row").hidden = q.method === "pd+fe" || !isNumeric;
-
-  const grouped = q.method === "pd+fe" || q.treatmentDesign !== "continuous";
   const toggleBtn = document.getElementById("sv-treatment-collapse-toggle");
-  toggleBtn.hidden = !grouped || !q.treatment;
+  toggleBtn.hidden = !q.treatment;
   if (toggleBtn.hidden) {
     bootstrap.Collapse.getOrCreateInstance(document.getElementById("sv-treatment-collapse"), { toggle: false }).hide();
   }
@@ -398,7 +402,6 @@ document.getElementById("sv-method").addEventListener("change", (e) => {
   state.study.question.method = e.target.value;
   document.getElementById("sv-method-help").textContent = METHOD_HELP[e.target.value];
   updateMethodVisibility();
-  updateDesignVisibility();
   updateGraphClasses();
   persist();
 });
@@ -413,7 +416,7 @@ document.getElementById("sv-treatment").addEventListener("change", (e) => {
   if (q.treatment) syncTypeSelect(document.getElementById("sv-treatment-type"), q.treatment);
   else document.getElementById("sv-treatment-type").innerHTML = "";
   updateSelectColors();
-  updateDesignVisibility();
+  updateTreatmentGroupsVisibility();
   renderTreatmentGroupWidget();
   updateGraphClasses(); // was missing - node didn't recolor until an unrelated topology change
   persist();
@@ -440,15 +443,6 @@ document.getElementById("sv-treatment-type").addEventListener("change", (e) => {
 document.getElementById("sv-outcome-type").addEventListener("change", (e) => {
   const q = state.study.question;
   if (q.outcome) setVariableType(q.outcome, e.target.value);
-});
-
-document.querySelectorAll('input[name="sv-design"]').forEach((el) => {
-  el.addEventListener("change", (e) => {
-    state.study.question.treatmentDesign = e.target.value;
-    updateDesignVisibility();
-    renderTreatmentGroupWidget();
-    persist();
-  });
 });
 
 document.getElementById("sv-panel-entity").addEventListener("change", (e) => {
@@ -490,10 +484,14 @@ function renderTreatmentGroupWidget() {
     container.innerHTML = "";
     return;
   }
-  const col = columnByName(q.treatment);
   const values = state.columns[q.treatment];
+  // The widget's editor kind (numeric range vs per-value table) follows the
+  // resolved type (dataset override / study override / sniff), not the raw
+  // dataset type directly - so overriding a numeric column to categorical
+  // (or back) here actually changes which editor shows up.
+  const columnType = effectiveVariableType(q.treatment) === "numerical" ? "numeric" : "categorical";
   const widget = renderTreatmentWidget(container, {
-    columnType: col.type,
+    columnType,
     values,
     sampleValues: sampledColumn(q.treatment),
     topCategories: categoryCounts(values, 50),

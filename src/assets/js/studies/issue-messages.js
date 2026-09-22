@@ -65,12 +65,8 @@ export const ISSUES = {
     articleSlug: "panel-data",
   },
   time_non_unique: {
-    message: "Panel data needs a time column, and each entity/time combination should appear once.",
+    message: "Each entity/time combination should appear only once - check your data or your entity/time column choices.",
     articleSlug: "panel-data",
-  },
-  method_pdfe_no_time_series: {
-    message: "Panel Data with Fixed Effects needs both an entity and a time column - pick a different method for cross-sectional data.",
-    articleSlug: "fixed-effects",
   },
 };
 

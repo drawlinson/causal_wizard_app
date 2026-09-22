@@ -10,9 +10,9 @@
 //   question: {
 //     method: "cd+po" | "pd+fe",
 //     treatment, outcome,                 // column names
-//     treatmentDesign: "grouped" | "continuous",
-//     treatmentSpec,                       // treatment-widget.js spec, when grouped
-//     variableTypes: { [columnName]: "numerical" | "categorical" },  // per-study override
+//     treatmentSpec,                       // treatment-widget.js spec (Control/Treated groups)
+//     variableTypes: { [columnName]: "numerical" | "categorical" },  // per-study override; also
+//       drives treatmentSpec's editor kind (numeric range vs per-value table)
 //     effect: "ate" | "att" | "atc",       // desired target units; pd+fe always uses att regardless
 //     splitTestPc,                          // % of rows randomly held out as a test set
 //     panelData: { entity, time, covariates: [] },  // pd+fe only

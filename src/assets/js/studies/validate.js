@@ -56,7 +56,7 @@ function checkCovariateCardinality(graph, treatment, outcome, schemaColumns, res
  * @returns {{valid: boolean, issues?: string[], estimands?: object[], groupCounts?: object}}
  */
 export function runCheck({ question, graph, datasetColumns, datasetSchema, resolveType }) {
-  const { treatment, outcome, method, treatmentDesign, treatmentSpec, panelData } = question;
+  const { treatment, outcome, method, treatmentSpec, panelData } = question;
 
   if (!treatment || !outcome) return { valid: false, issues: ["treatment_or_outcome_missing"] };
   if (treatment === outcome) return { valid: false, issues: ["treatment_is_outcome"] };
@@ -71,17 +71,15 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema, resol
   if (!outcomeUsable) issues.push("excessive_cardinality_outcome");
 
   let groupCounts = null;
-  if (treatmentDesign !== "continuous") {
-    if (!treatmentSpec) {
-      issues.push("treatment_group_undefined");
-    } else {
-      groupCounts = checkTreatmentGroups(treatmentSpec, datasetColumns[treatment]);
-      if (groupCounts.control === 0) issues.push("treatment_zero_control");
-      if (groupCounts.treated === 0) issues.push("treatment_zero_treated");
-      if (groupCounts.control > 0 && groupCounts.treated > 0) {
-        const minShare = Math.min(groupCounts.control, groupCounts.treated) / groupCounts.total;
-        if (minShare < 0.05) issues.push("class_imbalance");
-      }
+  if (!treatmentSpec) {
+    issues.push("treatment_group_undefined");
+  } else {
+    groupCounts = checkTreatmentGroups(treatmentSpec, datasetColumns[treatment]);
+    if (groupCounts.control === 0) issues.push("treatment_zero_control");
+    if (groupCounts.treated === 0) issues.push("treatment_zero_treated");
+    if (groupCounts.control > 0 && groupCounts.treated > 0) {
+      const minShare = Math.min(groupCounts.control, groupCounts.treated) / groupCounts.total;
+      if (minShare < 0.05) issues.push("class_imbalance");
     }
   }
 
@@ -104,17 +102,18 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema, resol
 }
 
 function runPanelDataCheck({ panelData, datasetColumns, outcomeType, outcomeCardinality }) {
-  if (!panelData?.entity || !panelData?.time) {
-    return { valid: false, issues: ["method_pdfe_no_time_series"] };
-  }
-
-  const entities = datasetColumns[panelData.entity];
-  const times = datasetColumns[panelData.time];
-  const seen = new Set();
-  for (let i = 0; i < entities.length; i++) {
-    const key = `${entities[i]}|${times[i]}`;
-    if (seen.has(key)) return { valid: false, issues: ["time_non_unique"] };
-    seen.add(key);
+  // Entity/time are optional - without them this is just an ordinary
+  // regression (no fixed effects), which the notebook handles directly.
+  // The entity/time duplicate check only makes sense once both are given.
+  if (panelData?.entity && panelData?.time) {
+    const entities = datasetColumns[panelData.entity];
+    const times = datasetColumns[panelData.time];
+    const seen = new Set();
+    for (let i = 0; i < entities.length; i++) {
+      const key = `${entities[i]}|${times[i]}`;
+      if (seen.has(key)) return { valid: false, issues: ["time_non_unique"] };
+      seen.add(key);
+    }
   }
 
   const estimand = {

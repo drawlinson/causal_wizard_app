@@ -111,7 +111,6 @@ document.getElementById("create-form").addEventListener("submit", async (event) 
       method: "cd+po",
       treatment: null,
       outcome: null,
-      treatmentDesign: "grouped",
       treatmentSpec: null,
       // Per-study type overrides, keyed by column name - resolves the
       // dataset's sniffed/overridden type, the diagram node's type, and

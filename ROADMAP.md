@@ -536,6 +536,65 @@ console errors. Production build and the internal-link checker both pass
 clean (same pre-existing `/project/*` placeholders, unrelated to this
 page).
 
+**8.4 revision 4 — threshold-exact binning, optional panel columns, redundant design radio removed** ✅ done
+A fourth round, following up on gaps the shared bin grid from revision 3
+didn't fully close:
+- **The shared "nice round number" bin grid still wasn't enough** - even a
+  uniform grid can have a bin that straddles a group's own cutoff (e.g. a
+  bin covering [6.5, 7.2) with a "< 7"/">= 7" split), which visually reads
+  as Control and Treated overlapping in the same bar even though no value
+  is actually double-counted. `treatment-widget.js`'s
+  `sharedBins()`/`xbins` approach is replaced with `thresholdAwareBins()` +
+  `binCounts()`: bin edges are now built to always land exactly on every
+  finite Control/Treated threshold, with "nice enough" sub-bins filling
+  the space between thresholds (rendered as a manually-computed `bar`
+  trace, since Plotly's `histogram` type can't do non-uniform bins).
+  Confirmed via `toy_panel.csv`'s `purchase` column at both a contiguous
+  "< 7"/">= 7" split and a gapped "< 5"/">= 8" split: edges land exactly
+  on 7, and on both 5 and 8, in each case. This is the same module the
+  dataset page's Treatment tab already uses (`data-view.js` and
+  `study-view.js` both call `renderTreatmentWidget()` from
+  `treatment-widget.js`), so the fix applies to both without duplicating
+  anything - verified directly on the dataset page too.
+- **Panel data's Entity and Time columns are now optional.** Leaving both
+  unset just means an ordinary regression with no fixed effects, which
+  the notebook (stage 8.6) handles directly - `validate.js`'s
+  `runPanelDataCheck()` only runs the entity/time duplicate-row check when
+  both are actually chosen, instead of hard-requiring both up front. The
+  now-unreachable `method_pdfe_no_time_series` issue key was removed, and
+  `time_non_unique`'s message was reworded now that it only fires in the
+  both-present case.
+- **Fixed the treatment-widget's numeric-vs-categorical choice to follow
+  the effective type selector**, not the raw dataset type -
+  `renderTreatmentGroupWidget()` now derives `columnType` from
+  `effectiveVariableType(q.treatment)` (as the "8.4 revision 2" fix above
+  already did for the outcome type selector's *options*, but not yet for
+  this widget's editor kind). Fixes the "select the type, widget doesn't
+  follow" issue flagged as a known gap at the end of the last revision.
+- **Removed the "How should the treatment be used?" grouped/continuous
+  radio** as redundant, per request, now that the type selector alone
+  drives the widget: `treatmentDesign` is gone from the question schema,
+  `validate.js`'s Check always runs the treatment-group-size checks (no
+  more "continuous, skip groups" branch), and `#sv-design-row` is gone
+  from `view.njk`. This also fixed a real bug the removal surfaced during
+  testing: switching the treatment type selector to Categorical made the
+  entire treatment-groups toggle and widget disappear, because the
+  toggle's visibility was keyed off the (now-stale) `treatmentDesign`
+  field rather than just "is a treatment selected" - confirmed fixed by
+  toggling Numerical &harr; Categorical repeatedly and checking the
+  toggle/widget survive both directions.
+
+Verified in-browser: threshold-exact bin edges on both a contiguous and a
+gapped Control/Treated split, on both pages that use the widget; a
+from-scratch panel-data Check succeeds with Entity and Time both left
+blank, and again with only Entity set; toggling the treatment type
+selector between Numerical and Categorical correctly swaps the widget's
+editor and keeps the toggle button visible throughout; `#sv-design-row`
+and every `treatmentDesign` reference confirmed gone via grep. No console
+errors on either page. Production build and the internal-link checker
+both pass clean (same pre-existing `/project/*` placeholders, unrelated
+to this page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for
