@@ -20,13 +20,11 @@ extraBodyScripts:
   <div id="sv-error" class="alert alert-danger" hidden></div>
 
   <div id="sv-content" hidden>
-    <div class="d-flex flex-row bd-highlight mb-3 align-items-center">
-      <div style="margin-right:1em;">
-        <h2 id="sv-name"></h2>
-      </div>
-      <div>
-        <a id="sv-dataset-link" href="#" target="_blank" class="btn btn-sm btn-outline-secondary">Explore dataset &#8599;</a>
-      </div>
+    <div class="d-flex flex-row bd-highlight mb-3 align-items-center gap-2 flex-wrap">
+      <h2 class="mb-0 me-2" id="sv-name"></h2>
+      <button class="btn btn-primary btn-sm" id="sv-check-button">Check</button>
+      <span id="sv-check-status"></span>
+      <a id="sv-dataset-link" href="#" target="_blank" class="btn btn-sm btn-outline-secondary ms-auto">Explore dataset &#8599;</a>
     </div>
 
     <div class="row mb-3">
@@ -85,11 +83,7 @@ extraBodyScripts:
       </div>
     </div>
 
-    <div class="d-flex flex-row align-items-center mb-2 mt-4 gap-2 flex-wrap">
-      <h5 class="mb-0 me-2" id="sv-diagram-heading">Causal diagram</h5>
-      <button class="btn btn-primary btn-sm" id="sv-check-button">Check</button>
-      <span id="sv-check-status"></span>
-    </div>
+    <h5 class="mb-2 mt-4" id="sv-diagram-heading">Causal diagram</h5>
 
     <div id="sv-diagram-section">
       <p class="text-muted">

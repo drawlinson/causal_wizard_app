@@ -646,6 +646,24 @@ used on the study page. No console errors on either page. Production
 build and the internal-link checker both pass clean (same pre-existing
 `/project/*` placeholders, unrelated to this page).
 
+**8.4 revision 6 — Check button moved up to the page header** ✅ done
+The Check button lived next to the "Causal diagram"/"Study design"
+heading, far enough below the fold on a typical viewport that it was easy
+to miss for a page whose entire point is that button. Moved it into the
+header row in `view.njk`, between the study name and the "Explore
+dataset" link (`<h2>` &rarr; Check &rarr; status &rarr; `ms-auto` &rarr;
+Explore dataset), so it's visible without scrolling. The diagram/study-
+design heading is now a plain `<h5>` with no button attached. No JS
+changes needed - `study-view.js` only ever looked these elements up by
+id, so the same `#sv-check-button` element just moved in the DOM.
+
+Verified in-browser: exactly one `#sv-check-button` on the page (no
+duplicate left behind), Check still runs and opens the results modal from
+its new position, and the heading still swaps between "Causal diagram"
+and "Study design" correctly when the method changes. No console errors.
+Production build and the internal-link checker both pass clean (same
+pre-existing `/project/*` placeholders, unrelated to this page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for
