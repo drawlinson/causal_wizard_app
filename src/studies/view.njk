@@ -34,10 +34,10 @@ extraBodyScripts:
           <option value="cd+po">Causal Diagram &amp; Potential Outcomes</option>
           <option value="pd+fe">Panel Data with Fixed Effects</option>
         </select>
-        <div class="form-text" id="sv-method-help"></div>
+        <div class="form-text"><span id="sv-method-help"></span> <a href="/articles/study-design-method/" target="_blank" class="small">help</a></div>
       </div>
       <div class="col-md-4">
-        <label class="form-label" for="sv-treatment">Treatment</label>
+        <label class="form-label" for="sv-treatment">Treatment <a href="/articles/treatment/" target="_blank" class="small">help</a></label>
         <select class="form-select" id="sv-treatment"></select>
         <select class="form-select form-select-sm mt-1 w-auto" id="sv-treatment-type"></select>
         <div>
@@ -55,6 +55,7 @@ extraBodyScripts:
 
     <div class="collapse mb-3" id="sv-treatment-collapse">
       <div class="card card-body">
+        <p class="text-muted small mb-2">See <a href="/articles/control-and-treated/" target="_blank">Control and treated groups</a> for background.</p>
         <div id="sv-treatment-widget"></div>
       </div>
     </div>
@@ -125,12 +126,12 @@ extraBodyScripts:
             <option value="att">Average Treatment Effect on the Treated (ATT)</option>
             <option value="atc">Average Treatment Effect on the Control (ATC)</option>
           </select>
-          <div class="form-text">Panel data methods always calculate ATT, regardless of this setting.</div>
+          <div class="form-text">Panel data methods always calculate ATT, regardless of this setting. <a href="/articles/validation/" target="_blank">more</a></div>
         </div>
         <div class="col-md-4">
           <label class="form-label" for="sv-split-test-pc">Held-out test set (%)</label>
           <input type="number" class="form-control" id="sv-split-test-pc" min="0" max="50" step="1">
-          <div class="form-text">Percentage of rows randomly held back to validate model performance.</div>
+          <div class="form-text">Percentage of rows randomly held back to validate model performance. <a href="/articles/validation/" target="_blank">more</a></div>
         </div>
       </div>
     </div>

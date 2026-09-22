@@ -790,6 +790,36 @@ and "Study design" correctly when the method changes. No console errors.
 Production build and the internal-link checker both pass clean (same
 pre-existing `/project/*` placeholders, unrelated to this page).
 
+**8.4 revision 7 — restored contextual help links** ✅ done
+The old site's wizard had contextual "learn more" links scattered through
+the form that never made it into the port. Added them back:
+- A small "help" link to `/articles/study-design-method/` after the
+  Method select's existing explanation text.
+- A small "help" link to `/articles/treatment/` next to the Treatment
+  label.
+- A "See Control and treated groups for background" line linking to
+  `/articles/control-and-treated/`, placed as static markup in `view.njk`
+  above `#sv-treatment-widget` (not inside the widget's own re-rendered
+  HTML), so it survives every re-render regardless of whether the widget
+  is currently showing the grouped editor, the categorical editor, or the
+  "Continuous treatment." placeholder - all three replace the widget's
+  own innerHTML on every change, so anything inside it would have
+  disappeared under "Continuous treatment."
+- "Help me choose" next to the Model select in the Check-results modal,
+  linking to `/articles/model-selection/`.
+- "more" links to `/articles/validation/` after both Advanced options
+  explanations (Desired effect and Held-out test set).
+
+All five target slugs (`study-design-method`, `treatment`,
+`control-and-treated`, `model-selection`, `validation`) confirmed to
+exist under `src/articles/` before wiring anything up. Verified in-
+browser: the Control-and-treated link stays visible after switching the
+treatment-groups widget to "Continuous treatment," and "Help me choose"
+renders next to the model select in a successful Check's modal. No
+console errors. Production build and the internal-link checker both pass
+clean (same pre-existing `/project/*` placeholders, unrelated to this
+page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for

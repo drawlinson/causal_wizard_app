@@ -565,7 +565,10 @@ function showCheckModal(result) {
       </p>
       <div class="mb-3">
         <label class="form-label" for="sv-model-select">Model</label>
-        <select class="form-select w-auto" id="sv-model-select"></select>
+        <div class="d-flex align-items-center gap-2">
+          <select class="form-select w-auto" id="sv-model-select"></select>
+          <a href="/articles/model-selection/" target="_blank">Help me choose</a>
+        </div>
       </div>
       <div class="d-flex align-items-center gap-2 mb-2">
         <span class="badge bg-secondary rounded-pill">1</span>
