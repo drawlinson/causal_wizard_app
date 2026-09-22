@@ -43,7 +43,7 @@ extraBodyScripts:
         <select class="form-select" id="sv-treatment"></select>
         <select class="form-select form-select-sm mt-1 w-auto" id="sv-treatment-type"></select>
         <div>
-          <button class="btn btn-sm btn-outline-secondary mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#sv-treatment-collapse" id="sv-treatment-collapse-toggle" hidden>
+          <button class="btn btn-sm btn-primary mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#sv-treatment-collapse" id="sv-treatment-collapse-toggle" hidden>
             Treatment groups
           </button>
         </div>
@@ -76,7 +76,6 @@ extraBodyScripts:
 
     <!-- Panel data fields -->
     <div id="sv-panel-fields" hidden>
-      <hr class="my-4" />
       <h5>Panel data structure</h5>
       <div class="row mb-3">
         <div class="col-md-4">
@@ -100,7 +99,7 @@ extraBodyScripts:
     </div>
 
     <div class="d-flex flex-row align-items-center mb-2 mt-4 gap-2 flex-wrap">
-      <h5 class="mb-0 me-2">Causal diagram</h5>
+      <h5 class="mb-0 me-2" id="sv-diagram-heading">Causal diagram</h5>
       <button class="btn btn-primary btn-sm" id="sv-check-button">Check</button>
       <span id="sv-check-status"></span>
     </div>

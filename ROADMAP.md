@@ -502,6 +502,40 @@ console errors on any of the above. Production build and the internal-
 link checker both pass clean (same pre-existing `/project/*` placeholders
 as before, unrelated to this page).
 
+**8.4 revision 3 — treatment histogram binning, panel-data polish** ✅ done
+A third, smaller round of fixes:
+- **Treatment-widget numeric histogram used misleading bin edges.** Plotly
+  auto-bins each histogram trace (Excluded/Control/Treated) independently
+  by default, so e.g. a "< 7" Control cutoff could visually show bars
+  reaching up to 7.9 - not because any control-classified value was that
+  high, but because that trace's own auto-binning rounded its bin edges up
+  on its own subset of the data. `treatment-widget.js` now computes one
+  shared bin grid (`sharedBins()`, a "nice round number" step size sized
+  off the full column) from the combined data and applies the same
+  `xbins`/`autobinx: false` to all three traces, so the bars stop exactly
+  where the threshold says they should.
+- Removed a stray `<hr>` above "Panel data structure" - the section
+  already reads clearly without it.
+- **"Treatment groups" toggle is now `btn-primary`** (was
+  `btn-outline-secondary`) to match the Check button's visual weight,
+  since picking treatment groups is as core to the flow as Checking.
+- **The "Causal diagram" heading now reads "Study design"** when the
+  method is panel data (no diagram shown) - the Check button next to it
+  still validates/identifies the study either way, so the heading
+  shouldn't imply a diagram is involved. Reverts back to "Causal diagram"
+  for CD+PO.
+
+Verified in-browser using `toy_panel.csv`'s `purchase` column (values
+5-15) with a Control "< 7" / Treated ">= 7" split: Control's actual max
+value is 6.5, and previously Plotly's independent auto-binning stretched
+the last Control bar out to ~7.9; with shared bins (start 5, end 15, size
+0.5 for this data) the last Control bar now ends exactly at 7. Also
+confirmed the toggle button's new styling, the removed `<hr>`, and the
+"Study design"/"Causal diagram" heading swap when toggling method. No
+console errors. Production build and the internal-link checker both pass
+clean (same pre-existing `/project/*` placeholders, unrelated to this
+page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for

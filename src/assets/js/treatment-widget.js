@@ -109,6 +109,27 @@ function numericGroupHtml(prefix, label, group) {
     </div>`;
 }
 
+/** Plotly auto-bins each histogram trace independently by default, so the
+ * Control/Treated/Excluded traces (each a different subset of the data)
+ * get different bin edges - the last "Control" bar can visually overrun
+ * the actual threshold (e.g. reaching 7.9 for a "< 7" cutoff) purely
+ * because that trace's own auto-binning rounded up, not because any
+ * control-classified value is actually that high. Computing one shared
+ * bin grid from the full column and applying it to all three traces
+ * keeps the bars honest about where the cutoff actually falls. */
+function sharedBins(xs) {
+  const min = Math.min(...xs);
+  const max = Math.max(...xs);
+  if (min === max) return { start: min - 0.5, end: max + 0.5, size: 1 };
+  const TARGET_BINS = 30;
+  const rawSize = (max - min) / TARGET_BINS;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawSize)));
+  const norm = rawSize / magnitude;
+  const niceNorm = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10;
+  const size = niceNorm * magnitude;
+  return { start: Math.floor(min / size) * size, end: Math.ceil(max / size) * size, size };
+}
+
 function renderNumericEditor(container, spec, onChange) {
   container.innerHTML = `
     ${numericGroupHtml("control", "Control", spec.control)}
@@ -260,15 +281,17 @@ export function renderTreatmentWidget(container, opts) {
         else if (bucket === "treated") treated.push(v);
         else excluded.push(v);
       }
+      const bins = sharedBins(xs);
+      const xbins = { start: bins.start, end: bins.end, size: bins.size };
       Plotly.newPlot(
         "tw-numeric-plot",
         [
           // Full/excluded distribution first and pale, so Control/Treated
           // stand out on top of it - by default (no ranges set) this is
           // the whole column, letting you see what you're picking from.
-          { x: excluded, name: "Excluded", type: "histogram", opacity: 0.5, marker: { color: "#c8c8c8" } },
-          { x: control, name: "Control", type: "histogram", opacity: 0.7, marker: { color: "#3D85C6" } },
-          { x: treated, name: "Treated", type: "histogram", opacity: 0.7, marker: { color: "#e03e2d" } },
+          { x: excluded, name: "Excluded", type: "histogram", opacity: 0.5, marker: { color: "#c8c8c8" }, autobinx: false, xbins },
+          { x: control, name: "Control", type: "histogram", opacity: 0.7, marker: { color: "#3D85C6" }, autobinx: false, xbins },
+          { x: treated, name: "Treated", type: "histogram", opacity: 0.7, marker: { color: "#e03e2d" }, autobinx: false, xbins },
         ],
         { barmode: "overlay", margin: { t: 20, r: 20, b: 40, l: 40 }, xaxis: { title: "Value" } },
         { responsive: true, displaylogo: false }

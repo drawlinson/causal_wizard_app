@@ -374,6 +374,7 @@ function updateMethodVisibility() {
   // row above this section) stays visible either way, since it's still how
   // a panel-data study gets validated and identified.
   document.getElementById("sv-diagram-section").hidden = isPanel;
+  document.getElementById("sv-diagram-heading").textContent = isPanel ? "Study design" : "Causal diagram";
 }
 
 function updateDesignVisibility() {
