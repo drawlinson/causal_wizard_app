@@ -975,29 +975,55 @@ IndexedDB correctly; switching back to CD+PO resets the spec to grouped
 and the radio disappears again. No console errors. Production build and
 the internal-link checker both pass clean.
 
-**8.6 — Make notebooks**
+**8.6 — Make notebooks** ✅ done
 Two Jupyter notebooks under `causal_wizard_app/notebooks/` reproducing the
 old site's server-side estimation + results page, redesigned from scratch
 (not ported) per the user's read of the old `cw/inference/*.py` code as
-architecturally messy. Planned (not yet built) on top of two research
-passes into exactly what the old Python pipeline computes and exactly how
-the old results page (`result_show.html`/`result.js`) renders each of its
-plots/tables - full technical detail in the approved plan file
+architecturally messy. Built on top of two research passes into exactly
+what the old Python pipeline computes and exactly how the old results page
+(`result_show.html`/`result.js`) renders each of its plots/tables - full
+technical detail in the approved plan file
 (`/home/dave/.claude/plans/compressed-yawning-spindle.md` at planning
 time). Shape: a `causalwizard/` Python package holding all the actual
-logic (config parsing/validation, identification, CD+PO and PD+FE
-estimation, counterfactuals, propensity diagnostics, refutation tests,
-plotting), with notebook 1 (identification & estimation) doing all the
-numeric work into a `results.json`, and notebook 2 (results) as pure
-presentation reading that JSON - modeled on the old site's own
-`resultData` JSON shape, reused as the hand-off contract. Planned
-deliberate corrections over the old code: PD+FE standard errors genuinely
+logic (`config`, `identification`, `estimation_cdpo`/`estimation_pdfe`,
+`counterfactuals`, `propensity`, `refutation`, `diagnostics`, `plotting`,
+`results_schema`), with notebook 1 (identification & estimation) doing all
+the numeric work into a `results.json`, and notebook 2 (results) as pure
+presentation reading that JSON plus the same config/data - modeled on the
+old site's own `resultData` JSON shape, reused as the hand-off contract.
+Deliberate corrections over the old code: PD+FE standard errors genuinely
 entity-clustered (old code's comment claimed this but didn't do it); the
 covariate-balance "love" plot's SMD reference line at 0.1 (the old page's
-own explanatory text value, not the 0.2 its code actually used).
+own explanatory text value, not the 0.2 its code actually used); CD+PO's
+own linear-regression/GLM estimators implemented via statsmodels directly
+rather than DoWhy's built-in `RegressionEstimator`, for direct control over
+the do-operator predictions counterfactuals/generalization/the entity plot
+need. `requirements.txt` pins `pandas<3.0` - DoWhy 0.12's own
+`RegressionEstimator` (used internally by the frontdoor two-stage
+estimator too, so this isn't fully dodged by the rewrite above) does
+positional integer indexing into a name-indexed pandas Series, removed in
+pandas 3.0; a `networkx.algorithms.d_separated` compatibility shim
+(renamed to `is_d_separator` in networkx ≥3.3) lives in
+`causalwizard/__init__.py`.
+
+Verified end-to-end (not just unit-level): every estimator family fitted
+against real (`lalonde.csv`) or synthetic data with sane, cross-checked
+numbers - CD+PO propensity weighting/matching/stratification, CD+PO's own
+linear regression and GLM (g-computation ATE/ATT/ATC reduces exactly to
+the regression coefficient for OLS, and to a real average-probability
+difference for GLM), EconML DML, IV, frontdoor, and PD+FE two-way fixed
+effects (recovers a known synthetic effect with genuine cluster-robust
+SEs). Both notebooks executed headlessly via `jupyter nbconvert
+--execute` against three real configs (CD+PO/linear regression/numerical
+outcome, PD+FE/continuous treatment, CD+PO/propensity weighting/
+categorical outcome) - every one of the 10 results-page sections renders
+without error for the combinations where it applies, and correctly says
+"not applicable"/skips where it doesn't (e.g. no contingency table for a
+continuous treatment, no causal diagram for PD+FE, no positivity/balance
+for a non-propensity estimator).
 *Deliverable*: a user takes the downloaded config JSON + their data file,
-runs notebook 1 then notebook 2 (locally or in Colab), gets the same
-analyses as today.
+runs notebook 1 then notebook 2 (locally or in Colab via the badges in
+`notebooks/README.md`), gets the same analyses as today.
 
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "causalwizard"
+version = "1.0.0"
+description = "Estimation/plotting internals for the Causal Wizard results notebooks"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas<3.0",
+    "numpy",
+    "scipy",
+    "statsmodels",
+    "networkx>=3.3",
+    "plotly",
+    "matplotlib",
+    "scikit-learn",
+    "dowhy==0.12",
+    "econml",
+]
+
+[tool.setuptools]
+packages = ["causalwizard"]

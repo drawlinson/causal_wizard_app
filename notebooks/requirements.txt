@@ -1,0 +1,15 @@
+# Pinned dependencies for the Causal Wizard results notebooks.
+# Install with: pip install -r requirements.txt (or, faster: uv pip install -r requirements.txt)
+# pandas must stay <3.0: DoWhy 0.12's own RegressionEstimator (used internally
+# by the frontdoor two-stage estimator) does positional int indexing on a
+# name-indexed Series, which pandas 3.0 removed.
+pandas==2.2.3
+numpy==2.5.3
+scipy==1.18.1
+statsmodels==0.15.0
+networkx==3.7
+plotly==7.1.0
+matplotlib==3.11.2
+scikit-learn==1.9.1
+dowhy==0.12
+econml==0.17.0
