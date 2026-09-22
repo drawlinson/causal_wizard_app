@@ -271,6 +271,39 @@ both correlation coefficients as working Wikipedia links, no console
 errors. Production build and the internal-link checker both pass clean
 (same pre-existing `/project/*` placeholders, unrelated to this page).
 
+**8.3 revision 3 — covariate-balance crash on all-null groups** ✅ done
+User-reported bug: uploading a large file with heavy nulls, CJK values,
+and many columns threw `TypeError: Cannot read properties of null
+(reading 'toFixed')` from `renderCovariatesTable()`, both on load and
+when toggling "Everything not listed is Control" in the assignment
+widget. Root cause: `groupBy()` (`datasets/stats.js`) can return a group
+that exists (some rows fall into it) but has `mean`/`std`/`topValue: null`
+when every value of *that particular covariate* happens to be missing
+for every row in that group - plausible on any wide, null-heavy file.
+`renderCovariatesTable()` only checked that the group object itself was
+truthy, not that its stats were non-null, so it called `.toFixed()` on
+`null`.
+
+This one crash had a second, seemingly unrelated symptom: the
+Correlations tab's plot never appeared. `render()` calls each tab's
+render function synchronously and unguarded, in order, with
+`renderTreatmentTab()` before `renderCorrelationsTab()` - the uncaught
+exception above aborted `render()` entirely, so `renderCorrelationsTab()`
+never got a chance to run. Fixed both: `renderCovariatesTable()` now
+checks `stat?.mean != null` / `stat?.topValue != null` before formatting,
+and `render()` now runs each tab's render step in a try/catch loop so one
+tab's bug can't silently take the rest of the page down with it.
+
+Verified with a synthetic 300-row, 17-column CSV built specifically to
+reproduce this (heavy random nulls throughout, CJK category values, and
+one covariate forced to be entirely null within one treatment group):
+loads without error, the Covariate balance tab renders all rows
+(including the null-group covariate, shown as "-"), toggling "Everything
+not listed is Control" no longer throws, and the Correlations tab renders
+its plot and table. No console errors. Production build and the
+internal-link checker both pass clean (same pre-existing `/project/*`
+placeholders, unrelated to this page).
+
 **8.4 — Migrate wizard / causal diagram editor** ✅ done
 Renamed "the wizard" to **Studies** throughout (nav already said Studies).
 Both old methods in scope (CD+PO and PD+FE, by request — the old site

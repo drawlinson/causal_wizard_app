@@ -160,13 +160,17 @@ async function main() {
 }
 
 function render() {
-  renderColumnSelects();
-  renderColumnsTab();
-  renderTableTab();
-  renderUnivariateTab();
-  renderBivariateTab();
-  renderTreatmentTab();
-  renderCorrelationsTab();
+  // Each tab renders independently - a bug in one (as happened with the
+  // covariate-balance table crashing on all-null groups, which silently
+  // prevented the Correlations tab below it from ever running) shouldn't
+  // take the rest of the page down with it.
+  for (const step of [renderColumnSelects, renderColumnsTab, renderTableTab, renderUnivariateTab, renderBivariateTab, renderTreatmentTab, renderCorrelationsTab]) {
+    try {
+      step();
+    } catch (err) {
+      console.error(`data-view: ${step.name} failed`, err);
+    }
+  }
 }
 
 // ---------- column <select> population ----------
@@ -500,17 +504,20 @@ function renderCovariatesTable(treatmentName, spec) {
           controlStat?.mean != null && treatedStat?.mean != null
             ? standardizedMeanDiff(treatedStat.mean, treatedStat.std, controlStat.mean, controlStat.std)
             : null;
+        // A group can exist (some rows fall in it) but still have no usable
+        // values for THIS covariate - e.g. it's null for every row in that
+        // group - in which case mean/std are null, not just the group.
         return `<tr>
           <td>${name}</td>
-          <td>${controlStat ? `${controlStat.mean.toFixed(2)} &plusmn; ${controlStat.std.toFixed(2)}` : "-"}</td>
-          <td>${treatedStat ? `${treatedStat.mean.toFixed(2)} &plusmn; ${treatedStat.std.toFixed(2)}` : "-"}</td>
+          <td>${controlStat?.mean != null ? `${controlStat.mean.toFixed(2)} &plusmn; ${controlStat.std.toFixed(2)}` : "-"}</td>
+          <td>${treatedStat?.mean != null ? `${treatedStat.mean.toFixed(2)} &plusmn; ${treatedStat.std.toFixed(2)}` : "-"}</td>
           <td>${smdBadge(smd)}</td>
         </tr>`;
       }
       return `<tr>
         <td>${name}</td>
-        <td>${controlStat ? `${controlStat.topValue} (${(controlStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
-        <td>${treatedStat ? `${treatedStat.topValue} (${(treatedStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
+        <td>${controlStat?.topValue != null ? `${controlStat.topValue} (${(controlStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
+        <td>${treatedStat?.topValue != null ? `${treatedStat.topValue} (${(treatedStat.topFraction * 100).toFixed(0)}%)` : "-"}</td>
         <td>-</td>
       </tr>`;
     })
