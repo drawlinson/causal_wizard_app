@@ -175,6 +175,7 @@ function numericDesignRadioHtml(design) {
         <input class="form-check-input" type="radio" name="tw-design" id="tw-design-continuous" value="continuous" ${design === "continuous" ? "checked" : ""}>
         <label class="form-check-label" for="tw-design-continuous">Use as a continuous value (e.g. effect per unit increase)</label>
       </div>
+      <a href="/articles/control-and-treated/" target="_blank" class="small">More info</a>
     </div>`;
 }
 

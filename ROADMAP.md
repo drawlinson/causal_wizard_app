@@ -820,6 +820,29 @@ console errors. Production build and the internal-link checker both pass
 clean (same pre-existing `/project/*` placeholders, unrelated to this
 page).
 
+**8.4 revision 8 — help-link corrections** ✅ done
+Two follow-up tweaks from the previous revision:
+- The "Desired effect" advanced-option's help link pointed at
+  `/articles/validation/` (copy-pasted from the test-set link next to it)
+  - should be `/articles/causal-effect/`, which is actually about ATE/
+    ATT/ATC. Fixed.
+- Moved the Control-and-treated link into the treatment widget itself:
+  it's now "More info" (was "See Control and treated groups for
+  background"), on the same line as and right after the "Use as a
+  continuous value" radio option, inside `numericDesignRadioHtml()` in
+  `treatment-widget.js`, rather than static markup in `view.njk` above
+  the widget. Still survives switching to "Continuous treatment" (the
+  radio row itself doesn't disappear, only the grouped-editor controls
+  below it do) - only now it's scoped to numeric treatments specifically
+  (where that radio exists at all) rather than showing unconditionally
+  for every treatment type.
+
+Verified in-browser: "More info" sits inline after the continuous-value
+label and survives toggling to "Continuous treatment"; the Desired
+effect help link now points at `/articles/causal-effect/`. No console
+errors. Production build and the internal-link checker both pass clean
+(same pre-existing `/project/*` placeholders, unrelated to this page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for
