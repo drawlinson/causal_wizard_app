@@ -444,6 +444,64 @@ pre-existing `/project/*` nav placeholders, out of scope until 8.7).
 *Skipped by request*: 8.5 (below) - the greenfield site never grew user
 account features, so there's nothing to remove.
 
+**8.4 revision 2 — panel-data mode, type-select constraints, advanced options** ✅ done
+A second round of hands-on testing on the Studies page, all on the panel-
+data (`pd+fe`) side plus a couple of loose ends from the first revision:
+- **Panel data now hides the causal diagram** (no graph needed for a fixed-
+  effects design) but keeps the Check button visible and working - the
+  diagram's paragraph/toolbar/legend/canvas moved into a new
+  `#sv-diagram-section` wrapper that `updateMethodVisibility()` hides for
+  `pd+fe`, while the "Causal diagram" heading + Check button (now outside
+  that wrapper) stay put so panel-data studies can still be Checked.
+  Switching back to Causal Diagram & Potential Outcomes shows it again.
+- **Outcome type selector was stuck on one option.** `allowedTypesFor()`
+  was reading the *resolved* schema type (post dataset-override) to decide
+  whether "numerical" is even a valid choice, instead of the underlying
+  raw sniff - so a numeric column already overridden to categorical at the
+  dataset level (e.g. `toy_panel.csv`'s `purchase`) couldn't be switched
+  back to numerical from the study page, even though the option is
+  perfectly valid. `state.schema.columns` now keeps `rawType` (the
+  pre-override sniff) alongside the resolved `type`, and
+  `allowedTypesFor()` checks that instead.
+- **"How should the treatment be used?" now collapses with the treatment-
+  groups widget** instead of staying visible on its own - moved
+  `#sv-design-row` inside `#sv-treatment-collapse`, alongside the widget,
+  so both show/hide together off the "Treatment groups" toggle.
+- **Check-modal numbered steps were top-aligned** against text of a
+  different line-height, producing a visible offset between each badge
+  and its text; switched `align-items-start` to `align-items-center` on
+  all four step rows.
+- **Added the missing "Advanced options"** card below the diagram/panel
+  section (always visible, not collapsed per request): a "Desired effect"
+  select (ATE/ATT/ATC, noting panel data always uses ATT regardless) and
+  a "Held-out test set (%)" number input, both wired straight to the
+  existing `question.effect`/`question.splitTestPc` fields (present in the
+  config schema since stage 8.4 but never exposed as controls until now).
+- **Blank placeholder instead of "-- choose --"** on every select that can
+  be unset (treatment, outcome, panel entity, panel time) -
+  `populateSelect()`'s `placeholder` option now takes a boolean and always
+  renders `<option value=""></option>` with no text, rather than a string
+  that doubled as both "should there be a blank option" and "what should
+  it say."
+- **Added a "Clear" button next to the panel covariates multi-select.**
+  Native `<select multiple>` only deselects one option at a time via ctrl/
+  cmd-click, with no built-in way to clear everything - not a bug in our
+  code, but not discoverable either, so this makes "no covariates" a
+  one-click action instead of a multi-step one.
+
+Verified all of the above in-browser on the same `toy_panel.csv`-backed
+study used for the first revision: switching method hides/restores the
+diagram and keeps Check working either way; the treatment-groups toggle
+and "how should the treatment be used" radio show/hide together; a full
+panel-data Check (entity=city, time=purchase, treatment=purchase grouped,
+outcome=mkt_costs) succeeds with a correctly-aligned modal; Advanced
+options persist `effect`/`splitTestPc` to the study record; a from-scratch
+study shows blank selects everywhere nothing is chosen; the covariates
+Clear button empties both the DOM selection and the persisted state. No
+console errors on any of the above. Production build and the internal-
+link checker both pass clean (same pre-existing `/project/*` placeholders
+as before, unrelated to this page).
+
 **8.5 — Remove user account features** (skipped - not applicable, see above)
 Strip login/signup/auth. Port the project builder (`builder.js`) to browser
 storage, reusing its existing share-code (`prid`) pattern for

@@ -13,8 +13,8 @@
 //     treatmentDesign: "grouped" | "continuous",
 //     treatmentSpec,                       // treatment-widget.js spec, when grouped
 //     variableTypes: { [columnName]: "numerical" | "categorical" },  // per-study override
-//     effect, targetUnit,
-//     splitTestPc,
+//     effect: "ate" | "att" | "atc",       // desired target units; pd+fe always uses att regardless
+//     splitTestPc,                          // % of rows randomly held out as a test set
 //     panelData: { entity, time, covariates: [] },  // pd+fe only
 //     modelKey,                            // chosen estimator, once Checked
 //   },

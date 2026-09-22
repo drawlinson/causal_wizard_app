@@ -55,22 +55,23 @@ extraBodyScripts:
       </div>
     </div>
 
-    <div class="row mb-3" id="sv-design-row" hidden>
-      <div class="col-md-6">
-        <label class="form-label">How should the treatment be used?</label>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="sv-design" id="sv-design-grouped" value="grouped" checked>
-          <label class="form-check-label" for="sv-design-grouped">Split into Control / Treated groups</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="sv-design" id="sv-design-continuous" value="continuous">
-          <label class="form-check-label" for="sv-design-continuous">Use as a continuous value (e.g. effect per unit increase)</label>
-        </div>
-      </div>
-    </div>
-
     <div class="collapse mb-3" id="sv-treatment-collapse">
-      <div id="sv-treatment-widget" class="card card-body"></div>
+      <div class="card card-body">
+        <div class="row mb-3" id="sv-design-row" hidden>
+          <div class="col-md-6">
+            <label class="form-label">How should the treatment be used?</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="sv-design" id="sv-design-grouped" value="grouped" checked>
+              <label class="form-check-label" for="sv-design-grouped">Split into Control / Treated groups</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="sv-design" id="sv-design-continuous" value="continuous">
+              <label class="form-check-label" for="sv-design-continuous">Use as a continuous value (e.g. effect per unit increase)</label>
+            </div>
+          </div>
+        </div>
+        <div id="sv-treatment-widget"></div>
+      </div>
     </div>
 
     <!-- Panel data fields -->
@@ -90,6 +91,9 @@ extraBodyScripts:
         <div class="col-md-4">
           <label class="form-label" for="sv-panel-covariates">Covariates</label>
           <select class="form-select" id="sv-panel-covariates" multiple size="4"></select>
+          <div>
+            <button class="btn btn-sm btn-outline-secondary mt-1" type="button" id="sv-panel-covariates-clear">Clear</button>
+          </div>
           <div class="form-text">Ctrl/Cmd-click to select multiple.</div>
         </div>
       </div>
@@ -100,33 +104,56 @@ extraBodyScripts:
       <button class="btn btn-primary btn-sm" id="sv-check-button">Check</button>
       <span id="sv-check-status"></span>
     </div>
-    <p class="text-muted">
-      Click empty space to add a node. Click a node to edit it. Switch to
-      "Draw edges" and drag from one node to another to connect them; click
-      an edge to delete it. See
-      <a href="/articles/causal-diagram/" target="_blank">How to draw a causal diagram</a>.
-    </p>
-    <div class="btn-toolbar mb-2 gap-2" role="toolbar">
-      <div class="btn-group" role="group">
-        <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-nodes" checked>
-        <label class="btn btn-outline-primary btn-sm" for="sv-mode-nodes">Edit nodes</label>
-        <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-edges">
-        <label class="btn btn-outline-primary btn-sm" for="sv-mode-edges">Draw edges</label>
+
+    <div id="sv-diagram-section">
+      <p class="text-muted">
+        Click empty space to add a node. Click a node to edit it. Switch to
+        "Draw edges" and drag from one node to another to connect them; click
+        an edge to delete it. See
+        <a href="/articles/causal-diagram/" target="_blank">How to draw a causal diagram</a>.
+      </p>
+      <div class="btn-toolbar mb-2 gap-2" role="toolbar">
+        <div class="btn-group" role="group">
+          <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-nodes" checked>
+          <label class="btn btn-outline-primary btn-sm" for="sv-mode-nodes">Edit nodes</label>
+          <input type="radio" class="btn-check" name="sv-graph-mode" id="sv-mode-edges">
+          <label class="btn btn-outline-primary btn-sm" for="sv-mode-edges">Draw edges</label>
+        </div>
+        <div class="btn-group" role="group">
+          <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-in">Zoom in</button>
+          <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-out">Zoom out</button>
+          <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-fit">Fit</button>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm active" id="sv-legend-toggle" aria-pressed="true">Legend</button>
+        <button class="btn btn-outline-danger btn-sm" id="sv-graph-clear">Clear diagram</button>
       </div>
-      <div class="btn-group" role="group">
-        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-in">Zoom in</button>
-        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-out">Zoom out</button>
-        <button class="btn btn-outline-secondary btn-sm" id="sv-zoom-fit">Fit</button>
+
+      <div id="sv-legend" class="card card-body mb-2">
+        <img src="/assets/images/graph-legend.png" alt="Diagram legend: numerical/categorical node icons, treatment (blue), outcome (green), unobserved (dashed), backdoor (orange-red fill), frontdoor (pale orange fill), instrumental variable (purple fill), collider (dark red outline only), mediator (grey fill, dark red outline)." style="max-width:100%;" />
       </div>
-      <button class="btn btn-outline-secondary btn-sm active" id="sv-legend-toggle" aria-pressed="true">Legend</button>
-      <button class="btn btn-outline-danger btn-sm" id="sv-graph-clear">Clear diagram</button>
+
+      <div id="sv-graph" style="width:100%; height:450px; border:1px solid #ccc;"></div>
     </div>
 
-    <div id="sv-legend" class="card card-body mb-2">
-      <img src="/assets/images/graph-legend.png" alt="Diagram legend: numerical/categorical node icons, treatment (blue), outcome (green), unobserved (dashed), backdoor (orange-red fill), frontdoor (pale orange fill), instrumental variable (purple fill), collider (dark red outline only), mediator (grey fill, dark red outline)." style="max-width:100%;" />
+    <div class="card card-body mb-3 mt-4" id="sv-advanced-options">
+      <h5>Advanced options</h5>
+      <div class="row">
+        <div class="col-md-4">
+          <label class="form-label" for="sv-effect">Desired effect</label>
+          <select class="form-select" id="sv-effect">
+            <option value="ate">Average Treatment Effect (ATE)</option>
+            <option value="att">Average Treatment Effect on the Treated (ATT)</option>
+            <option value="atc">Average Treatment Effect on the Control (ATC)</option>
+          </select>
+          <div class="form-text">Panel data methods always calculate ATT, regardless of this setting.</div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="sv-split-test-pc">Held-out test set (%)</label>
+          <input type="number" class="form-control" id="sv-split-test-pc" min="0" max="50" step="1">
+          <div class="form-text">Percentage of rows randomly held back to validate model performance.</div>
+        </div>
+      </div>
     </div>
-
-    <div id="sv-graph" style="width:100%; height:450px; border:1px solid #ccc;"></div>
 
   </div>
 </div>

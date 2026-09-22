@@ -108,7 +108,13 @@ async function main() {
       // silently re-sniffing from scratch and ignoring them entirely.
       const type = datasetTypeOverrides[name] || sniff.type;
       const stats = computeColumnStats(parsed.columns[name], type);
-      return { name, type, isConstant: sniff.isConstant, isNearUnique: sniff.isNearUnique, ...stats };
+      // rawType (the un-overridden sniff) is kept separately from the
+      // resolved `type` - allowedTypesFor() needs to know whether the
+      // underlying data is actually numeric, which a dataset-level
+      // override to "categorical" would otherwise hide (e.g. a numeric
+      // column deliberately overridden to categorical must still be
+      // switchable back to numerical here).
+      return { name, type, rawType: sniff.type, isConstant: sniff.isConstant, isNearUnique: sniff.isNearUnique, ...stats };
     }),
   };
 
@@ -137,7 +143,7 @@ function datasetTypeToNodeType(datasetType) {
 function allowedTypesFor(name) {
   if (name.startsWith("u") || name.startsWith("x")) return ["numerical", "categorical"];
   const col = columnByName(name);
-  if (col && col.type !== "numeric") return ["categorical"]; // no numeric data to treat as numerical
+  if (col && col.rawType !== "numeric") return ["categorical"]; // no numeric data to treat as numerical
   return ["numerical", "categorical"];
 }
 
@@ -316,8 +322,8 @@ document.getElementById("node-modal-save").addEventListener("click", () => {
 
 // ---------- form controls ----------
 
-function populateSelect(select, names, selected, { placeholder } = {}) {
-  const placeholderHtml = placeholder ? `<option value="">${placeholder}</option>` : "";
+function populateSelect(select, names, selected, { placeholder = false } = {}) {
+  const placeholderHtml = placeholder ? `<option value=""></option>` : "";
   select.innerHTML = placeholderHtml + names.map((n) => `<option value="${n}">${n}</option>`).join("");
   select.value = selected && names.includes(selected) ? selected : "";
 }
@@ -337,8 +343,8 @@ function render() {
   const q = state.study.question;
   document.getElementById("sv-method").value = q.method;
   document.getElementById("sv-method-help").textContent = METHOD_HELP[q.method];
-  populateSelect(document.getElementById("sv-treatment"), state.columnNames, q.treatment, { placeholder: "-- choose --" });
-  populateSelect(document.getElementById("sv-outcome"), state.columnNames, q.outcome, { placeholder: "-- choose --" });
+  populateSelect(document.getElementById("sv-treatment"), state.columnNames, q.treatment, { placeholder: true });
+  populateSelect(document.getElementById("sv-outcome"), state.columnNames, q.outcome, { placeholder: true });
   document.getElementById(q.treatmentDesign === "continuous" ? "sv-design-continuous" : "sv-design-grouped").checked = true;
 
   if (q.treatment) syncTypeSelect(document.getElementById("sv-treatment-type"), q.treatment);
@@ -347,10 +353,13 @@ function render() {
   else document.getElementById("sv-outcome-type").innerHTML = "";
   updateSelectColors();
 
-  populateSelect(document.getElementById("sv-panel-entity"), state.columnNames, q.panelData.entity, { placeholder: "-- choose --" });
-  populateSelect(document.getElementById("sv-panel-time"), state.columnNames, q.panelData.time, { placeholder: "-- choose --" });
+  populateSelect(document.getElementById("sv-panel-entity"), state.columnNames, q.panelData.entity, { placeholder: true });
+  populateSelect(document.getElementById("sv-panel-time"), state.columnNames, q.panelData.time, { placeholder: true });
   const covSelect = document.getElementById("sv-panel-covariates");
   covSelect.innerHTML = state.columnNames.map((n) => `<option value="${n}" ${q.panelData.covariates.includes(n) ? "selected" : ""}>${n}</option>`).join("");
+
+  document.getElementById("sv-effect").value = q.effect;
+  document.getElementById("sv-split-test-pc").value = q.splitTestPc;
 
   updateMethodVisibility();
   updateDesignVisibility();
@@ -360,6 +369,11 @@ function render() {
 function updateMethodVisibility() {
   const isPanel = state.study.question.method === "pd+fe";
   document.getElementById("sv-panel-fields").hidden = !isPanel;
+  // Panel data has no causal diagram - identification comes from the fixed-
+  // effects structure declared above, not a graph. The Check button (in the
+  // row above this section) stays visible either way, since it's still how
+  // a panel-data study gets validated and identified.
+  document.getElementById("sv-diagram-section").hidden = isPanel;
 }
 
 function updateDesignVisibility() {
@@ -448,6 +462,25 @@ document.getElementById("sv-panel-covariates").addEventListener("change", (e) =>
   state.study.question.panelData.covariates = [...e.target.selectedOptions].map((o) => o.value);
   persist();
 });
+document.getElementById("sv-panel-covariates-clear").addEventListener("click", () => {
+  // A native <select multiple> only lets you deselect one option at a time
+  // (ctrl/cmd-click), with no click-to-clear-all gesture - this button is
+  // the explicit equivalent.
+  const select = document.getElementById("sv-panel-covariates");
+  [...select.options].forEach((o) => (o.selected = false));
+  state.study.question.panelData.covariates = [];
+  persist();
+});
+
+document.getElementById("sv-effect").addEventListener("change", (e) => {
+  state.study.question.effect = e.target.value;
+  persist();
+});
+document.getElementById("sv-split-test-pc").addEventListener("change", (e) => {
+  const pc = Number(e.target.value);
+  state.study.question.splitTestPc = Number.isFinite(pc) ? pc : 0;
+  persist();
+});
 
 function renderTreatmentGroupWidget() {
   const q = state.study.question;
@@ -530,15 +563,15 @@ function showCheckModal(result) {
         <label class="form-label" for="sv-model-select">Model</label>
         <select class="form-select w-auto" id="sv-model-select"></select>
       </div>
-      <div class="d-flex align-items-start gap-2 mb-2">
+      <div class="d-flex align-items-center gap-2 mb-2">
         <span class="badge bg-secondary rounded-pill">1</span>
         <div>Download your study configuration: <button class="btn btn-sm btn-success" id="sv-download-config">Download config JSON</button></div>
       </div>
-      <div class="d-flex align-items-start gap-2 mb-2">
+      <div class="d-flex align-items-center gap-2 mb-2">
         <span class="badge bg-secondary rounded-pill">2</span>
         <div>Have your data file handy &mdash; <a href="${datasetUrl}" target="_blank">${state.dataset.name}</a> (opens in a new tab).</div>
       </div>
-      <div class="d-flex align-items-start gap-2 mb-2">
+      <div class="d-flex align-items-center gap-2 mb-2">
         <span class="badge bg-secondary rounded-pill">3</span>
         <div>
           Open the notebooks &mdash;
@@ -546,7 +579,7 @@ function showCheckModal(result) {
           or clone the <a href="${repoUrl}" target="_blank">notebooks repository</a> to run locally.
         </div>
       </div>
-      <div class="d-flex align-items-start gap-2 mb-3">
+      <div class="d-flex align-items-center gap-2 mb-3">
         <span class="badge bg-secondary rounded-pill">4</span>
         <div>When the notebook asks for your config file and data file, provide the two files above.</div>
       </div>
