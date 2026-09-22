@@ -11,9 +11,12 @@
 //     method: "cd+po" | "pd+fe",
 //     treatment, outcome,                 // column names
 //     treatmentSpec,                       // treatment-widget.js spec - {kind, design, control, treated,
-//       ...} for a numeric treatment (design: "grouped" thresholds into Control/Treated as usual,
-//       "continuous" skips grouping - see validate.js's isContinuousTreatment), {kind, control, treated,
-//       controlAnything, treatedAnything} for a categorical one (always grouped)
+//       counterfactualLower, counterfactualUpper, ...} for a numeric treatment (design: "grouped"
+//       thresholds into Control/Treated as usual, "continuous" skips grouping - only offered for
+//       pd+fe, since DoWhy/CD+PO has no continuous-treatment support - see validate.js's
+//       isContinuousTreatment; counterfactualLower/Upper are optional treatment values the results
+//       notebook evaluates counterfactual outcomes at, continuous design only), {kind, control,
+//       treated, controlAnything, treatedAnything} for a categorical one (always grouped)
 //     variableTypes: { [columnName]: "numerical" | "categorical" },  // per-study override; also
 //       drives treatmentSpec's editor kind (numeric range vs per-value table)
 //     effect: "ate" | "att" | "atc",       // desired target units; pd+fe always uses att regardless

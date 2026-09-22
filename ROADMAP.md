@@ -939,16 +939,62 @@ the internal-link checker is fully clean for the first time this project -
 the `/project/*` placeholders that were "out of scope until 8.7" in every
 previous stage's link-check note are now real, working pages.
 
+**8.6 prerequisite — continuous treatment is PD+FE-only; counterfactual value inputs** ✅ done
+Two small UI changes ahead of the notebooks themselves, driven by research
+into the old site's actual estimation code (see the notebooks entry below):
+- **DoWhy doesn't support continuous treatment at all** - the old app's
+  CD+PO validation forbade it outright, and its DML estimator hardcoded
+  `discrete_treatment=True`. The new site's treatment widget had been
+  offering "Use as a continuous value" for *any* numeric treatment
+  regardless of method (added in an earlier revision without this
+  constraint in mind). Fixed: `renderTreatmentGroupWidget()` now passes
+  `allowContinuous: question.method === "pd+fe"` instead of an unconditional
+  `true`, and the `sv-method` change handler (which previously never
+  re-rendered the treatment widget at all) now does, resetting
+  `treatmentSpec` back to a fresh grouped default if the user had continuous
+  selected and switches away from PD+FE - the same "drop the stale spec,
+  let the widget regenerate a valid default" pattern already used when a
+  treatment's type changes.
+- **Counterfactual treatment value inputs.** The results notebooks' item 3
+  (counterfactual outcomes table) needs two optional values - "lower
+  (control)" and "upper (treated)" - to evaluate a continuous treatment's
+  counterfactual outcome at, matching what the old site's estimate config
+  carried (`treatment_counterfactual_lower/upper`) but with no UI to set
+  them anywhere on the new site yet. Added two number inputs directly
+  inside `treatment-widget.js`'s "continuous" branch (`spec.
+  counterfactualLower`/`counterfactualUpper`), wired the same way as the
+  existing range inputs. Since continuous mode is now PD+FE-only, these
+  inputs are automatically scoped correctly with no extra visibility logic.
+  Flows into the exported config for free - `config-export.js` already
+  passes `question` (which owns `treatmentSpec`) through wholesale.
+
+Verified in-browser: CD+PO shows no grouped/continuous radio at all (just
+the grouped editor directly); switching to PD+FE brings the radio back;
+selecting continuous shows the two counterfactual inputs, which persist to
+IndexedDB correctly; switching back to CD+PO resets the spec to grouped
+and the radio disappears again. No console errors. Production build and
+the internal-link checker both pass clean.
+
 **8.6 — Make notebooks**
-Refactor the `cw/inference` Python package (`causal_methods.py`,
-`causal_task.py`, `counterfactuals.py`, `cw_regression_estimator.py`,
-`estimation.py`, `features.py`, `fixed_effects.py`, `identification.py`,
-`propensity.py`) into a clean, facade-based package under
-`causal_wizard_app/notebooks`, on current pandas/numpy/DoWhy/statsmodels.
-Two notebooks: (1) identification & estimation — full validation of config
-+ data even though partially pre-checked client-side; (2) results analysis,
-keeping all current plots. README with an Open-in-Colab badge; notebooks
-take config-file-location and data-file-location variables.
+Two Jupyter notebooks under `causal_wizard_app/notebooks/` reproducing the
+old site's server-side estimation + results page, redesigned from scratch
+(not ported) per the user's read of the old `cw/inference/*.py` code as
+architecturally messy. Planned (not yet built) on top of two research
+passes into exactly what the old Python pipeline computes and exactly how
+the old results page (`result_show.html`/`result.js`) renders each of its
+plots/tables - full technical detail in the approved plan file
+(`/home/dave/.claude/plans/compressed-yawning-spindle.md` at planning
+time). Shape: a `causalwizard/` Python package holding all the actual
+logic (config parsing/validation, identification, CD+PO and PD+FE
+estimation, counterfactuals, propensity diagnostics, refutation tests,
+plotting), with notebook 1 (identification & estimation) doing all the
+numeric work into a `results.json`, and notebook 2 (results) as pure
+presentation reading that JSON - modeled on the old site's own
+`resultData` JSON shape, reused as the hand-off contract. Planned
+deliberate corrections over the old code: PD+FE standard errors genuinely
+entity-clustered (old code's comment claimed this but didn't do it); the
+covariate-balance "love" plot's SMD reference line at 0.1 (the old page's
+own explanatory text value, not the 0.2 its code actually used).
 *Deliverable*: a user takes the downloaded config JSON + their data file,
 runs notebook 1 then notebook 2 (locally or in Colab), gets the same
 analyses as today.

@@ -190,7 +190,14 @@ function renderNumericEditor(container, spec, allowContinuous, onChange) {
     ${allowContinuous ? numericDesignRadioHtml(spec.design) : ""}
     ${
       continuous
-        ? `<p class="text-muted mb-0">Continuous treatment.</p>`
+        ? `<p class="text-muted mb-2">Continuous treatment.</p>
+      <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+        <label class="form-label mb-0" for="tw-cf-lower">Counterfactual value &mdash; lower (control)</label>
+        <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" id="tw-cf-lower" data-role="cf-lower" value="${spec.counterfactualLower ?? ""}" placeholder="optional" />
+        <label class="form-label mb-0" for="tw-cf-upper">upper (treated)</label>
+        <input type="number" class="form-control form-control-sm w-auto" style="width:8em;" id="tw-cf-upper" data-role="cf-upper" value="${spec.counterfactualUpper ?? ""}" placeholder="optional" />
+      </div>
+      <p class="text-muted small mb-0">Optional - used to show counterfactual outcomes at two specific treatment values in the results notebook.</p>`
         : `
       ${numericGroupHtml("control", "Control", spec.control)}
       ${numericGroupHtml("treated", "Treated", spec.treated)}
@@ -209,7 +216,18 @@ function renderNumericEditor(container, spec, allowContinuous, onChange) {
     });
   }
 
-  if (continuous) return;
+  if (continuous) {
+    const num = (el) => (el.value.trim() === "" ? null : Number(el.value));
+    container.querySelector('[data-role="cf-lower"]').addEventListener("change", (e) => {
+      spec.counterfactualLower = num(e.target);
+      onChange(spec);
+    });
+    container.querySelector('[data-role="cf-upper"]').addEventListener("change", (e) => {
+      spec.counterfactualUpper = num(e.target);
+      onChange(spec);
+    });
+    return;
+  }
 
   function readGroup(prefix) {
     const num = (el) => (el.value.trim() === "" ? null : Number(el.value));

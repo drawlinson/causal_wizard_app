@@ -399,9 +399,18 @@ function expandTreatmentCollapse() {
 }
 
 document.getElementById("sv-method").addEventListener("change", (e) => {
-  state.study.question.method = e.target.value;
+  const q = state.study.question;
+  q.method = e.target.value;
   document.getElementById("sv-method-help").textContent = METHOD_HELP[e.target.value];
+  // Continuous treatment is PD+FE-only (DoWhy doesn't support it) - moving
+  // away from PD+FE while it was selected would leave an invalid spec, so
+  // drop it and let renderTreatmentGroupWidget() regenerate a fresh
+  // grouped default, same as when a treatment's type changes.
+  if (q.method !== "pd+fe" && q.treatmentSpec?.design === "continuous") {
+    q.treatmentSpec = null;
+  }
   updateMethodVisibility();
+  renderTreatmentGroupWidget();
   updateGraphClasses();
   persist();
 });
@@ -496,11 +505,12 @@ function renderTreatmentGroupWidget() {
     sampleValues: sampledColumn(q.treatment),
     topCategories: categoryCounts(values), // uncapped - the widget itself caps how many rows it shows
     initialSpec: q.treatmentSpec,
-    // Whether a numeric treatment gets thresholded into Control/Treated or
-    // passed through continuously affects which methods/analyses apply -
-    // that choice only matters here, not on the dataset page's balance tab
-    // (which always needs a group split to compute anything).
-    allowContinuous: true,
+    // Continuous treatment is only meaningful for Panel Data with Fixed
+    // Effects - DoWhy (CD+PO's whole estimation stack) doesn't support a
+    // continuous treatment at all, so that choice isn't offered there. Also
+    // not offered on the dataset page's balance tab (which always needs a
+    // group split to compute anything), regardless of method.
+    allowContinuous: q.method === "pd+fe",
     onChange: (spec) => {
       q.treatmentSpec = spec;
       persist();
