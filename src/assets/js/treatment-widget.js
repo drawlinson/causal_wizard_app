@@ -256,7 +256,15 @@ function renderCategoricalEditor(container, spec, valueCounts, onChange) {
   const truncated = valueCounts.length > MAX_ROWS;
 
   container.innerHTML = `
-    ${truncated ? `<p class="alert alert-warning">Showing the ${MAX_ROWS} most common values of ${valueCounts.length} - this column may be too high-cardinality to use as a treatment.</p>` : ""}
+    ${
+      truncated
+        ? `<p class="alert alert-warning">Showing the ${MAX_ROWS} most common values of ${valueCounts.length} (counted across the whole column, not a sample) - the other ${valueCounts.length - MAX_ROWS} aren't listed below individually, and are classified only by whichever "everything not listed" option you choose next (or excluded, if neither is checked). This column may be too high-cardinality to use as a treatment.</p>`
+        : ""
+    }
+    <p class="text-muted mb-2">
+      A value's Control/Treated/Exclude button below always takes priority. For everything
+      else${truncated ? " - including every value not listed above" : ""} - pick a default:
+    </p>
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="checkbox" id="tw-control-anything" ${spec.controlAnything ? "checked" : ""}>
       <label class="form-check-label" for="tw-control-anything">Everything not listed below is Control</label>
@@ -265,6 +273,7 @@ function renderCategoricalEditor(container, spec, valueCounts, onChange) {
       <input class="form-check-input" type="checkbox" id="tw-treated-anything" ${spec.treatedAnything ? "checked" : ""}>
       <label class="form-check-label" for="tw-treated-anything">Everything not listed below is Treated</label>
     </div>
+    <p class="text-muted small mb-2">Only one can be checked at a time. If neither is checked, anything not explicitly assigned is excluded.</p>
     <table class="table table-sm">
       <thead><tr><th>Value</th><th>Count</th><th>Assign to&hellip;</th></tr></thead>
       <tbody>${shown.map((c) => categoryRowHtml(c.value, c.count, bucketOf(spec, c.value))).join("")}</tbody>

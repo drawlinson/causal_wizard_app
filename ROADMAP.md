@@ -304,6 +304,35 @@ its plot and table. No console errors. Production build and the
 internal-link checker both pass clean (same pre-existing `/project/*`
 placeholders, unrelated to this page).
 
+**8.3 revision 4 — explain what the treatment widget's catch-all checkboxes do** ✅ done
+User asked what "Everything not listed below is Control/Treated" actually
+means and whether the table shows all the data. Answer: each value's
+explicit Control/Treated/Exclude button always wins; the checkbox only
+sets the default for values that don't have an explicit pick (excluded,
+if neither is checked); the two checkboxes are mutually exclusive
+(checking one clears the other); and the table only lists the top 50
+most frequent distinct values - anything beyond that never gets a row and
+is governed entirely by the checkbox default. Added this as explanatory
+copy directly in `treatment-widget.js`'s categorical editor, above and
+around the checkboxes.
+
+While verifying the truncation warning, found it could never actually
+fire: both callers (`data-view.js`, `study-view.js`) passed `limit: 50`
+into `categoryCounts()`, so the widget always received an already-capped
+list and its own `valueCounts.length > 50` check was never true,
+regardless of the column's real cardinality - the "showing top 50 of N"
+warning was dead code. `categoryCounts()` is now uncapped by default
+(only used by these two callers), and both now call it uncapped, letting
+the widget's own cap and truncation check do their job correctly.
+
+Verified in-browser: a low-cardinality column (4 values) shows no
+truncation warning and the new explanatory text reads cleanly; a
+synthetic 80-value column correctly triggers "Showing the 50 most common
+values of 80 - the other 30 aren't listed below individually..." No
+console errors. Production build and the internal-link checker both pass
+clean (same pre-existing `/project/*` placeholders, unrelated to this
+page).
+
 **8.4 — Migrate wizard / causal diagram editor** ✅ done
 Renamed "the wizard" to **Studies** throughout (nav already said Studies).
 Both old methods in scope (CD+PO and PD+FE, by request — the old site

@@ -56,8 +56,11 @@ export function computeColumnStats(values, type) {
 }
 
 /** Full (not top-10-capped) frequency table, for UI that needs to list
- * every distinct value - e.g. the treatment-assignment widget. */
-export function categoryCounts(values, limit = 50) {
+ * every distinct value - e.g. the treatment-assignment widget. Uncapped by
+ * default (`limit` is only for callers that want a smaller top-N) - the
+ * widget itself caps how many rows it displays, and needs the *true* count
+ * of distinct values to decide whether it's showing everything or not. */
+export function categoryCounts(values, limit = Infinity) {
   const counts = new Map();
   for (const v of values) {
     if (v === null || v === undefined || String(v).trim() === "") continue;

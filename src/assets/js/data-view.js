@@ -458,7 +458,7 @@ function renderTreatmentTab() {
     columnType: col.type,
     values,
     sampleValues: sampledColumn(name),
-    topCategories: categoryCounts(values, 50),
+    topCategories: categoryCounts(values), // uncapped - the widget itself caps how many rows it shows
     initialSpec,
     onChange: (spec) => {
       state.treatmentSpec = { columnName: name, spec };

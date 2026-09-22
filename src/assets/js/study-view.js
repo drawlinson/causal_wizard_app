@@ -494,7 +494,7 @@ function renderTreatmentGroupWidget() {
     columnType,
     values,
     sampleValues: sampledColumn(q.treatment),
-    topCategories: categoryCounts(values, 50),
+    topCategories: categoryCounts(values), // uncapped - the widget itself caps how many rows it shows
     initialSpec: q.treatmentSpec,
     // Whether a numeric treatment gets thresholded into Control/Treated or
     // passed through continuously affects which methods/analyses apply -
