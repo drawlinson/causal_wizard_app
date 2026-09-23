@@ -139,6 +139,15 @@ async function init() {
     document.getElementById("studies-create-card").hidden = false;
     const select = document.getElementById("study-dataset");
     select.innerHTML = datasets.map((d) => `<option value="${d.id}">${d.name}</option>`).join("");
+
+    // Coming from a dataset's own page (its "Create study" button) -
+    // preselect that dataset instead of defaulting to the most recent one,
+    // and jump straight to naming the study since the dataset's already chosen.
+    const requestedDatasetId = new URLSearchParams(window.location.search).get("datasetId");
+    if (requestedDatasetId && datasetsById[requestedDatasetId]) {
+      select.value = requestedDatasetId;
+      document.getElementById("study-name").focus();
+    }
   }
 
   renderList();

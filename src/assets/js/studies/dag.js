@@ -241,9 +241,12 @@ export function findMediators(x, y, nodes, edges) {
 /**
  * Colliders: nodes with two or more parents (a common effect of separate
  * causes) - conditioning on one can open a spurious association between
- * its causes, so these are flagged for the diagram regardless of whether
- * they're on a treatment-outcome path.
+ * its causes, so these are flagged for the diagram. Excludes `exclude`
+ * (the treatment and outcome, in practice) - collider bias is a risk for
+ * variables that might get conditioned on (covariates/adjustment sets),
+ * not for the outcome itself, which is never conditioned on, or the
+ * treatment, which is likewise just observed rather than adjusted for.
  */
-export function findColliders(nodes, edges) {
-  return nodes.filter((n) => parents(n, edges).length >= 2);
+export function findColliders(nodes, edges, exclude = []) {
+  return nodes.filter((n) => !exclude.includes(n) && parents(n, edges).length >= 2);
 }

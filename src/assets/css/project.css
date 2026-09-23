@@ -305,7 +305,7 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
     linear-gradient(rgba(0, 0, 0, 0.7),
       rgba(0, 0, 0, 0.7)),
     /* your image */
-    url(/static/images/container-port-2.jpg);
+    url(/assets/images/container-port-2.jpg);
 }
 
 .grey-tinted-image-data {
@@ -318,7 +318,7 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
     linear-gradient(rgba(0, 0, 0, 0.7),
       rgba(0, 0, 0, 0.7)),
     /* your image */
-    url(/static/images/stocks.jpg);
+    url(/assets/images/stocks.jpg);
 }
 
 .grey-tinted-image-interventions {
@@ -331,7 +331,7 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
     linear-gradient(rgba(0, 0, 0, 0.7),
       rgba(0, 0, 0, 0.7)),
     /* your image */
-    url(/static/images/plumbing.jpg);
+    url(/assets/images/plumbing.jpg);
 }
 
 .grey-tinted-image-register {
@@ -344,7 +344,7 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
     linear-gradient(rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)),
     /* your image */
-    url(/static/images/pipes-crop.jpg);
+    url(/assets/images/pipes-crop.jpg);
 }
 
 .cw-horz-fade-background-1 {
@@ -359,7 +359,7 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
       rgba(255, 255, 255, 0.2) 90%,
       rgba(255, 255, 255, 0.1) 100%),
     /* your image */
-    url(/static/images/container-port-2.jpg);
+    url(/assets/images/container-port-2.jpg);
 }
 
 .cw-dark-fg {
@@ -376,11 +376,11 @@ https://stackoverflow.com/questions/20007610/bootstrap-carousel-multiple-frames-
     linear-gradient(to right, rgba(0, 0, 0, 0.7),
       rgba(0, 0, 0, 0.7)),
     /* your image */
-    url(/static/images/container-port-2.jpg);
+    url(/assets/images/container-port-2.jpg);
 }
 
 /*.card-img-container-data {
-  background-image: url('/static/images/spreadsheet.jpg');
+  background-image: url('/assets/images/spreadsheet.jpg');
   background-size: cover;
   background-position: center;
 
@@ -391,7 +391,7 @@ Without content, the div won't have any height and with * /
 }*/
 
 /*.card-img-container-graph {
-  background-image: url('/static/images/causal_diagram_crm.png');
+  background-image: url('/assets/images/causal_diagram_crm.png');
   background-size: cover;
   background-position: center;
 
@@ -402,7 +402,7 @@ Without content, the div won't have any height and with * /
 }*/
 
 /*.card-img-container-check {
-  background-image: url('/static/images/yes_check_circle.png');
+  background-image: url('/assets/images/yes_check_circle.png');
   background-size: cover;
   background-position: center;
 
@@ -413,7 +413,7 @@ Without content, the div won't have any height and with * /
 }*/
 
 /*.card-img-container-result {
-  background-image: url('/static/images/result_plot.png');
+  background-image: url('/assets/images/result_plot.png');
   background-size: cover;
   background-position: center;
 
@@ -458,7 +458,7 @@ Without content, the div won't have any height and with * /
 }
 
 .twitter-logo {
-  background-image: url('/static/images/twitter.svg');
+  background-image: url('/assets/images/twitter.svg');
   background-size: auto;
   height: 14px;
   width: 14px;

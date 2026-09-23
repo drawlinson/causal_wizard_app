@@ -105,6 +105,7 @@ async function main() {
   }
   state.record = record;
   document.getElementById("dv-name").textContent = record.name;
+  document.getElementById("dv-create-study").href = `/studies/?datasetId=${id}`;
 
   showProgress("Reading file…");
   let parsed;

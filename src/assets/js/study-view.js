@@ -161,6 +161,7 @@ function effectiveVariableType(name) {
  * bit of UI that shows a type for this variable. */
 function setVariableType(name, type, { skipNodeSync = false } = {}) {
   const q = state.study.question;
+  const previousEffectiveType = effectiveVariableType(name);
   q.variableTypes[name] = type;
   if (!skipNodeSync) state.graph.setNodeTypeQuiet(name, type);
 
@@ -169,9 +170,15 @@ function setVariableType(name, type, { skipNodeSync = false } = {}) {
     // The treatment-groups widget's editor kind (numeric range vs per-value
     // table) is derived from this type, so a spec built for the other kind
     // no longer applies - drop it and let the widget re-derive a default.
-    q.treatmentSpec = null;
-    updateTreatmentGroupsVisibility();
-    renderTreatmentGroupWidget();
+    // Only when the type actually changed, though: this function also runs
+    // whenever a diagram node is added/edited (even for an unrelated type,
+    // or the treatment node re-saved with its existing type unchanged), and
+    // that shouldn't blow away treatment groups the user already set up.
+    if (type !== previousEffectiveType) {
+      q.treatmentSpec = null;
+      updateTreatmentGroupsVisibility();
+      renderTreatmentGroupWidget();
+    }
   }
   if (name === q.outcome) {
     syncTypeSelect(document.getElementById("sv-outcome-type"), name);
@@ -240,7 +247,7 @@ function deriveStructuralRoles() {
   if (!dag.nodes.includes(q.treatment) || !dag.nodes.includes(q.outcome)) return {};
   return {
     mediatorVariables: findMediators(q.treatment, q.outcome, dag.nodes, dag.edges),
-    colliderVariables: findColliders(dag.nodes, dag.edges),
+    colliderVariables: findColliders(dag.nodes, dag.edges, [q.treatment, q.outcome]),
   };
 }
 
