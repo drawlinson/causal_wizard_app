@@ -1174,6 +1174,33 @@ scenarios via `jupyter nbconvert --execute` - all clean, with bootstrap/
 placebo/random-common-cause refutation results now genuinely populated
 for own linear regression/GLM instead of being silently skipped.
 
+**8.6 follow-up 4 — GLM family selection (Poisson/Binomial), a second latent bug** ✅ done
+Immediate follow-up to follow-up 3: the `glm_family` fix above only
+handled the binary-outcome case, leaving GLM still broken for a numerical
+outcome (the site's own model-selection UI explicitly offers GLM for
+numerical outcomes too - "suitable for... numerical outcomes such as
+count data" - so this combination is a real, reachable path, not a
+hypothetical). Root-caused against the old Django site's actual family-
+selection algorithm (`cw/inference/causal_methods.py`'s
+`add_method_specific_params()`, per the user's own recollection of having
+built it): **Binomial** for a binary-categorical outcome, **Poisson** (not
+Gaussian) for a numerical one - the site's own UI text ("count data")
+already promised this. Along the way, also found and fixed a real
+conflation bug in `_fit_own_regression()`: it branched on outcome type for
+*both* `linear_regression` and `generalized_linear_model`, meaning
+`linear_regression` would silently switch to a Binomial-GLM fit for a
+binary outcome instead of staying plain OLS (a linear probability model,
+same treatment PD+FE already gives a binary outcome) - the old site's
+`linear_regression` estimator (DoWhy's own `LinearRegressionEstimator`)
+never had this outcome-type branching at all. New `glm_family()` helper
+used both by our own fit and by the DoWhy-native fit obtained for
+refutation, so both agree.
+
+Re-verified all 4 combinations (linear_regression/GLM x binary/numerical
+outcome) directly, plus the two previously-untested end-to-end (GLM with
+each outcome type, via `jupyter nbconvert --execute`) - all give distinct,
+sane effect estimates with working refutation, no crashes.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

@@ -73,11 +73,28 @@ def _formula(outcome_col: str, treatment_col: str, covariate_cols: list[str], co
     return f"{_q(outcome_col)} ~ " + " + ".join(terms)
 
 
-def _fit_own_regression(df, treatment_col, outcome_col, covariate_cols, covariate_types, outcome_is_binary):
+def glm_family(outcome_is_binary: bool):
+    """The site always offers GLM for a binary-categorical outcome or a
+    numerical one ("suitable for... numerical outcomes such as count
+    data" - causal-methods.js's own GLM warning text), never anything
+    else (the old site's algorithm - causal_methods.py's
+    add_method_specific_params() - raised NotImplementedError for any
+    other categorical cardinality, which our own config.py already
+    enforces upstream by requiring exactly 2 categories). Binomial for
+    the binary case (logistic regression); Poisson for the numerical one
+    (count-data regression) - not Gaussian, matching that same algorithm."""
+    return sm.families.Binomial() if outcome_is_binary else sm.families.Poisson()
+
+
+def _fit_own_regression(df, treatment_col, outcome_col, covariate_cols, covariate_types, estimator, outcome_is_binary):
     formula = _formula(outcome_col, treatment_col, covariate_cols, covariate_types)
-    if outcome_is_binary:
-        result = smf.glm(formula, data=df, family=sm.families.Binomial()).fit()
+    if estimator == "generalized_linear_model":
+        result = smf.glm(formula, data=df, family=glm_family(outcome_is_binary)).fit()
     else:
+        # linear_regression is always plain OLS, regardless of outcome type -
+        # a linear probability model for a binary outcome, same as PD+FE's own
+        # always-OLS choice (see estimation_pdfe.py) - not conflated with GLM's
+        # own outcome-type-dependent family selection above.
         result = smf.ols(formula, data=df).fit()
 
     def predict(data: pd.DataFrame, fixed_treatment_value: float | None = None) -> pd.Series:
@@ -90,10 +107,11 @@ def _fit_own_regression(df, treatment_col, outcome_col, covariate_cols, covariat
 def _effect_via_gcomputation(predict: PredictFn, df: pd.DataFrame, treatment_col: str, target_units: str) -> float:
     """ATE/ATT/ATC as an average predicted-outcome difference between
     "everyone treated" and "everyone control" (g-computation) - works
-    uniformly for both linear regression (where it reduces to exactly the
-    treatment coefficient) and GLM (where it gives a real average
-    probability difference, not a log-odds coefficient), and reuses the
-    same do-operator counterfactuals.py needs elsewhere."""
+    uniformly for linear regression (reduces to exactly the treatment
+    coefficient), Binomial GLM (a real average probability difference, not
+    a log-odds coefficient), and Poisson GLM (a real average count-rate
+    difference, not a log-rate coefficient), and reuses the same
+    do-operator counterfactuals.py needs elsewhere."""
     if target_units == "att":
         subset = df[df[treatment_col] == 1]
     elif target_units == "atc":
@@ -121,15 +139,15 @@ def estimate(
 
     if estimator in DO_OPERATOR_ESTIMATORS:
         result, predict = _fit_own_regression(
-            df, treatment_col, outcome_col, covariate_cols, covariate_types, outcome_is_binary
+            df, treatment_col, outcome_col, covariate_cols, covariate_types, estimator, outcome_is_binary
         )
         effect = _effect_via_gcomputation(predict, df, treatment_col, target_units)
         coefficients = {str(k): float(v) for k, v in result.params.items()}
         # Separate DoWhy-native fit of the *same* model, purely so refute_estimate()
         # has a real CausalEstimate to run its refuters against - see module docstring.
-        # GLM requires glm_family explicitly - it has no way to infer binary vs.
-        # continuous from the data the way our own _fit_own_regression() does.
-        method_params = {"glm_family": sm.families.Binomial()} if estimator == "generalized_linear_model" and outcome_is_binary else None
+        # GLM requires glm_family explicitly - it has no way to infer it from the
+        # data the way our own _fit_own_regression() (via glm_family()) does.
+        method_params = {"glm_family": glm_family(outcome_is_binary)} if estimator == "generalized_linear_model" else None
         dowhy_estimate = model.estimate_effect(
             identified, method_name=method_key, target_units=target_units,
             test_significance=False, confidence_intervals=False, method_params=method_params,
