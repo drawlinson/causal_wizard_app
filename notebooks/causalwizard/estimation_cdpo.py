@@ -52,6 +52,7 @@ class CdpoEstimate:
     predict: PredictFn | None  # do-operator; None if this estimator doesn't support one
     dowhy_estimate: object | None  # DoWhy CausalEstimate, for refutation/bootstrap CI - None for own regression/GLM
     coefficients: dict | None = None  # {term: coef}, own regression/GLM only - feature-importance display
+    summary_text: str | None = None  # str(result.summary()) - own regression/GLM only
 
 
 def _q(name: str) -> str:
@@ -117,7 +118,7 @@ def estimate(
         )
         effect = _effect_via_gcomputation(predict, df, treatment_col, target_units)
         coefficients = {str(k): float(v) for k, v in result.params.items()}
-        return CdpoEstimate(method_key, estimand_type, estimator, effect, predict, None, coefficients)
+        return CdpoEstimate(method_key, estimand_type, estimator, effect, predict, None, coefficients, str(result.summary()))
 
     if estimator == "econml.dml.DML":
         from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor

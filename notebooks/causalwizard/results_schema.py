@@ -44,6 +44,7 @@ def build_results(
     dropped_na: int,
     train_predictions: dict | None = None,
     estimand_variables: list[str] | None = None,
+    regression_summary: str | None = None,
 ) -> dict:
     return {
         "schemaVersion": 1,
@@ -76,6 +77,7 @@ def build_results(
             "propensityAnalysis": propensity_analysis,
             "trainPredictions": train_predictions,
             "estimandVariables": estimand_variables or [],
+            "regressionSummary": regression_summary,
         },
         "sample": {
             "contingencyTable": contingency,

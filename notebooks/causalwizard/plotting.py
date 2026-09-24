@@ -29,6 +29,11 @@ CONTROL_COLOR_LIGHT = "#a9c9ea"
 TREATED_COLOR_LIGHT = "#f0a99e"
 PREDICTED_COLOR = "#a52a2a"
 
+# Standard 4:3 for the outcome/generalization plots - Plotly's own default
+# (responsive, ~450px tall in a full-width Jupyter cell) reads as squashed.
+PLOT_WIDTH = 800
+PLOT_HEIGHT = 600
+
 
 # ---------- Positivity check ----------
 
@@ -104,7 +109,7 @@ def plot_outcomes_cohort(df: pd.DataFrame, treatment_col: str, outcome_col: str,
                 go.Bar(x=["Treated"], y=[treated_counts.get(1, 0)], showlegend=False, marker_color=TREATED_COLOR_LIGHT, base=[treated_counts.get(0, 0)]),
             ]
         )
-        fig.update_layout(barmode="stack", title=f"Outcome '{outcome_col}' frequency by Control/Treated", yaxis_title="Proportion")
+        fig.update_layout(barmode="stack", title=f"Outcome '{outcome_col}' frequency by Control/Treated", yaxis_title="Proportion", width=PLOT_WIDTH, height=PLOT_HEIGHT)
         return fig
 
     fig = go.Figure(
@@ -113,7 +118,7 @@ def plot_outcomes_cohort(df: pd.DataFrame, treatment_col: str, outcome_col: str,
             go.Box(y=treated, name="Treated", marker_color=TREATED_COLOR, boxmean=True),
         ]
     )
-    fig.update_layout(title=f"Outcome '{outcome_col}' distribution by Control/Treated group", yaxis_title=outcome_col)
+    fig.update_layout(title=f"Outcome '{outcome_col}' distribution by Control/Treated group", yaxis_title=outcome_col, width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig
 
 
@@ -141,7 +146,7 @@ def plot_outcomes_entity(
         fig.add_trace(go.Scatter(x=[control_value] * len(df), y=control_pred, mode="markers", name=f"Control/Lower = {control_value}", marker=dict(color="lightgreen")))
         fig.add_trace(go.Scatter(x=[treated_value] * len(df), y=treated_pred, mode="markers", name=f"Treated/Upper = {treated_value}", marker=dict(color="#ffcc80")))
 
-    fig.update_layout(title=f"Scatter plot of predicted and actual Outcomes '{outcome_col}'", xaxis_title=f"Treatment ({treatment_col})", yaxis_title=outcome_col)
+    fig.update_layout(title=f"Scatter plot of predicted and actual Outcomes '{outcome_col}'", xaxis_title=f"Treatment ({treatment_col})", yaxis_title=outcome_col, width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig
 
 
@@ -170,7 +175,7 @@ def plot_outcomes_over_time(
         else:
             fig.add_trace(go.Scatter(x=pred_grouped[time_col], y=pred_grouped["_predicted"], mode="lines", line=dict(color=PREDICTED_COLOR, dash="dash"), name="Predicted"))
 
-    fig.update_layout(title=f"Outcomes over time ('{outcome_col}')", xaxis_title=time_col, yaxis_title=outcome_col)
+    fig.update_layout(title=f"Outcomes over time ('{outcome_col}')", xaxis_title=time_col, yaxis_title=outcome_col, width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig
 
 
@@ -197,7 +202,7 @@ def plot_generalization_scatter(generalization: dict, treatment_col_is_binary: b
     xs = np.linspace(lo, hi, 50)
     fig.add_trace(go.Scatter(x=xs, y=slope * xs + intercept, mode="lines", line=dict(color="red"), name="Trend"))
 
-    fig.update_layout(title="Held-out test set: predicted vs. actual outcome", xaxis_title="Actual", yaxis_title="Predicted")
+    fig.update_layout(title="Held-out test set: predicted vs. actual outcome", xaxis_title="Actual", yaxis_title="Predicted", width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig
 
 

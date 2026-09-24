@@ -1097,6 +1097,53 @@ treatment, and a deliberately-introduced missing covariate value) via
 generalization R²/RMSE/MAE are real numbers again (not NaN) and DML's effect
 is now reproducible run-to-run.
 
+**8.6 follow-up 2 — more user-testing fixes and explanatory content** ✅ done
+- **A blank CSV header crashed notebook 1** with `KeyError: 'column_1'`. The
+  site's own parser (`datasets/parse.js`) renames a blank header to
+  `column_N` before anything else sees it, but pandas doesn't know that
+  convention - a literal single-space header stays `' '`, a truly empty one
+  becomes `'Unnamed: N'` - so the config's column names (which are always
+  the site's already-renamed ones) didn't match the raw dataframe's. Fixed
+  with `config.align_columns()`, which renames the loaded CSV's columns to
+  the config's own `dataset.expectedColumns` names *by position* (both sides
+  read the file left-to-right in the same order), called right after
+  `pd.read_csv()` in both notebooks - this also covers any other case where
+  pandas' own header guess doesn't match the site's, not just blank headers.
+- Outcome/generalization plots were Plotly's cramped default aspect ratio;
+  set to a standard 800x600 (4:3) via `plotting.PLOT_WIDTH`/`PLOT_HEIGHT`.
+- Added a link to the live site (https://causalwizard.app) in both notebooks'
+  header cells, alongside the existing logo.
+- Found the "Summary results" section from the old site's `result_show.html`
+  had no notebook equivalent - the full statsmodels regression summary
+  (R², F-statistic, a coefficient table with std errors/t-stats/p-values/
+  confidence intervals, Omnibus, Durbin-Watson, Jarque-Bera, condition
+  number) that the old code laboriously parsed field-by-field out of
+  `result.summary()`'s internal tables. Since our own regression/GLM and
+  PD+FE estimators already return that `result` object, showing
+  `str(result.summary())` directly gets everything for free, including the
+  z/F-statistics the "Validation" table alone doesn't fully contextualize -
+  added as its own section (own linear regression/GLM and PD+FE only;
+  propensity/DML/IV/frontdoor don't have a comparable plain-regression
+  summary).
+- A full pass through `result_show.html`/`result.js` for explanatory text a
+  reader with general stats knowledge but new to causal inference would
+  need, adapted into notebook 2 and rendered as Markdown (not plain text) -
+  covering Findings (the effect number now gets its own heading instead of
+  being one line among many plain-text ones), Assumptions, Validation (a
+  one-line description + desired result per test - z-statistic, F-statistic,
+  bootstrap, placebo treatment, random common cause), held-out
+  Generalization (why it matters, a data-leakage caveat, and metric
+  definitions - R²/RMSE/MAE or accuracy/F1/precision/recall depending on
+  outcome type), the Counterfactual table (do-operator explanation plus the
+  categorical-outcome and continuous-treatment caveats), Contingency table,
+  Positivity, Covariate balance, Summary results, and the Causal diagram -
+  each linking back to the matching article on causalwizard.app where one
+  exists. `diagnostics.py` gained one markdown-building function per section.
+
+Re-verified end-to-end against 6 scenarios (the original 5 plus a
+deliberately blank-headed CSV column) via `jupyter nbconvert --execute` -
+all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

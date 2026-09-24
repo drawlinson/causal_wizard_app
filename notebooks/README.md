@@ -17,8 +17,12 @@ against that config plus your own data file to get the actual causal-effect esti
    and fits the model, runs validation/refutation, and writes everything to `results.json`.
 2. **02-results.ipynb** is pure presentation: it reads `results.json` (plus the same
    config/data, for the plots that need raw rows) and renders the full results report -
-   findings, outcome plots, counterfactuals, refutation, positivity/covariate-balance
-   checks, assumptions, the causal diagram, and modelling statements.
+   a study summary, findings, outcome plots, counterfactuals, refutation/validation,
+   held-out generalization, contingency table, positivity/covariate-balance checks, the
+   full regression summary (own linear regression/GLM and PD+FE), assumptions, and the
+   causal diagram. Each section includes plain-language explanatory text (adapted from
+   the site's own help articles, with links back to [causalwizard.app](https://causalwizard.app))
+   aimed at a reader who knows statistics but is new to causal inference.
 
 In Colab, each notebook's first cell installs the `causalwizard` package straight from
 this repository. To run locally instead:
@@ -42,8 +46,10 @@ different (older, or differently-named) results file.
 The notebooks themselves stay thin - all computation lives in the `causalwizard/`
 package so the notebook flow reads cleanly cell-by-cell:
 
-- `config.py` - parses the study config, re-derives column types, applies the treatment
-  spec, encodes the outcome, splits off a held-out test set.
+- `config.py` - parses the study config, aligns your data file's columns to it by
+  position (so a blank CSV header the site renamed to `column_N` doesn't crash a name
+  lookup), re-derives column types, applies the treatment spec, encodes the outcome,
+  drops rows missing a required value, and splits off a held-out test set.
 - `identification.py` - builds the DoWhy causal model from your diagram and identifies
   the estimand.
 - `estimation_cdpo.py` / `estimation_pdfe.py` - fits the chosen model for each method.

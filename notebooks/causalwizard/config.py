@@ -28,6 +28,29 @@ def load_config(path: str) -> dict:
         return json.load(f)
 
 
+def align_columns(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+    """Renames `df`'s columns, by position, to the config's own
+    `dataset.expectedColumns` names - not a no-op, and not optional.
+
+    The site's own CSV parser (datasets/parse.js) renames a blank header to
+    "column_N" before anything else ever sees it, so every name the config
+    references (graph nodes, treatment/outcome, `variableTypes`) is one of
+    those already-renamed names. pandas' `read_csv()` doesn't know about
+    that convention - a literal single-space header stays exactly `" "`,
+    and a truly empty one becomes `"Unnamed: N"` - so trusting pandas' own
+    column names here would raise a KeyError for any such column the first
+    time it's looked up by name. Renaming by position (both sides read the
+    file's columns in the same left-to-right order) sidesteps the mismatch
+    entirely, whatever pandas happened to call it."""
+    expected_names = [c["name"] for c in config["dataset"]["expectedColumns"]]
+    if len(expected_names) != len(df.columns):
+        raise ValueError(
+            f"Data file has {len(df.columns)} columns but the config expects "
+            f"{len(expected_names)} - is this the right data file for this config?"
+        )
+    return df.rename(columns=dict(zip(df.columns, expected_names)))
+
+
 def parse_numeric(value: Any) -> float | None:
     """Mirrors datasets/types.js's parseNumeric(): strips thousands
     commas, returns None (not NaN/0) for blank/unparseable values."""
