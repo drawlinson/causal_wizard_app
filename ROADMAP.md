@@ -1144,6 +1144,36 @@ Re-verified end-to-end against 6 scenarios (the original 5 plus a
 deliberately blank-headed CSV column) via `jupyter nbconvert --execute` -
 all clean.
 
+**8.6 follow-up 3 — own linear regression/GLM now run refutation too** ✅ done
+CD+PO's own linear regression/GLM estimator (fit via a named statsmodels
+formula, bypassing DoWhy's built-in one - see `estimation_cdpo.py`) had no
+`dowhy_estimate`, so `refute_estimate()` had nothing to run against and
+these two estimators silently skipped the whole Validation section. Traced
+this to a since-outdated assumption: the bypass was originally needed
+because DoWhy 0.12's own `RegressionEstimator` crashed under pandas>=3.0
+(the bug `requirements.txt`'s `pandas<3.0` pin exists for), but with that
+pin already in place, DoWhy's native `backdoor.linear_regression`/
+`generalized_linear_model` now fits fine and agrees with our own fit on the
+effect to several significant figures - confirmed by also tracing DoWhy's
+`RegressionEstimator.interventional_outcomes()`, which turns out to
+already implement the same do-operator our own `predict()` does (per the
+user: they originally built this do-operator support for Causal Wizard and
+upstreamed it into DoWhy). Kept our own named-formula fit (needed for
+real column names in the "Summary results" table - DoWhy's own fit uses a
+raw, anonymous `x1`/`x2`/`const` feature matrix internally, which would
+make that table much less readable), but now *also* separately calls
+DoWhy's native estimator for the same method purely so refutation has a
+real `CausalEstimate` to run against. Also fixed a related latent bug
+surfaced while testing this: DoWhy's `generalized_linear_model` estimator
+requires an explicit `glm_family` in `method_params` (we weren't passing
+one), which would have raised a `ValueError` the first time this path was
+actually exercised end-to-end.
+
+Re-verified end-to-end: own linear regression, GLM, and all 5 previous
+scenarios via `jupyter nbconvert --execute` - all clean, with bootstrap/
+placebo/random-common-cause refutation results now genuinely populated
+for own linear regression/GLM instead of being silently skipped.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

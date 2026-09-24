@@ -10,17 +10,24 @@ do-operator too (see _dml_predict below), built from EconML's own
 counterfactual table but NOT a held-out generalization check (see that
 function's docstring for why). Propensity/IV/frontdoor still have no
 do-operator - no comparable "predict Y for new X" hook exists for them.
-Linear regression
-and GLM are implemented here via statsmodels instead of DoWhy's built-in
-RegressionEstimator: a hand-rolled version gives direct control over the
-do-operator (set every row's treatment to a fixed value, predict) that
-counterfactuals.py needs, via the same g-computation machinery used to
-compute the headline effect below, rather than depending on DoWhy's own
-(allowlisted, narrower) get_interventional_outcomes. (DoWhy 0.12's own
-RegressionEstimator also has a real bug under pandas>=3.0 - positional
-indexing into a name-indexed Series - which is why requirements.txt pins
-pandas<3.0; that bug affects the frontdoor estimator too, which chains
-through the same class internally, so it isn't dodged by this rewrite.)
+
+Linear regression and GLM are *also* fit here via statsmodels directly
+(not just left to DoWhy's own built-in RegressionEstimator), because a
+hand-rolled version gives direct control over the do-operator (set every
+row's treatment to a fixed value, predict) that counterfactuals.py needs,
+via the same g-computation machinery used to compute the headline effect
+below - and because fitting via a real patsy formula keeps real column
+names in the coefficient table (`Q('Age')`, not DoWhy's own raw-array
+fit's anonymous `x1`/`x2`), which matters for the "Summary results"
+notebook section. But this estimator *also* separately calls DoWhy's own
+`model.estimate_effect()` for the same method, purely so its refuters can
+run against a real DoWhy CausalEstimate (refute_estimate() needs one) -
+DoWhy 0.12's own RegressionEstimator had a real bug under pandas>=3.0
+(positional indexing into a name-indexed Series) that made this
+impossible at first, but requirements.txt now pins pandas<3.0, which
+fixes it (confirmed: both fits agree on the effect to several sig figs).
+That pin still matters for the frontdoor estimator, which chains through
+the same buggy class internally and has no hand-rolled bypass.
 """
 
 from __future__ import annotations
@@ -50,7 +57,7 @@ class CdpoEstimate:
     estimator: str
     effect: float
     predict: PredictFn | None  # do-operator; None if this estimator doesn't support one
-    dowhy_estimate: object | None  # DoWhy CausalEstimate, for refutation/bootstrap CI - None for own regression/GLM
+    dowhy_estimate: object | None  # DoWhy CausalEstimate, for refutation/bootstrap CI - always set for CD+PO
     coefficients: dict | None = None  # {term: coef}, own regression/GLM only - feature-importance display
     summary_text: str | None = None  # str(result.summary()) - own regression/GLM only
 
@@ -118,7 +125,16 @@ def estimate(
         )
         effect = _effect_via_gcomputation(predict, df, treatment_col, target_units)
         coefficients = {str(k): float(v) for k, v in result.params.items()}
-        return CdpoEstimate(method_key, estimand_type, estimator, effect, predict, None, coefficients, str(result.summary()))
+        # Separate DoWhy-native fit of the *same* model, purely so refute_estimate()
+        # has a real CausalEstimate to run its refuters against - see module docstring.
+        # GLM requires glm_family explicitly - it has no way to infer binary vs.
+        # continuous from the data the way our own _fit_own_regression() does.
+        method_params = {"glm_family": sm.families.Binomial()} if estimator == "generalized_linear_model" and outcome_is_binary else None
+        dowhy_estimate = model.estimate_effect(
+            identified, method_name=method_key, target_units=target_units,
+            test_significance=False, confidence_intervals=False, method_params=method_params,
+        )
+        return CdpoEstimate(method_key, estimand_type, estimator, effect, predict, dowhy_estimate, coefficients, str(result.summary()))
 
     if estimator == "econml.dml.DML":
         from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
