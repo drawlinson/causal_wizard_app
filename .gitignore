@@ -221,3 +221,8 @@ __marimo__/
 node_modules/
 _site/
 .cache/
+
+# Causal Wizard notebooks - user-run output, not source
+notebooks/results*.json
+notebooks/study-config*.json
+notebooks/data.csv

@@ -136,3 +136,83 @@ def modelling_statements(
         "estimand_expression": estimand_expression,
         "estimator_name": estimator_name,
     }
+
+
+STATEMENT_LABELS = {
+    "methodology": "Methodology",
+    "study_design": "Study design",
+    "treatment_variable": "Treatment variable",
+    "outcome_variable": "Outcome variable",
+    "outcome_type": "Outcome type",
+    "sample_counts": "Sample counts",
+    "panel_data": "Panel data",
+    "estimand_type": "Estimand type",
+    "estimand_expression": "Estimand expression",
+    "estimator_name": "Estimator",
+}
+
+
+def modelling_statements_markdown(stmts: dict) -> str:
+    """modelling_statements()'s dict as a Markdown bullet list, for
+    display(Markdown(...)) - notebook 2 shows this up top rather than as a
+    plain dict dump at the bottom."""
+    lines = []
+    for key, label in STATEMENT_LABELS.items():
+        value = stmts.get(key)
+        if value is None:
+            continue
+        lines.append(f"- **{label}:** {value}")
+    return "\n".join(lines)
+
+
+def generalization_unavailable_reason(method: str, estimator: str | None) -> str | None:
+    """Why the held-out generalization check isn't shown for this
+    estimator, or None if it is. PD+FE and CD+PO's own linear
+    regression/GLM always have a real fitted "predict Y from X" model, so
+    they're always eligible."""
+    if method == "pd+fe" or estimator in ("linear_regression", "generalized_linear_model"):
+        return None
+    if estimator == "econml.dml.DML":
+        return (
+            "Double ML's do-operator only gives the shift from a row's actual treatment to a "
+            "counterfactual one (used for the counterfactual table above) - its \"prediction\" for "
+            "a row's actual treatment is just that row's own observed outcome, so a held-out "
+            "accuracy check would trivially show a perfect fit. Not shown for that reason."
+        )
+    if estimator in ("propensity_score_weighting", "propensity_score_matching", "propensity_score_stratification"):
+        return (
+            "Propensity-based estimators compare treated and control groups directly (via "
+            "weighting/matching/stratification) rather than fitting a model that predicts a row's "
+            "outcome from its covariates, so there's no outcome model to check against held-out data."
+        )
+    return "This estimator doesn't fit a model that predicts a row's outcome from its covariates."
+
+
+VALIDATION_LABELS = {
+    "bootstrap": "Bootstrap significance",
+    "placebo_treatment": "Placebo treatment refuter",
+    "random_common_cause": "Random common cause refuter",
+    "z_statistic": "Treatment coefficient z-statistic",
+    "f_statistic": "Overall model F-statistic",
+}
+
+
+def validation_rows(validation: dict | None) -> list[dict]:
+    """validation dict (CD+PO's bootstrap/placebo/random-common-cause, or
+    PD+FE's z/f-statistic) as one row per test that's actually present -
+    a uniform table shape regardless of method, for display(pd.DataFrame(...))
+    rather than a raw dict dump that's easy to skim past."""
+    if not validation:
+        return []
+    rows = []
+    for key, label in VALIDATION_LABELS.items():
+        if key not in validation:
+            continue
+        v = validation[key]
+        row = {"Test": label, "p-value": v.get("p_value"), "Significant": v.get("significant")}
+        if "new_effect" in v:
+            row["New effect"] = v["new_effect"]
+        if "confidence_interval" in v:
+            row["95% CI"] = v["confidence_interval"]
+        rows.append(row)
+    return rows

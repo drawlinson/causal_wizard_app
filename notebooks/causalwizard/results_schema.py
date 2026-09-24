@@ -7,11 +7,15 @@ one of the 13 result-page display features.
 
 from __future__ import annotations
 
+import glob
 import json
+import os
 
 
 def build_results(
     *,
+    config_path: str,
+    data_path: str,
     method: str,
     treatment_col: str,
     outcome_col: str,
@@ -43,6 +47,9 @@ def build_results(
 ) -> dict:
     return {
         "schemaVersion": 1,
+        # So notebook 2 doesn't need config_path/data_path re-entered - it
+        # reads them straight back out of the results.json it loads.
+        "source": {"configPath": config_path, "dataPath": data_path},
         "question": {
             "method": method,
             "treatment": treatment_col,
@@ -88,3 +95,16 @@ def save_results(results: dict, path: str) -> None:
 def load_results(path: str) -> dict:
     with open(path) as f:
         return json.load(f)
+
+
+def find_latest_results(directory: str = ".", pattern: str = "results*.json") -> str:
+    """The most recently written results*.json in `directory` - lets
+    notebook 2 default to "whatever notebook 1 last produced" instead of
+    requiring the same fixed filename to be typed in both notebooks."""
+    candidates = glob.glob(os.path.join(directory, pattern))
+    if not candidates:
+        raise FileNotFoundError(
+            f"No {pattern!r} found in {directory!r} - run notebook 1 first, "
+            "or set results_path explicitly."
+        )
+    return max(candidates, key=os.path.getmtime)

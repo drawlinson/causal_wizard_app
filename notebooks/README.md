@@ -31,8 +31,11 @@ pip install -r requirements.txt                       # or: uv pip install -r re
 jupyter notebook
 ```
 
-Then edit the `config_path`/`data_path` (and `results_path`) variables near the top of
-each notebook to point at your downloaded config JSON and dataset file.
+Edit the `config_path`/`data_path`/`results_path` variables near the top of notebook 1
+to point at your downloaded config JSON and dataset file. Notebook 2 needs no editing for
+a normal run - it auto-finds the most recently written `results*.json` in the folder and
+reads the config/data paths back out of it; set `results_path` there only to load a
+different (older, or differently-named) results file.
 
 ## Package layout
 
@@ -50,4 +53,7 @@ package so the notebook flow reads cleanly cell-by-cell:
 - `refutation.py` - CD+PO's DoWhy refuters/bootstrap, PD+FE's z/F-statistics.
 - `diagnostics.py` - contingency table, findings text, assumptions, modelling statements.
 - `plotting.py` - every Plotly/matplotlib figure, one function per plot.
-- `results_schema.py` - the `results.json` contract between the two notebooks.
+- `results_schema.py` - the `results.json` contract between the two notebooks (embeds the
+  config/data paths themselves, and can find the latest results file automatically).
+- `display_utils.py` - shared pretty-printing so dict-shaped results show up indented
+  rather than as a dense one-liner.

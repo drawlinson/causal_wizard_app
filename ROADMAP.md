@@ -1025,6 +1025,78 @@ for a non-propensity estimator).
 runs notebook 1 then notebook 2 (locally or in Colab via the badges in
 `notebooks/README.md`), gets the same analyses as today.
 
+**8.6 follow-up — user-testing fixes** ✅ done
+User testing against real config/data files surfaced several real bugs, found and fixed:
+- **CD+PO's own linear regression/GLM was regressing on every covariate in the
+  dataset**, not the DoWhy-identified backdoor set - e.g. it included an "ID"
+  column. Notebook 1 now computes `covariate_cols` from
+  `identification.estimand_variables()` once, before estimation, and uses it
+  consistently (also fixes the covariate-balance/positivity checks, which
+  happened to already be correct by a different path).
+- **A NaN in a covariate for even one held-out row silently NaN'd that row's
+  prediction** (statsmodels doesn't raise), which then poisoned every
+  aggregate generalization metric (RMSE/MAE/R² all propagate NaN via plain
+  numpy arithmetic) while the scatter plot looked fine (Plotly just omits
+  the NaN point). Fixed with a new `config.dropna_rows()` pass over the
+  model's actual covariates, run before the train/test split.
+- **A rewrite of the identification/estimation cell split introduced a
+  worse bug while fixing the above**: building the DoWhy `CausalModel` on
+  the full (pre-split) dataframe so identification could run before
+  finalizing covariates meant DoWhy's own estimators (propensity/DML/IV/
+  frontdoor) were being fit on *all* the data, held-out rows included -
+  `identify_effect()` is graph-only and didn't care, but `estimate_effect()`
+  reuses the same bound data. Fixed by re-identifying on `train_df` alone,
+  right before estimation (cheap - identification doesn't touch data
+  values, only the graph).
+- **Double ML had no do-operator** (no counterfactual table, no
+  generalization check, even though its refutation tests did run - just
+  weren't rendered legibly). Added one via EconML's own
+  `.effect(X=None, T0=, T1=)`, which gives the shift from a row's actual
+  treatment to a counterfactual one - correct for the counterfactual table,
+  but not usable for a held-out accuracy check (its "prediction" for a
+  row's actual treatment is trivially that row's own observed outcome), so
+  generalization stays unavailable for DML with an explanatory reason
+  (`diagnostics.generalization_unavailable_reason()`) shown in notebook 2.
+- **DML's effect estimate was wildly irreproducible** (swings of 1000+,
+  including sign flips, from the identical train/test split) - its
+  GradientBoosting nuisance models had no `random_state`. Pinned to 42.
+- Propensity-based estimators (weighting/matching/stratification) still
+  have no generalization check - they compare groups directly rather than
+  fitting a "predict Y from X" model, so there's no outcome model to check
+  against held-out data. The held-out split still happens either way (it's
+  a property of the study, not the chosen estimator), but notebook 2 now
+  explains why generalization isn't shown instead of just saying "not
+  available."
+- Fixed several markdown cells that rendered a literal `\n\n` instead of a
+  line break (an escaping mistake - `\\n` in a plain Python string literal
+  is the two characters backslash+n, not a newline; only mattered in
+  markdown cells, since code cells' `\n` is interpreted by Python itself at
+  execution time). Converted the affected two-line notes to one line instead
+  of just fixing the escaping, per feedback that they didn't need to be two
+  lines.
+- `results.json` now embeds the config/data file paths it was built from
+  (`source.configPath`/`dataPath`), and gained `results_schema.
+  find_latest_results()` - notebook 2 defaults to the most recently written
+  `results*.json` in the folder and reads config/data paths back out of it,
+  so nothing needs re-entering between the two notebooks.
+- Added `causalwizard/display_utils.py` (a `show()` pretty-printer, indented
+  instead of a dense one-line dict repr) and `diagnostics.validation_rows()`
+  (renders CD+PO's bootstrap/placebo/random-common-cause or PD+FE's z/F-stat
+  as a proper table instead of a raw dict dump easy to skim past).
+- Modelling statements moved from the last section to a "Study summary" at
+  the top of notebook 2, rendered as Markdown
+  (`diagnostics.modelling_statements_markdown()`) instead of a plain-text
+  dict dump.
+- Both notebooks now show the site's logo above the title, and are labeled
+  "(1/2)"/"(2/2)".
+
+Re-verified end-to-end against 5 real/synthetic scenarios (linear regression,
+Double ML, propensity weighting + categorical outcome, PD+FE + continuous
+treatment, and a deliberately-introduced missing covariate value) via
+`jupyter nbconvert --execute` - all clean, including confirming the
+generalization R²/RMSE/MAE are real numbers again (not NaN) and DML's effect
+is now reproducible run-to-run.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

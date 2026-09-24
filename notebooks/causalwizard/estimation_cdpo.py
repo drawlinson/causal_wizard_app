@@ -4,7 +4,13 @@ already generates client-side) to the right estimator.
 
 Propensity weighting/matching/stratification, Double ML, IV, and
 frontdoor all use DoWhy/EconML's own implementations directly - genuinely
-hard statistical machinery, not worth reimplementing. Linear regression
+hard statistical machinery, not worth reimplementing. Double ML gets a
+do-operator too (see _dml_predict below), built from EconML's own
+`.effect(X, T0=, T1=)` rather than a hand-rolled model - it supports the
+counterfactual table but NOT a held-out generalization check (see that
+function's docstring for why). Propensity/IV/frontdoor still have no
+do-operator - no comparable "predict Y for new X" hook exists for them.
+Linear regression
 and GLM are implemented here via statsmodels instead of DoWhy's built-in
 RegressionEstimator: a hand-rolled version gives direct control over the
 do-operator (set every row's treatment to a fixed value, predict) that
@@ -117,7 +123,14 @@ def estimate(
         from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
         from sklearn.linear_model import LinearRegression
 
-        model_y = GradientBoostingClassifier() if outcome_is_binary else GradientBoostingRegressor()
+        # random_state pinned on both nuisance models: unset, GradientBoosting's
+        # own randomness (unrelated to cross-fit sample splitting, which DML
+        # seeds separately) made the effect wildly irreproducible run-to-run
+        # on this dataset's size - swings of 1000+, including sign flips,
+        # from the exact same train_df.
+        model_y = (
+            GradientBoostingClassifier(random_state=42) if outcome_is_binary else GradientBoostingRegressor(random_state=42)
+        )
         dowhy_estimate = model.estimate_effect(
             identified,
             method_name=f"{estimand_type}.{estimator}",
@@ -127,21 +140,50 @@ def estimate(
             method_params={
                 "init_params": {
                     "model_y": model_y,
-                    "model_t": GradientBoostingClassifier(),
+                    "model_t": GradientBoostingClassifier(random_state=42),
                     "model_final": LinearRegression(),
                     "discrete_treatment": True,
+                    "random_state": 42,
                 },
                 "fit_params": {},
             },
         )
-    else:
-        dowhy_estimate = model.estimate_effect(
-            identified,
-            method_name=f"{estimand_type}.{estimator}",
-            target_units=target_units,
-            test_significance=False,
-            confidence_intervals=False,
-        )
+        effect = float(np.ravel(dowhy_estimate.value)[0])
+        predict = _dml_predict(dowhy_estimate, treatment_col, outcome_col)
+        return CdpoEstimate(method_key, estimand_type, estimator, effect, predict, dowhy_estimate, None)
+
+    dowhy_estimate = model.estimate_effect(
+        identified,
+        method_name=f"{estimand_type}.{estimator}",
+        target_units=target_units,
+        test_significance=False,
+        confidence_intervals=False,
+    )
 
     effect = float(np.ravel(dowhy_estimate.value)[0])
     return CdpoEstimate(method_key, estimand_type, estimator, effect, None, dowhy_estimate, None)
+
+
+def _dml_predict(dowhy_estimate, treatment_col: str, outcome_col: str) -> PredictFn:
+    """DML's do-operator: EconML's own `.effect(X, T0=, T1=)` gives the
+    estimated shift in outcome from one treatment value to another (our
+    config never sets effect-modifier features, so this shift is constant
+    across rows, but the vectorised form is used anyway for a uniform
+    per-row Series). "Predicted" for a row's *actual* treatment is just
+    that row's own observed outcome (shifting from T_actual to T_actual is
+    a zero shift by construction) - genuinely correct for the counterfactual
+    table's "actual data" scenarios, but NOT a real fitted prediction, so
+    callers must not use this for a held-out generalization check (that
+    would trivially show a perfect fit)."""
+    raw = dowhy_estimate.estimator.estimator
+
+    def predict(data: pd.DataFrame, fixed_treatment_value: float | None = None) -> pd.Series:
+        observed = data[outcome_col].astype(float)
+        if fixed_treatment_value is None:
+            return observed.copy()
+        t0 = data[treatment_col].to_numpy(dtype=float)
+        t1 = np.full(len(data), float(fixed_treatment_value))
+        shift = raw.effect(X=None, T0=t0, T1=t1)
+        return pd.Series(observed.to_numpy() + shift, index=data.index)
+
+    return predict

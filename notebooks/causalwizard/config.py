@@ -190,6 +190,22 @@ def prepare_dataframe(config: dict, raw_df: pd.DataFrame) -> PreparedData:
     )
 
 
+def dropna_rows(df: pd.DataFrame, columns: list[str]) -> tuple[pd.DataFrame, int]:
+    """Drops rows with a missing value in any of `columns` - used for the
+    covariates a specific chosen model will actually use, on top of
+    prepare_dataframe()'s own treatment/outcome-only cleaning. Doing this
+    before the train/test split (not just before fitting) matters: a
+    covariate that's NaN only in a held-out row silently NaNs that one
+    row's prediction (statsmodels doesn't raise) rather than crashing,
+    which then poisons every aggregate generalization metric - RMSE/MAE/R^2
+    all propagate NaN via plain numpy arithmetic - even though nothing
+    crashed and the scatter plot still looks fine (it just quietly omits
+    the NaN point)."""
+    before = len(df)
+    clean = df.dropna(subset=columns).copy()
+    return clean, before - len(clean)
+
+
 def train_test_split(df: pd.DataFrame, test_pct: float, seed: int = 42) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Ordinary random split for held-out generalization checks - not a
     causal-validity test, just "how well does this model predict outcomes
