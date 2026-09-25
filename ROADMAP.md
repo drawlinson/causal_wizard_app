@@ -1551,6 +1551,41 @@ Verified by rendering the actual styled HTML output and looking at it:
 full Notes text now visible with no "...", table stretches full width.
 Re-ran all 19 scenarios end-to-end - all clean.
 
+**8.6 follow-up 16 — Persist a real pytest suite for the causalwizard package** ✅ done
+Every fix in follow-ups 3-15 was verified the same way: copy the notebooks
+into a scratch dir, run `jupyter nbconvert --execute` against a roster of
+~19 hand-built scenarios, and check for error cells - useful, but slow
+(a full pass takes minutes) and throwaway (nothing persisted between
+sessions; each follow-up rebuilt its own repro from scratch). Replaced
+the routine-check part of that with a real `pytest` suite under
+`notebooks/tests/`, calling `causalwizard`'s functions directly instead
+of executing whole notebooks - the full 137-test suite runs in ~4.5
+seconds. `jupyter nbconvert --execute` still matters for catching a
+notebook-cell wiring mistake (this suite can't - it never touches the
+`.ipynb` files), so both remain part of the workflow; see tests/README.md.
+
+Two small, deterministic, committed fixture CSVs (`tests/data/backdoor.csv`
+for CD+PO, `tests/data/panel.csv` for PD+FE - a `generate_fixtures.py`
+regenerates them byte-identically from a fixed RNG seed, verified) replace
+the ad-hoc real-world datasets (lalonde.csv, billboard_impact_treatment.csv,
+toy_panel.csv) the manual testing this session relied on - synthetic,
+so tests assert on real properties (e.g. "the treatment coefficient
+recovers the ~5.0 effect baked into the generator," not just "it didn't
+crash"), and small enough to read and reason about directly.
+
+137 tests across 11 files (one per `causalwizard/*.py` module), including
+direct regression tests for the session's actual bugs: the frontdoor
+categorical-mediator crash (reproduced directly, confirming it's config.py's
+2-level-categorical encoding that prevents it, not something specific to
+one dataset), the good/bad significance-direction logic for validation,
+the singleton-entity/time warning, duplicate-(entity,time)-row handling,
+and the counterfactual-plot x-coordinate bug. Found and fixed one real gap
+while writing these: `pytest` itself wasn't installed (this venv has no
+working `pip` - see follow-up 11/12 - installed via `uv pip install
+--python .venv/bin/python`), pinned in a new `requirements-dev.txt`
+(kept separate from `requirements.txt`, which is for people running the
+notebooks, not developing this package).
+
 **8.7 — Update site content** ✅ first pass done
 Two goals, both driven by the user's own framing of the target audience:
 people with "minimal or advanced programming skills, basic statistics

@@ -1,0 +1,5 @@
+# Extra dependencies for running the test suite (tests/) - not needed to
+# run the notebooks themselves, so kept out of requirements.txt.
+# Install with: uv pip install -r requirements-dev.txt (this venv has no
+# working pip - see tests/README.md)
+pytest==9.1.1
