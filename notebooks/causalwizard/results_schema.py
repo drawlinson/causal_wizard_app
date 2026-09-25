@@ -46,6 +46,7 @@ def build_results(
     estimand_variables: list[str] | None = None,
     regression_summary: str | None = None,
     coefficients: dict | None = None,
+    warnings: list[str] | None = None,
 ) -> dict:
     return {
         "schemaVersion": 1,
@@ -80,6 +81,7 @@ def build_results(
             "estimandVariables": estimand_variables or [],
             "regressionSummary": regression_summary,
             "coefficients": coefficients,
+            "warnings": warnings or [],
         },
         "sample": {
             "contingencyTable": contingency,

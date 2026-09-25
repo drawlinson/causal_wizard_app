@@ -270,7 +270,12 @@ def plot_feature_importance(coefficients: dict) -> go.Figure:
         xaxis_title="Coefficient value",
         yaxis_title="Variable",
         yaxis=dict(automargin=True),
-        width=PLOT_WIDTH, height=max(PLOT_HEIGHT, 40 * len(labels)),
+        # Scaled to the bar count, not PLOT_HEIGHT's fixed 600px - with very
+        # few features (often just "treatment" alone for PD+FE with no
+        # covariates), a fixed tall height stretches the one bar to fill
+        # nearly the whole plot, reading as a solid block rather than a
+        # recognizable bar.
+        width=PLOT_WIDTH, height=max(220, 80 + 60 * len(labels)),
     )
     return fig
 

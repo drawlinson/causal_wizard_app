@@ -31,6 +31,30 @@ def _q(name: str) -> str:
     return f"Q({name!r})"
 
 
+def _singleton_warning(df: pd.DataFrame, col: str, role: str) -> str | None:
+    """Fixed effects demean out *within-group* variation - a group with
+    only one row contributes none, so if most groups are singletons the
+    model has essentially nothing left to estimate from (and entity-
+    clustered SEs are meaningless with ~1 observation per cluster). This
+    silently produces a rank-deficient design, a treatment effect that
+    collapses to exactly 0, and NaN significance - easy to miss (a stderr
+    warning, not a clear result), so it's surfaced explicitly instead.
+    Typical cause: a unique per-row identifier (e.g. a row index) used as
+    the entity/time column instead of a genuine repeated-measures unit."""
+    counts = df[col].value_counts()
+    singleton = int((counts == 1).sum())
+    if singleton / len(counts) <= 0.5:
+        return None
+    return (
+        f"{singleton} of {len(counts)} {role} groups ('{col}') appear only once in this data "
+        f"({singleton / len(counts):.0%}) - with mostly one row per group, fixed effects have no "
+        f"within-group variation to estimate from, which can make the model rank-deficient and "
+        f"the treatment effect meaningless (often exactly 0, with NaN significance). Check that "
+        f"'{col}' is really a repeated-measures unit (e.g. a store, customer, or time period), not "
+        f"a unique per-row identifier."
+    )
+
+
 @dataclass
 class DemeanState:
     entity_col: str | None
@@ -85,6 +109,7 @@ class PdfeEstimate:
     coefficients: dict  # {term: coef}, for feature-importance display
     z_pvalue: float  # treatment coefficient's own significance
     f_pvalue: float  # overall model significance
+    warnings: list[str]  # e.g. an entity/time column that's mostly-singleton groups
 
 
 def estimate(
@@ -128,6 +153,12 @@ def estimate(
 
     treatment_term = _q(treatment_col)
     coefficients = {str(k): float(v) for k, v in result.params.items()}
+    warnings = [
+        w for w in (
+            _singleton_warning(df, entity_col, "entity") if entity_col else None,
+            _singleton_warning(df, time_col, "time") if time_col else None,
+        ) if w
+    ]
     return PdfeEstimate(
         effect=float(result.params[treatment_term]),
         result=result,
@@ -135,4 +166,5 @@ def estimate(
         coefficients=coefficients,
         z_pvalue=float(result.pvalues[treatment_term]),
         f_pvalue=float(result.f_pvalue),
+        warnings=warnings,
     )

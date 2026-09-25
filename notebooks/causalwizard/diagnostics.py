@@ -228,6 +228,20 @@ def modelling_statements_markdown(stmts: dict) -> str:
     return "\n".join(lines)
 
 
+def warnings_markdown(warnings: list[str]) -> str | None:
+    """A bold, impossible-to-miss callout for model-level warnings (e.g. a
+    fixed-effects entity/time column that's mostly singleton groups) -
+    shown up top, since a plot with no visible line/bar downstream is a
+    confusing way to first learn the fit was degenerate. None if there's
+    nothing to show."""
+    if not warnings:
+        return None
+    lines = ["> **⚠️ Warning**"]
+    for w in warnings:
+        lines.append(f"> \n> {w}")
+    return "\n".join(lines)
+
+
 def generalization_unavailable_reason(method: str, estimator: str | None) -> str | None:
     """Why the held-out generalization check isn't shown for this
     estimator, or None if it is. PD+FE and CD+PO's own linear

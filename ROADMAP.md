@@ -1464,6 +1464,56 @@ no working `pip` and `causalwizard` isn't actually installed into it (see
 follow-up 11) - scratch-dir test runs continue to need `PYTHONPATH` set
 explicitly rather than relying on the notebook's own install-cell.
 
+**8.6 follow-up 13 — Feature-importance bar sizing, and a clear warning for a degenerate fixed-effects entity/time choice** ✅ done
+Two reports that looked like display bugs but were two different things:
+
+1. *Real bug — Feature importance bar chart illegible with few features.*
+   `plot_feature_importance()`'s height was `max(PLOT_HEIGHT, 40 * len(labels))`
+   - PLOT_HEIGHT is a fixed 600px, so with only 1-4 features (the common
+   case - e.g. just "treatment" for a PD+FE study with no covariates) the
+   single bar stretched to fill nearly the whole 600px plot, rendering as
+   a solid orange block rather than a recognizable bar. Confirmed by
+   rendering the actual figure and looking at it (not just inspecting the
+   trace JSON, which looked fine - `x`/`y` were both correct). Fixed with
+   height scaled to the bar count (`max(220, 80 + 60 * len(labels))`)
+   instead of a large fixed floor.
+
+2. *Not a bug - a degenerate model, now clearly flagged.* A user report
+   of "no line between time 0 and 1" in the outcomes-over-time plot, and
+   "no bar" in Feature importance, for the same PD+FE result. Root-caused
+   by finding the *actual executed notebook* the report came from - baked
+   into the committed `02-results.ipynb` via the user's own live Jupyter
+   session (see follow-up 7/8's contamination note; happened again here).
+   Its printed output revealed `Panel data: entity=column_1, time=jul` -
+   `column_1` is the dataset's unlabeled first column, a per-row index
+   (3680 distinct values across 3680 training rows - exactly one row per
+   "entity"). Reproduced directly: this makes the two-way FE design
+   rank-deficient (`SingularMatrixWarning`), the treatment coefficient
+   collapses to exactly `0.0`, and z/f p-values come back `NaN`. Both
+   "missing" plot elements were rendering *correctly* - a single point
+   really has no second point to connect to, and a coefficient of exactly
+   0 really is a zero-length bar. The actual gap: nothing made this
+   obvious (a stderr warning easy to miss, `Accept: False` with no
+   explanation why). Added `estimation_pdfe._singleton_warning()`: if
+   more than half of an entity or time column's groups have only one row
+   (fixed effects have no within-group variation left to estimate from in
+   that case), a clear explanatory warning is generated, printed
+   immediately in notebook 1, threaded through `results.json`
+   (`estimate.warnings`), and shown as a bold blockquote callout at the
+   very top of notebook 2 (`diagnostics.warnings_markdown()`) - before the
+   user gets to a confusing-looking plot at all.
+
+Verified: reproduced the exact `entity=column_1` scenario against the same
+`billboard_impact_treatment.csv` - warning now prints in notebook 1
+("3680 of 3680 entity groups ('column_1') appear only once...") and
+renders as a `> **⚠️ Warning**` callout at the top of notebook 2, above
+the study summary. Confirmed the normal `entity=poa` scenario (2 groups,
+thousands of rows each) still produces no warning. Re-rendered the
+Feature importance plot directly (not just inspected JSON) for both a
+1-bar and a 4-bar case - both now show clearly proportioned, readable
+bars. Re-ran all 19 scenarios (18 previous + this new degenerate one)
+end-to-end - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data
