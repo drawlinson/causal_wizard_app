@@ -127,14 +127,20 @@ title: FAQ
               relationships</a> which might exist, and their direction.
           </p>
           <p>
-            <b>3/4: Validation &amp; Estimation</b><br>
-            Causal Wizard will check your diagram and data all make sense, and provide feedback. If the causal effect
-            can be
-            measured, choose a model and Causal Wizard will go away and calculate everything.
+            <b>3/4: Check</b><br>
+            Causal Wizard checks your diagram and data all make sense, and provides feedback - entirely in your
+            browser, using JavaScript. Nothing is uploaded anywhere. If the causal effect can be measured, you'll be
+            offered a choice of model.
           </p>
           <p>
-            <b>4/4: Review &amp; download results</b><br>
-            You'll receive a detailed report describing:
+            <b>4/4: Download &amp; run the analysis</b><br>
+            The actual statistical fitting happens outside the browser, using real Python statistics libraries
+            (the same ones professional data scientists use) rather than a cut-down in-browser reimplementation.
+            Causal Wizard generates a small <b>configuration file</b> describing your study, which you run through a
+            ready-made <a target="_blank" href="https://jupyter.org/">Jupyter notebook</a> - either in <a
+              target="_blank" href="https://colab.research.google.com/">Google Colab</a> (free, no install needed) or
+            on your own computer. The notebook re-checks everything independently, fits the model to your data, and
+            produces a full report:
             <ul>
               <li>The estimated causal effect and confidence interval</li>
               <li>Some graphical plots depicting the effect in the context of your data</li>
@@ -143,6 +149,8 @@ title: FAQ
               <li>A list of assumptions made</li>
               <li>Details of all modelling choices and parameters, including your provided causal diagram</li>
             </ul>
+            Since the notebook runs on your own machine (or your own Colab session), your data never has to leave
+            your control - see <a target="_blank" href="/security/">Privacy, security &amp; data sovereignty</a>.
             <p style="text-align: center;">
               <img src="/assets/images/result_plot.png" alt="Example causal inference result"
                 style="width:70%;" />
@@ -316,22 +324,21 @@ title: FAQ
 
       <h5 id="results">Understanding your results</h5>
       <p>
-        After successfully passing the CHECK, the <b>Calculate</b> button will become available. Click Calculate and the
-        Wizard will do its magic,
-        by which we mean it will produce a <a target="_blank"
+        After successfully passing the CHECK, download the config file and run it through the notebook (see "How
+        does it work?" above). The notebook produces a <a target="_blank"
           href="/articles/estimate/">statistical estimate</a> of the causal effect of the
         <a target="_blank" href="/articles/treatment/">Treatment variable</a> on
         the
         <a target="_blank" href="/articles/outcome/">Outcome variable</a>, given the data
         and graph provided.
-        The wizard will also attempt to refute the estimate provided, using several techniques. It will measure the
-        stability of the answer on different subsets of your data, and provide a <a target="_blank"
+        It also attempts to refute the estimate, using several techniques. It measures the
+        stability of the answer on different subsets of your data, and provides a <a target="_blank"
           href="/articles/confidence-interval/">confidence interval</a> around the
         estimated effect.
-        This helps to you to understand how confident you can be in the answer, and what uncertainty remains.
+        This helps you to understand how confident you can be in the answer, and what uncertainty remains.
       </p>
       <p>
-        You will receive a report describing:
+        The notebook's report describes:
         <ul>
           <li>The methodology applied, including identified <a target="_blank"
               href="/articles/estimand/">Estimand</a></li>
@@ -356,9 +363,11 @@ title: FAQ
       </p>
       <h5 id="download-results">Downloading and exporting results</h5>
       <p>
-        There's a big DOWNLOAD button in the results page, which produces a PDF file containing all the results. The
-        watermark is removed for
-        paid accounts.
+        Your results are the completed notebook itself - every plot, table and figure is right there in it. Both
+        Jupyter and Colab let you export a completed notebook as a PDF or HTML file (in Colab: <b>File &rarr;
+          Download &rarr; Download .pdf</b> or <b>.html</b>) if you want to share a static report. There's no
+        watermark and no paid tier - the whole thing, including your copy of the notebook, is yours to keep, edit
+        and re-run.
       </p>
 
       <h5 id="learn-more">Where can I learn more about Causal Inference?</h5>
