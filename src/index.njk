@@ -9,18 +9,14 @@ title: Causal Wizard
       <h1>Causal software for effect estimation</h1>
       <h2>Quantify cause-and-effect relationships using Causal Inference and Machine Learning</h2>
       <img src="/assets/images/variable_types.png" class="my-3" style="width:100%;" />
-      <h5>You may have heard that you can't establish or measure causality from existing data, only through
-        Randomized Controlled Trials (RCTs). <b>That's not true.</b></h5>
-      <h5><a href="/articles/publications/" target="_blank">Many peer-reviewed papers</a> including <a
-          href="https://www.nobelprize.org/prizes/economic-sciences/2021/press-release/" target="_blank" title="2021
-          Nobel
-          Prize in Economics was awarded to David Card, Joshua Angrist and Guido Imbens</a>, for their work using
-        Causal Inference to discover new insights about labour market dynamics, and showing that
-        conclusions about cause and
-        effect can be drawn
-        from natural [and observational]
-          experiments">Nobel prize-winning research</a>* have proven that Causal Machine
-        Learning techniques can
+      <h5>You may have heard that you can't establish or measure causality from existing data, only through a
+        <a href="/articles/rct/" target="_blank">Randomized Controlled Trial (RCT)</a> - a study where a researcher
+        deliberately, randomly assigns who gets the treatment. <b>That's not true.</b></h5>
+      <h5><a href="/articles/publications/" target="_blank">Many peer-reviewed papers</a> - including the <a
+          href="https://www.nobelprize.org/prizes/economic-sciences/2021/press-release/" target="_blank">2021 Nobel
+          Prize in Economics</a>, awarded to David Card, Joshua Angrist and Guido Imbens for showing that solid
+        conclusions about cause and effect can be drawn from natural and observational data, not just RCTs - have
+        proven that Causal Machine Learning techniques can
         <b>detect</b>, <b>confirm</b> and <b>quantify</b> cause-and-effect relationships.<br><br>But you must have 2
         things:
       </h5>
@@ -29,13 +25,14 @@ title: Causal Wizard
           <h5><b>Some data</b> - to validate and quantify the model and its effects</h5>
         </li>
         <li>
-          <h5><b>A causal model</b> - can be specified in advance by elicitation of expert domain knowledge, or learned
-            from
-            data (causal discovery)</h5>
+          <h5><b>A causal model</b> - your own <a href="/articles/domain-knowledge/" target="_blank">domain knowledge</a>
+            of how the variables in your system relate to each other, drawn as a simple diagram</h5>
         </li>
       </ul>
-      <h5>Causal Wizard helps you use your knowledge to build causal models, and apply them to your
-        data.</h5>
+      <h5>Causal Wizard helps you turn that knowledge into a causal model, and apply it to your data. (It doesn't try
+        to <i>learn</i> the causal model for you from data alone - a separate field called <a
+          href="https://en.wikipedia.org/wiki/Causal_analysis" target="_blank">causal discovery</a> - since that
+        requires your expert knowledge to sanity-check anyway.)</h5>
 
       <p>
         <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
@@ -69,8 +66,9 @@ title: Causal Wizard
       <h2 class="mt-5">What's wrong with other Machine Learning methods?</h2>
       <h5>
         With Causal ML you can use historical data to accurately predict the outcomes of hypothetical
-        <b>interventions</b>
-        (i.e. <b>changes</b> to a system), or <b>counterfactual scenarios</b> - things that didn't actually happen,
+        <a href="/articles/intervention/" target="_blank"><b>interventions</b></a>
+        (i.e. <b>changes</b> to a system), or <a href="/articles/counterfactual/" target="_blank"><b>counterfactual
+            scenarios</b></a> - things that didn't actually happen,
         but you want to understand <i>"what would have happened, if ..."</i>
       </h5>
       <h5>
@@ -118,9 +116,12 @@ title: Causal Wizard
               style="color:red;">red</span>,
             <span style="color:green;">green</span> and <span style="color:blue;">blue</span>).
           </p>
-          <h5>Without appropriate handling of the confounding variable used to identify subgroups, it's easy to come
-            away with a completely backwards conclusion about the effect of X on Y. Causal models handle these variables
-            correctly.</h5>
+          <h5>Without appropriate handling of the <a href="/articles/confounding/" target="_blank">confounding
+              variable</a> used to identify subgroups, it's easy to come away with a completely backwards conclusion
+            about the effect of X on Y. And the fix isn't simply to "control for everything you have" either -
+            <a href="/articles/controlling/" target="_blank">controlling for the wrong variable can create bias that
+              wasn't even there to begin with</a>. Causal models handle this correctly, by making you document which
+            variables you're accounting for and why - not by silently throwing every column at a model.</h5>
         </div>
       </div>
 
@@ -406,7 +407,7 @@ title: Causal Wizard
   <div class="row mx-5">
     <div class="col">
       <p><small>Causal Wizard is owned and operated by AI/ML Services, registered in Australia. All website contents ©
-          Causal Wizard, 2023. <a href="/legal/">Terms &amp; Conditions</a><br>
+          Causal Wizard, 2023-2026. <a href="/legal/">Terms &amp; Conditions</a><br>
           Contact us: <a href="/contact/">email</a> or
           <span class="twitter-wrapper">
             <i class="twitter-logo"></i>
