@@ -1203,25 +1203,41 @@ sane effect estimates with working refutation, no crashes.
 
 **8.6 follow-up 5 — None in required_cols crashed dropna for PD+FE** ✅ done
 Covariates, entity, and time are all independently optional (an empty
-covariate list is fine; only PD+FE needs entity/time at all, and even
-those aren't guaranteed present on an incompletely-configured study). The
-"Finalize sample" cell's `required_cols` list included `panelData.entity`/
-`time` unconditionally whenever method was PD+FE, so an unset one landed
-in the list as a literal `None`, and `config.dropna_rows()`'s
-`df.dropna(subset=[...])` raised `KeyError: [None]` - `None` isn't a real
-column. Fixed by filtering falsy entries out of `required_cols` before the
-call. Investigating the repro also confirmed PD+FE genuinely cannot run
-without *both* entity and time (the demeaning step groups by each in
-turn), so a config missing either was always going to fail somewhere -
-just three cells later, as an opaque pandas `TypeError: You have to supply
-one of 'by' and 'level'`. Added an explicit check in the Identification
-cell instead, raising a clear, actionable error immediately.
+covariate list is fine). The "Finalize sample" cell's `required_cols` list
+included `panelData.entity`/`time` unconditionally whenever method was
+PD+FE, so an unset one landed in the list as a literal `None`, and
+`config.dropna_rows()`'s `df.dropna(subset=[...])` raised `KeyError:
+[None]` - `None` isn't a real column. Fixed by filtering falsy entries out
+of `required_cols` before the call. (This entry originally also added a
+hard requirement that PD+FE needs *both* entity and time set - that
+assumption was wrong; see follow-up 6, immediately below, which replaces
+it with the correct behavior.)
 
-Re-verified: the exact reported repro (entity set, time unset) now fails
-fast with the clear message instead of the KeyError; a genuinely
-covariate-free PD+FE study (entity and time both set) runs cleanly
-end-to-end through both notebooks; all previously-covered scenarios
-unaffected.
+**8.6 follow-up 6 — entity/time are independently optional for PD+FE, not required** ✅ done
+Corrects a mistake in follow-up 5 immediately above: entity and time were
+treated as jointly mandatory for PD+FE (raising a clear `ValueError` if
+either was unset), but only treatment and outcome are actually mandatory -
+entity, time, and covariates are all independently optional, same as
+covariates already were. With neither entity nor time set, PD+FE should
+degrade to plain OLS (`outcome ~ treatment [+ covariates]`); with only one
+set, one-way fixed effects on that dimension alone. Fixed throughout
+`estimation_pdfe.py`: `_demean()`/`_redemean_new_rows()` skip whichever of
+entity/time demeaning isn't applicable, and the `predict()` closure adds
+back only the demeaning terms that were actually subtracted. Entity-
+clustered standard errors need an entity to cluster on, so with none, the
+fit falls back to heteroskedasticity-robust (HC1) instead - still robust,
+just not clustered. Also removed the now-wrong Identification-cell
+`ValueError`, and fixed a related bug in notebook 2's "Outcomes over Time"
+plot cell, which checked `if q["panelData"]:` (always true once the dict
+exists) rather than `q["panelData"].get("time")` - `plot_outcomes_over_time()`
+needs a real time column to group by.
+
+Re-verified all 4 entity/time combinations (both set, entity-only,
+time-only, neither) directly against synthetic panel data, plus all 4
+end-to-end via `jupyter nbconvert --execute` (including the user's exact
+"no covariates, no entity, no time" case, which now behaves as a genuinely
+simple linear regression) - no crashes, and correct `cov_type` in each
+case; all previously-covered scenarios re-verified unaffected.
 
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
