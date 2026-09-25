@@ -18,6 +18,26 @@ title: News and feature roadmap
     <div class="col-md-6 offset-md-3">
       <h5 id="new-features">News to date</h5>
       <ul>
+        <li><b>2026/Sep:</b> <b>Causal Wizard has been rebuilt as a fully static, open-source site.</b> Everything -
+          uploading data, drawing your causal diagram, and checking your study - now runs entirely as JavaScript in
+          your own browser. Nothing is ever uploaded to a server, because there is no longer a server: there's
+          nothing to sign up for, no account, and no data ever leaves your device during that part of the process.
+          <br><br>
+          The one step that genuinely needs real statistics software - fitting the model and computing your result -
+          now happens in a ready-made <a href="https://jupyter.org/" target="_blank">Jupyter notebook</a>, which you
+          run for free in <a href="https://colab.research.google.com/" target="_blank">Google Colab</a> or on your
+          own computer. A couple of years ago, asking a non-programmer to "run a Python notebook" would have been a
+          big ask. In this AI-assisted era, it's genuinely a few clicks - Colab needs no install, and if anything
+          goes wrong, you can paste the error into your AI assistant of choice. That shift is what let us retire the
+          old account-based, server-side model entirely and give you a tool that's both more private (your data
+          only ever touches your own machine) and more transparent (the exact statistics code that produces your
+          result is sitting right there in the notebook, not hidden behind an API).
+          <br><br>
+          The full source - the site, the notebooks, and the underlying <code>causalwizard</code> Python package -
+          is <a href="https://github.com/drawlinson/causal_wizard_app" target="_blank">open source on GitHub</a>.
+          See <a href="/about/">the FAQ</a> for how the new workflow works, and <a href="/security/">Privacy,
+            security &amp; data sovereignty</a> for what this means for your data.
+        </li>
         <li><b>2024/Nov:</b> Added <a href="https://matheusfacure.github.io/python-causality-handbook/22-Debiased-Orthogonal-Machine-Learning.html" target="_blank" title="Double ML model explained">DoubleML</a> via <a href="https://econml.azurewebsites.net/" target="_blank" title="EconML">EconML</a>. 
           This popular model has been requested several times.
           <div class="w100" style="text-align:center;">
