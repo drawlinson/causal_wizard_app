@@ -1,0 +1,26 @@
+---
+title: "Collider (variable)"
+summary: "A collider is a variable caused by both the treatment and the outcome. Controlling for a collider can create a spurious association between treatment and outcome that didn't exist before - the opposite of what controlling for a confounder does."
+keywords: "collider bias, selection bias, conditioning, controlling, confounding"
+categorySlugs: ["variables", "causal-inference", "causal-wizard-concept"]
+---
+<h3>What is a collider?</h3>
+<p>A <strong>collider</strong> is a variable that is directly caused by <em>both</em> the Treatment and the Outcome (or by variables that themselves cause Treatment and Outcome). In a <a href="/articles/causal-diagram/">Causal Diagram</a>, this looks like two arrows colliding head-to-head at the same node:</p>
+<p style="text-align:center;"><code>Treatment &rarr; Collider &larr; Outcome</code></p>
+<p>This is the opposite arrow pattern to a <a href="/articles/confounding/">confounder</a> (where the arrows point <em>out</em> of the confounder, toward both Treatment and Outcome).</p>
+<h3>Why controlling for a collider is dangerous</h3>
+<p>Confounders need to be controlled for. Colliders are the opposite: <strong>do not control for a collider</strong>. Conditioning on (controlling for, or restricting your sample by) a collider can create a spurious statistical association between Treatment and Outcome, even when no causal relationship between them exists at all.</p>
+<p>This is often called <strong>collider bias</strong> or <strong>selection bias</strong>, because it very commonly shows up as a side-effect of how a sample was selected, not just an explicit modelling choice.</p>
+<h3>A worked example</h3>
+<p>Suppose <strong>Talent</strong> and <strong>Looks</strong> are completely independent in the general population - knowing someone is talented tells you nothing about how they look. Now suppose that both Talent and Looks independently increase a person's chance of <strong>being cast in a movie</strong>.</p>
+<p style="text-align:center;"><code>Talent &rarr; Cast in a movie &larr; Looks</code></p>
+<p><strong>Cast in a movie</strong> is a collider of Talent and Looks. If you now only look at actors (i.e. you've implicitly conditioned on "cast in a movie" = yes, by restricting your sample to actors), you'll typically find that Talent and Looks are <em>negatively</em> correlated - the untalented actors who made it tended to be very good-looking, and the less conventionally attractive ones who made it tended to be very talented. This apparent relationship is completely spurious: it's an artefact of the selection process, not a real effect of one on the other.</p>
+<p>The same mechanism explains other well-known examples, like the observation that among hospitalized patients, having one disease can appear negatively associated with having another (<a title="Berkson's paradox" href="https://en.wikipedia.org/wiki/Berkson%27s_paradox" target="_blank" rel="noopener">Berkson's paradox</a>) - hospitalization is a collider of the two diseases (either one, or both, can land you in hospital), and conditioning on it (by only studying hospitalized patients) distorts the relationship between them.</p>
+<h3>How this shows up in a causal-effect study</h3>
+<p>Two common ways a collider sneaks into an analysis:</p>
+<ul>
+<li><strong>Explicitly, as a covariate</strong> - a variable is included as a control/covariate that turns out to be caused by both Treatment and Outcome. This is one of the reasons <a href="/articles/controlling/">controlling for every available variable</a> is bad practice, rather than a safe default.</li>
+<li><strong>Implicitly, through sample selection</strong> - your dataset only contains rows that survived some filtering process which was itself influenced by both treatment and outcome (e.g. only customers who didn't churn before you could measure the outcome, or only equipment that didn't fail during data collection). This can introduce collider/selection bias before you've made a single explicit modelling choice.</li>
+</ul>
+<h3>In Causal Wizard</h3>
+<p>Causal Wizard identifies collider variables automatically from your <a href="/articles/causal-diagram/">Causal Diagram</a> during the <a href="/articles/check/">Check</a> process, and excludes them from the set of variables it controls for. You should still think carefully about whether your sample's <em>selection process</em> (how rows ended up in your dataset in the first place) might itself be conditioning on a collider - that's something no software can detect for you, since it depends on how the data was collected, not just what's in your Causal Diagram.</p>
