@@ -133,18 +133,40 @@ def plot_outcomes_entity(
     `treated_pred` are precomputed per-row arrays (aligned with `df`'s
     row order), not a live model - this is a pure-presentation function so
     it works from a saved results.json alone, no fitted estimator needed.
-    Pass `predicted=None` when the chosen estimator has no do-operator."""
-    fig = go.Figure()
-    if entity_col and entity_col in df.columns:
-        for entity, group in df.groupby(entity_col):
-            fig.add_trace(go.Scatter(x=group[treatment_col], y=group[outcome_col], mode="markers", name=f"Observed ({entity})", marker=dict(color="#444444")))
-    else:
-        fig.add_trace(go.Scatter(x=df[treatment_col], y=df[outcome_col], mode="markers", name="Observed", marker=dict(color="#444444")))
+    Pass `predicted=None` when the chosen estimator has no do-operator.
 
+    When `entity_col` is set (panel data), each series is drawn as one
+    line per entity (same colour as that series, thin for the
+    counterfactual ones) rather than a flat scatter, so a given entity's
+    points can be traced across treatment values - otherwise there's
+    nothing linking, say, one city's four rows together. With no entity
+    (e.g. CD+PO, which has no panel structure), lines wouldn't represent
+    a real relationship between unrelated units, so points stay unjoined."""
+    fig = go.Figure()
+
+    def add_series(values, color: str, name: str, symbol: str = "circle", width: int = 2):
+        d = df[[treatment_col]].copy()
+        d["_y"] = np.asarray(values)
+        if entity_col and entity_col in df.columns:
+            d[entity_col] = df[entity_col].values
+            for i, (_, group) in enumerate(d.groupby(entity_col)):
+                group = group.sort_values(treatment_col)
+                fig.add_trace(go.Scatter(
+                    x=group[treatment_col], y=group["_y"], mode="lines+markers", name=name,
+                    legendgroup=name, showlegend=(i == 0),
+                    line=dict(color=color, width=width), marker=dict(color=color, symbol=symbol),
+                ))
+        else:
+            fig.add_trace(go.Scatter(
+                x=d[treatment_col], y=d["_y"], mode="markers", name=name,
+                marker=dict(color=color, symbol=symbol),
+            ))
+
+    add_series(df[outcome_col], "#444444", "Observed")
     if predicted is not None:
-        fig.add_trace(go.Scatter(x=df[treatment_col], y=predicted, mode="markers", name="Predicted", marker=dict(color=PREDICTED_COLOR, symbol="x")))
-        fig.add_trace(go.Scatter(x=[control_value] * len(df), y=control_pred, mode="markers", name=f"Control/Lower = {control_value}", marker=dict(color="lightgreen")))
-        fig.add_trace(go.Scatter(x=[treated_value] * len(df), y=treated_pred, mode="markers", name=f"Treated/Upper = {treated_value}", marker=dict(color="#ffcc80")))
+        add_series(predicted, PREDICTED_COLOR, "Predicted", symbol="x")
+        add_series(control_pred, "lightgreen", f"Control/Lower = {control_value}", width=1)
+        add_series(treated_pred, "#ffcc80", f"Treated/Upper = {treated_value}", width=1)
 
     fig.update_layout(title=f"Scatter plot of predicted and actual Outcomes '{outcome_col}'", xaxis_title=f"Treatment ({treatment_col})", yaxis_title=outcome_col, width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig

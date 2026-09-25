@@ -1239,6 +1239,57 @@ end-to-end via `jupyter nbconvert --execute` (including the user's exact
 simple linear regression) - no crashes, and correct `cov_type` in each
 case; all previously-covered scenarios re-verified unaffected.
 
+**8.6 follow-up 7 — three PD+FE/continuous-treatment display bugs** ✅ done
+User testing a PD+FE study with an entity but no time (continuous
+treatment, no covariates) surfaced three real bugs in notebook 2, all in
+`plotting.py`/the results notebook rather than the underlying estimation:
+- **"Outcomes by Sample Cohort" rendered nonsense for a continuous
+  treatment**: notebook 2 called `plot_outcomes_cohort()` unconditionally,
+  but that plot filters rows by `treatment_col == 0`/`== 1` - meaningless
+  for a continuous variable, and actively misleading when a continuous
+  value coincidentally equals 1.0 (as one row's `mkt_costs` did here),
+  producing a plausible-looking but meaningless single-point "Treated"
+  box. Now skipped entirely when `treatmentIsContinuous`, matching the old
+  site's own binary-design-only scope for this plot.
+- **`plot_outcomes_entity()` didn't connect same-entity points**, and
+  notebook 2 was passing `entity_col=None` unconditionally regardless of
+  whether the study actually had one - so even fixing that, there was
+  nothing joining a given entity's points together to show how its
+  outcome varies with treatment. Rewrote the plot to draw one line per
+  entity per series (Observed/Predicted/Control-Lower/Treated-Upper),
+  each in that series' own colour (counterfactual lines thinner), when an
+  entity column is available; falls back to plain unjoined points when
+  there isn't one (e.g. CD+PO, which has no panel structure to join by).
+- **Counterfactual table mislabeled continuous-treatment rows**: the 7
+  fixed `SCENARIOS` labels ("if all samples were controls"/"treated") are
+  written for a grouped design; for a continuous one only 3 of the 7 rows
+  are ever populated, and showing all 7 (4 always blank) with
+  group-language labels that don't apply was confusing. Added
+  `counterfactuals.display_scenarios()`, which returns just the 3
+  applicable rows for a continuous design, explicitly labelled with the
+  actual counterfactual values ("If all samples had mkt_costs = 2
+  (Lower)") instead of "controls"/"treated".
+
+Also hit, and want to flag for the record since it briefly produced
+misleading verification results: mid-session, the live-edited notebook on
+disk (the user's own manual Jupyter testing, with their own config/data
+paths appended) got copied into an automated test run before a coincident
+regeneration, so one batch of "all scenarios pass" output was briefly
+testing the user's file instead of the intended ones. Caught via
+suspicious identical output sizes across unrelated scenarios, traced with
+`git diff`, resolved by regenerating clean notebooks and re-running the
+full suite against isolated copies. No code was affected - purely a
+testing-methodology hazard worth remembering when a notebook under test is
+also open elsewhere.
+
+Re-verified end-to-end against the reported scenario (entity-only,
+continuous treatment, no covariates) - confirmed via direct inspection of
+the executed notebook's Plotly JSON and rendered tables: the cohort plot
+no longer appears, the entity plot shows 16 traces (4 series x 4 entities,
+consistent per-series colour), and the counterfactual table shows exactly
+3 correctly-labelled rows. Also re-ran all 12 previously-covered scenarios
+- all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

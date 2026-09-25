@@ -29,6 +29,21 @@ SCENARIOS = [
 ]
 
 
+def display_scenarios(treatment_is_continuous: bool, treatment_col: str, control_value: float, treated_value: float) -> list[tuple[str, str]]:
+    """(key, label) pairs actually worth displaying for this design - for a
+    continuous treatment, only 3 of SCENARIOS' 7 keys are ever populated
+    (see counterfactual_table()), and "controls"/"treated" language is
+    misleading when there's no such group, just two counterfactual values -
+    so those 3 get design-specific labels naming the actual values instead."""
+    if not treatment_is_continuous:
+        return SCENARIOS
+    return [
+        ("all", "All actual data"),
+        ("all_if_control", f"If all samples had {treatment_col} = {control_value:.4g} (Lower)"),
+        ("all_if_treated", f"If all samples had {treatment_col} = {treated_value:.4g} (Upper)"),
+    ]
+
+
 def _summarize(series: pd.Series) -> dict:
     series = series.dropna()
     if len(series) == 0:
