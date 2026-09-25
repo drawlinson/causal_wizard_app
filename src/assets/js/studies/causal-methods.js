@@ -22,6 +22,22 @@ const ESTIMATOR = {
   PSS: "propensity_score_stratification",
 };
 
+// Which /articles/ page explains each estimator, for a "Learn more about
+// this method" link next to the model picker - keyed by ESTIMATOR value,
+// since that's the specific statistical technique a user most needs
+// explained (the estimand type - backdoor/frontdoor/fixed-effects - is
+// already covered by the causal diagram legend and identification.html).
+export const ESTIMATOR_ARTICLE_SLUGS = {
+  [ESTIMATOR.LR]: "regression",
+  [ESTIMATOR.GLM]: "regression",
+  [ESTIMATOR.DML]: "double-ml",
+  [ESTIMATOR.TWO_STAGE]: "frontdoor-variable",
+  [ESTIMATOR.IV]: "iv",
+  [ESTIMATOR.PSW]: "propensity-scores",
+  [ESTIMATOR.PSM]: "propensity-scores",
+  [ESTIMATOR.PSS]: "propensity-scores",
+};
+
 const LINEARITY_WARNING =
   "All interactions between independent variables (including Treatment) and the outcome must be linear.";
 

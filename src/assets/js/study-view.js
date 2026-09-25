@@ -9,6 +9,7 @@ import { findMediators, findColliders } from "./studies/dag.js";
 import { runCheck } from "./studies/validate.js";
 import { issueHtml } from "./studies/issue-messages.js";
 import { buildConfig, downloadConfig } from "./studies/config-export.js";
+import { ESTIMATOR_ARTICLE_SLUGS } from "./studies/causal-methods.js";
 
 const SAMPLE_SIZE = 1000;
 const TREATMENT_COLOR = "#bfd9ff";
@@ -585,6 +586,7 @@ function showCheckModal(result) {
         <div class="d-flex align-items-center gap-2">
           <select class="form-select w-auto" id="sv-model-select"></select>
           <a href="/articles/model-selection/" target="_blank">Help me choose</a>
+          <a href="#" id="sv-model-article-link" target="_blank" hidden>What is this method?</a>
         </div>
       </div>
       <div class="d-flex align-items-center gap-2 mb-2">
@@ -629,6 +631,7 @@ function showCheckModal(result) {
 
 function populateModelSelect(models) {
   const select = document.getElementById("sv-model-select");
+  const articleLink = document.getElementById("sv-model-article-link");
   select.innerHTML = models.map((m) => `<option value="${m.methodKey}">${m.methodName}</option>`).join("");
   if (state.study.question.modelKey && models.some((m) => m.methodKey === state.study.question.modelKey)) {
     select.value = state.study.question.modelKey;
@@ -636,6 +639,10 @@ function populateModelSelect(models) {
   select.onchange = () => {
     state.study.question.modelKey = select.value;
     persist();
+    const selected = models.find((m) => m.methodKey === select.value);
+    const slug = selected && ESTIMATOR_ARTICLE_SLUGS[selected.estimatorKey];
+    articleLink.hidden = !slug;
+    if (slug) articleLink.href = `/articles/${slug}/`;
   };
   select.onchange();
 }
