@@ -121,8 +121,15 @@ title: Page Title
 </div>
 ```
 
-## Notebooks (future)
+## Notebooks
 
-Per `ROADMAP.md` (stage 8.6), the Python analysis notebooks will live in a
-`./notebooks` folder in this same repo, not a separate one. Nothing there
-yet.
+The Python analysis notebooks (stage 8.6) live in `./notebooks` in this
+same repo — the site itself never computes a result; it hands off a config
+JSON to `notebooks/01-identification-and-estimation.ipynb` /
+`02-results.ipynb`, which do the actual DoWhy/EconML/statsmodels fitting.
+See [`notebooks/README.md`](notebooks/README.md) for how they work and how
+to run them, and [`notebooks/tests/README.md`](notebooks/tests/README.md)
+for the pytest suite covering the `causalwizard` package they're built on.
+Nothing here needs to build or deploy the notebooks — Colab reads them
+straight from GitHub, and this repo's own deploy workflow only ever
+touches `src/`.
