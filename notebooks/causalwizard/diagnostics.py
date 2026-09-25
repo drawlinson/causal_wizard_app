@@ -258,27 +258,6 @@ VALIDATION_LABELS = {
 }
 
 
-def validation_rows(validation: dict | None) -> list[dict]:
-    """validation dict (CD+PO's bootstrap/placebo/random-common-cause, or
-    PD+FE's z/f-statistic) as one row per test that's actually present -
-    a uniform table shape regardless of method, for display(pd.DataFrame(...))
-    rather than a raw dict dump that's easy to skim past."""
-    if not validation:
-        return []
-    rows = []
-    for key, label in VALIDATION_LABELS.items():
-        if key not in validation:
-            continue
-        v = validation[key]
-        row = {"Test": label, "p-value": v.get("p_value"), "Significant": v.get("significant")}
-        if "new_effect" in v:
-            row["New effect"] = v["new_effect"]
-        if "confidence_interval" in v:
-            row["95% CI"] = v["confidence_interval"]
-        rows.append(row)
-    return rows
-
-
 # {key: (description, desired result, is "Significant"=True the good outcome?)}
 # - ported from result_show.html's validation table, one row per test.
 # The third element is the non-obvious part: bootstrap (and PD+FE's z/F
@@ -319,6 +298,40 @@ VALIDATION_DESCRIPTIONS = {
         "Effect unchanged", False,
     ),
 }
+
+
+def validation_rows(validation: dict | None) -> list[dict]:
+    """validation dict (CD+PO's bootstrap/placebo/random-common-cause, or
+    PD+FE's z/f-statistic) as one row per test that's actually present -
+    a uniform table shape regardless of method, for display(pd.DataFrame(...))
+    rather than a raw dict dump that's easy to skim past.
+
+    "Estimate valid?" is the test's raw Significant flag translated
+    through VALIDATION_DESCRIPTIONS' good/bad direction into the actual
+    question a reader cares about - Yes/No, not "Significant: True/False"
+    that means the opposite thing for two of the five tests."""
+    if not validation:
+        return []
+    rows = []
+    for key, label in VALIDATION_LABELS.items():
+        if key not in validation:
+            continue
+        v = validation[key]
+        significant = v.get("significant")
+        significant_is_good = VALIDATION_DESCRIPTIONS[key][2]
+        valid = (significant if significant_is_good else not significant) if significant is not None else None
+        row = {
+            "Test": label,
+            "p-value": v.get("p_value"),
+            "Significant": significant,
+            "Estimate valid?": {True: "Yes", False: "No", None: ""}[valid],
+        }
+        if "new_effect" in v:
+            row["New effect"] = v["new_effect"]
+        if "confidence_interval" in v:
+            row["95% CI"] = v["confidence_interval"]
+        rows.append(row)
+    return rows
 
 
 def validation_markdown_intro(validation: dict | None) -> str:

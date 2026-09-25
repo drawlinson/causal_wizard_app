@@ -1347,6 +1347,25 @@ signal); the original all-numerical lalonde scenario re-verified
 unaffected. Re-ran all 12 previously-covered scenarios end-to-end - all
 clean.
 
+**8.6 follow-up 10 — "Estimate valid?" column on the Validation table** ✅ done
+The Validation table's raw "Significant" column meant the opposite thing
+for two of its five tests (see follow-up 8), so even with the explanatory
+text above it, a reader still had to work out the answer to the actual
+question themselves. Added a new "Estimate valid?" column -
+`diagnostics.validation_rows()` now translates each row's Significant
+flag through `VALIDATION_DESCRIPTIONS`' good/bad direction into a plain
+Yes/No, and a new `display_utils.style_yes_no()` colours it green/red via
+a pandas Styler (`Styler.map`, the pandas 2.1+ non-deprecated form of
+`applymap`).
+
+Re-verified: real bootstrap/placebo/random-common-cause and z/F-statistic
+runs render green "Yes" rows matching their `accept: True` verdicts; a
+synthetic bootstrap-not-significant + placebo-significant case (both
+genuinely bad) renders red "No" for both, confirming the colour and the
+good/bad translation both work in the direction that matters, not just
+that green appears somewhere. Re-ran all 12 previously-covered scenarios
+end-to-end - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data
