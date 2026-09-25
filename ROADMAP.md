@@ -1514,6 +1514,25 @@ Feature importance plot directly (not just inspected JSON) for both a
 bars. Re-ran all 19 scenarios (18 previous + this new degenerate one)
 end-to-end - all clean.
 
+**8.6 follow-up 14 — Held-out generalization metrics as a proper table, matching the old site** ✅ done
+The R²/RMSE/MAE (and Accuracy/F1/Precision/Recall) metrics were a plain
+`print()` of the raw numbers plus a *separate* bullet list of notes below
+- no single place showing metric name, value, and explanation together,
+unlike the old site's `result_show.html` 3-column (Metric/Value/Notes)
+table. Replaced `generalization_metric_notes_markdown()` with
+`generalization_metrics_table()` (returns Metric/Value/Notes rows,
+rendered as a real `pd.DataFrame`) and `generalization_metrics_read_more()`
+for the article link. Also upgraded the confusion matrix from a raw
+`pprint` dict to a proper Actual-vs-Predicted table (`display_utils.
+style_confusion_matrix()`), green on the diagonal / red off it, matching
+the old site's coloured confusion-matrix widget.
+
+Verified by rendering the actual HTML output (not just checking values):
+a categorical-outcome scenario shows a real 4-row Accuracy/F1/Precision/
+Recall table plus a green/red 2x2 (+Total) confusion matrix; a numerical-
+outcome scenario shows a real 3-row R²/RMSE/MAE table. Re-ran all 19
+scenarios end-to-end - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

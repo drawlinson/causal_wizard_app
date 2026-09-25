@@ -401,9 +401,16 @@ CATEGORICAL_METRIC_NOTES = [
 ]
 
 
-def generalization_metric_notes_markdown(outcome_is_binary: bool) -> str:
+def generalization_metrics_table(outcome_is_binary: bool, values: dict[str, str]) -> list[dict]:
+    """One row per metric (Metric/Value/Notes), `values` keyed by the same
+    labels as NUMERICAL_METRIC_NOTES/CATEGORICAL_METRIC_NOTES - matches
+    the old site's own 3-column generalization table."""
     notes = CATEGORICAL_METRIC_NOTES if outcome_is_binary else NUMERICAL_METRIC_NOTES
-    return "\n".join(f"- **{k}:** {v}" for k, v in notes) + f"\n\n[Read more]({SITE_URL}/articles/metrics/) about these metrics."
+    return [{"Metric": label, "Value": values.get(label, ""), "Notes": note} for label, note in notes]
+
+
+def generalization_metrics_read_more() -> str:
+    return f"[Read more]({SITE_URL}/articles/metrics/) about these metrics."
 
 
 def generalization_plot_markdown() -> str:

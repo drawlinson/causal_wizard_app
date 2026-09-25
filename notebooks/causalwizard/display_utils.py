@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from pprint import pformat
 
+import pandas as pd
+
 
 def show(obj, label: str | None = None) -> None:
     """Pretty-print a dict/list with indentation, instead of the dense
@@ -29,3 +31,19 @@ def style_yes_no(df, column: str):
         return ""
 
     return df.style.map(_color, subset=[column])
+
+
+def style_confusion_matrix(df):
+    """Colours a confusion-matrix DataFrame (rows=Actual, columns=
+    Predicted) the way the old site did: green on the diagonal (correct
+    predictions), red off it (incorrect) - a "Total" row/column, if
+    present, stays uncoloured."""
+    def _cell_style(row_label: str, col_label: str) -> str:
+        if row_label == "Total" or col_label == "Total":
+            return ""
+        return "background-color: #d4edda" if row_label == col_label else "background-color: #f8d7da"
+
+    styles = pd.DataFrame(
+        [[_cell_style(r, c) for c in df.columns] for r in df.index], index=df.index, columns=df.columns,
+    )
+    return df.style.apply(lambda _: styles, axis=None)
