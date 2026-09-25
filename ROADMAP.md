@@ -1551,11 +1551,94 @@ Verified by rendering the actual styled HTML output and looking at it:
 full Notes text now visible with no "...", table stretches full width.
 Re-ran all 19 scenarios end-to-end - all clean.
 
-**8.7 — Update site content**
-Rewrite help articles, tutorials, and security/privacy copy to describe the
-new workflow (site → config JSON → notebooks) and its implications for data
-handling.
-*Deliverable*: content accurately reflects the new architecture everywhere.
+**8.7 — Update site content** ✅ first pass done
+Two goals, both driven by the user's own framing of the target audience:
+people with "minimal or advanced programming skills, basic statistics
+skills and possibly some exposure to machine learning," who have heard of
+causal inference but don't know what an RCT is, have a vague notion of
+"bias" but no real grasp of confounding, and often believe (wrongly) that
+controlling for everything available makes a result bias-free. The site's
+job is to teach the essentials in context, not require a semester of
+study first.
+
+*Accuracy pass* - many pages still described the old server-side
+architecture (a "Calculate" button that computes everything, a PDF
+download with a watermark removed for "paid accounts" - `index.njk`
+directly contradicted this a few paragraphs later, saying there are no
+fees at all). Fixed throughout: `index.njk` (Step 4 of the carousel),
+`about.njk` (the "How does it work?" card, "Understanding your results",
+and "Downloading and exporting results" sections), `articles/check.html`.
+Deleted `articles/pending-results.html` entirely - it described a
+server-side results queue/rate-limit that has no equivalent anymore (no
+inbound links to it either, confirmed via grep).
+
+*Content gaps* (approved directly by the user):
+- `articles/bias.html` was entirely about ML model-fitting bias
+  (overfitting/underfitting/sampling/label/algorithmic bias) - the single
+  most-searched term for this tool's actual audience never mentioned
+  confounding, selection bias, or over-controlling at all. Added a new
+  top section ("Two different meanings of Bias") covering causal bias
+  specifically, keeping the existing ML-bias content below it as a
+  clearly-labelled secondary topic (per the user's explicit choice, not
+  split into a separate article).
+- No `collider.html` existed, unlike confounder/mediator which both had
+  one - `controlling.html` only linked out to Wikipedia for it. Added a
+  new article with a worked example (talent/looks/casting) and linked it
+  from `bias.html` and `controlling.html`.
+- `confounding.html` got a new "why it doesn't just average out" section
+  with a concrete example, addressing the "more data fixes bias"
+  misconception directly, plus cross-links to `controlling.html` and
+  `collider.html`.
+- `correlationcausality.html` now links its "third variable" mention to
+  `common-cause.html`/`confounding.html` instead of leaving the reader to
+  find those on their own.
+- `causal-methods.js`/`study-view.js`: the Check modal's Model picker had
+  zero links to the matching method articles (Propensity Score Matching,
+  Double ML, DiD, etc. all already had articles, just never linked from
+  where a user actually picks a model). Added a dynamic "What is this
+  method?" link next to "Help me choose" that updates with the selected
+  model (`ESTIMATOR_ARTICLE_SLUGS` map in `causal-methods.js`) - verified
+  in-browser that it updates correctly across several estimator choices.
+
+*Tutorials* - all 5 (`tutorial-1` through `tutorial-4`, `tutorial-
+fixed-effects`) described the old site's UI in detail (a separate
+"Threshold" modal dialog, a "Calculate" button, a PDF "Result" page,
+"Edit Study Wizard") - none of it matches the current site. Rewrote the
+mechanical steps in all 5 against the actual current UI (verified live
+in-browser this session: Treatment/Outcome selects, the inline
+Control/Treated range editor under "Treatment groups", the node-modal
+diagram editor, the Check modal's "Download config JSON" → "Open in
+Colab" flow) and against the actual notebook 2 output structure this
+project built in stage 8.6 (Findings, Outcomes plots, Counterfactual
+table, Refutation/validation, Feature importance, etc. - not the old
+site's PDF report). The pedagogical content (the actual causal-inference
+lesson each tutorial teaches) is preserved unchanged throughout - only
+the "how to do this in the current UI" mechanics were rewritten. Old
+UI-specific screenshots (the threshold modal, the old results page) were
+removed since they're now actively wrong; diagrams/images that are
+UI-independent (e.g. the Facure book's own chart images) were kept.
+
+Added `src/assets/data/tutorials/` (served at `/assets/data/tutorials/`)
+with a `README.txt` and one placeholder CSV per tutorial, matching the
+`download` links now in each tutorial's text - stubs only, per the user's
+request, to be replaced with the real datasets. (Note: a first attempt
+named it `README.md` - Eleventy processed that as a template page too,
+double-served at both the raw path and `/assets/data/tutorials/README/`;
+renamed to `.txt` to avoid that.)
+
+*Verified*: full production build (`npx eleventy`) succeeds with no
+errors; every `/articles/<slug>/` link added across all touched files
+resolves to a real article (checked by grep against the articles
+directory, not just a build pass); every image and `/assets/data/
+tutorials/` link added resolves too. Spot-checked `collider.html`,
+`tutorial-fixed-effects.html`, and `about.njk` rendering in-browser.
+
+*Not done in this pass* - this covers the highest-leverage fixes (broken
+accuracy, the two most commonly-needed missing concepts, tutorials), not
+an exhaustive rewrite of all ~93 remaining articles. Most weren't touched
+and may still read more like a generic ML/stats glossary than content
+tuned to this tool's specific audience and mission - a further pass
+reviewing tone/depth article-by-article would still be worthwhile.
 
 ## Notes for later stages
 
