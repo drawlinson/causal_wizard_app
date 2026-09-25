@@ -570,6 +570,9 @@ function showCheckModal(result) {
 
     body.innerHTML = `
       <div class="alert alert-success">Your diagram and data support estimating this effect.</div>
+      <p class="text-muted small">This only confirms your diagram lets the effect be identified - it can't
+        check whether the diagram itself matches the real-world system you're studying. That's the one
+        assumption no software can verify for you.</p>
       <p>Identification found:</p>
       <ul>${estimandSummary}</ul>
 

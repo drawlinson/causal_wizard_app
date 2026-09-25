@@ -1586,6 +1586,34 @@ working `pip` - see follow-up 11/12 - installed via `uv pip install
 (kept separate from `requirements.txt`, which is for people running the
 notebooks, not developing this package).
 
+**8.6 follow-up 17 — Emphasize that validity depends on the causal diagram being correct, not just the estimate being statistically robust** ✅ done
+Came out of a requested design review of the whole product (is this format
+actually useful, will it help people): the biggest risk flagged was that a
+wrong or incomplete causal diagram can produce a confident, fully-validated-
+looking result - the validation section checks the *estimate's* statistical
+robustness, it can't check whether the *diagram* matches reality, and
+nothing on the page said so explicitly. Added that distinction in the two
+highest-traffic spots rather than only in the Assumptions section (already
+present there, but by section 10 of 12 nobody still reading is the one who
+needed it):
+
+- Notebook 2's Findings section - a new `diagnostics.DAG_CAVEAT` callout,
+  shown directly under the headline effect number and before the
+  accept/reject verdict, unconditionally (a "validated" wrong-diagram
+  result is exactly as wrong as an unvalidated one, so this isn't gated
+  on `accept`).
+- The site's own Check-results modal - kept the existing "Your diagram
+  and data support estimating this effect" success banner as-is (still
+  correct - it's about identifiability), added one sentence directly
+  under it clarifying that this confirms identifiability only, not that
+  the diagram matches the real system.
+
+Verified: new `test_findings_markdown_always_includes_dag_caveat_before_
+the_verdict` (parametrized over accept=True/False/None) in the pytest
+suite; re-ran a real notebook end-to-end to confirm the Markdown renders
+correctly; confirmed the Check-modal sentence renders under the banner
+in-browser, console clean.
+
 **8.7 — Update site content** ✅ first pass done
 Two goals, both driven by the user's own framing of the target audience:
 people with "minimal or advanced programming skills, basic statistics

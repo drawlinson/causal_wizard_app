@@ -4,6 +4,20 @@ import pytest
 from causalwizard import diagnostics
 
 
+# ---------- findings_markdown: the DAG-correctness caveat ----------
+
+
+@pytest.mark.parametrize("accept", [True, False, None])
+def test_findings_markdown_always_includes_dag_caveat_before_the_verdict(accept):
+    # The caveat applies regardless of whether validation passed, failed,
+    # or didn't run at all - a "validated" wrong-diagram result is just as
+    # wrong as an unvalidated one, so this must never be conditional on
+    # `accept`.
+    md = diagnostics.findings_markdown("treated", "outcome", False, "numerical", None, "ate", 12.3, accept)
+    assert "causal diagram" in md
+    assert md.index("Before you trust this number") < md.index("Validation" if accept is not None else "No validation")
+
+
 # ---------- feature_label ----------
 
 

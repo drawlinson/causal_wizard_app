@@ -78,6 +78,14 @@ def contingency_table(df: pd.DataFrame, treatment_col: str, outcome_col: str, ou
     return result
 
 
+DAG_CAVEAT = (
+    "**Before you trust this number:** every test on this page checks the *statistical* robustness "
+    f"of this estimate - none of them can check whether your [causal diagram]({SITE_URL}/articles/"
+    "causal-diagram/) correctly and completely describes the system you're studying. A wrong or "
+    "incomplete diagram produces a result that passes every test here and is still wrong. If you're "
+    "not confident you've included every important confounder, treat this effect as provisional."
+)
+
 ACCEPT_TEXT = (
     "All validation tests passed. The validation tests explore the robustness and stability of the "
     "results. This provides confidence in the estimated causal effect, as long as no assumptions are "
@@ -168,6 +176,7 @@ def findings_markdown(
         f"The effect of treatment **{treatment_col}** on outcome **{outcome_col}** was estimated as "
         f"**{effect:.4g}**.\n\n"
         f"{statement}\n\n"
+        f"> {DAG_CAVEAT}\n\n"
         f"> {verdict}"
     )
 
