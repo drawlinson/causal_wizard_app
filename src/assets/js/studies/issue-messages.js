@@ -64,10 +64,6 @@ export const ISSUES = {
     message: "Panel data needs an entity column identifying each unit being tracked over time.",
     articleSlug: "panel-data",
   },
-  time_non_unique: {
-    message: "Each entity/time combination should appear only once - check your data or your entity/time column choices.",
-    articleSlug: "panel-data",
-  },
 };
 
 export function issueMessage(key) {

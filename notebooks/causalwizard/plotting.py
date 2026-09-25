@@ -248,6 +248,33 @@ def confusion_matrix(generalization: dict, threshold: float = 0.5) -> dict:
     return {"tp": tp, "tn": tn, "fp": fp, "fn": fn, "accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
 
 
+# ---------- Feature importance ----------
+
+
+def plot_feature_importance(coefficients: dict) -> go.Figure:
+    """Horizontal bar chart of the fitted regression's own coefficients
+    (treatment + every backdoor/covariate feature, one bar per dummy level
+    for a categorical one) - matches the old site's "Fitted model
+    coefficients" plot (same orange bars, sorted by value, `Intercept`
+    excluded since it isn't a feature)."""
+    from .diagnostics import feature_label
+
+    pairs = [(feature_label(term), value) for term, value in coefficients.items() if term != "Intercept"]
+    pairs.sort(key=lambda p: p[1])
+    labels = [p[0] for p in pairs]
+    values = [p[1] for p in pairs]
+
+    fig = go.Figure([go.Bar(x=values, y=labels, orientation="h", marker_color="orange")])
+    fig.update_layout(
+        title="Fitted model coefficients",
+        xaxis_title="Coefficient value",
+        yaxis_title="Variable",
+        yaxis=dict(automargin=True),
+        width=PLOT_WIDTH, height=max(PLOT_HEIGHT, 40 * len(labels)),
+    )
+    return fig
+
+
 # ---------- Causal diagram ----------
 
 

@@ -7,6 +7,8 @@ identification.py) - nothing custom to reverse-engineer there.
 
 from __future__ import annotations
 
+import re
+
 import pandas as pd
 
 SITE_URL = "https://causalwizard.app"
@@ -469,6 +471,45 @@ def regression_summary_markdown_intro() -> str:
         "strongly the model weighs that feature - check both against your own expectations as a sanity "
         "check. Coefficients close to zero are unstable and best ignored; if your numerical variables "
         "aren't on comparable scales, don't directly compare magnitudes across them "
+        f"([read more]({SITE_URL}/articles/feature-importance/))."
+    )
+
+
+_TERM_RE = re.compile(r"^(?:C\()?Q\('(?P<name>[^']+)'\)\)?(?:\[T\.(?P<level>.+)\])?$")
+
+
+def feature_label(term: str) -> str:
+    """A fitted formula's raw statsmodels term name (patsy syntax, e.g.
+    "C(Q('Married'))[T.1.0]" for a categorical dummy level, or plain
+    "Q('Age')" for a numerical one) turned into something readable
+    ("Married = 1.0", "Age") - falls back to the raw term unchanged if it
+    doesn't match the `Q('...')`/`C(Q('...'))[T....]` shape this project's
+    own formula-builders always produce."""
+    match = _TERM_RE.match(term)
+    if not match:
+        return term
+    name, level = match.group("name"), match.group("level")
+    return f"{name} = {level}" if level else name
+
+
+def feature_importance_markdown_intro(outcome_col: str, outcome_is_binary: bool, outcome_class1_label: str | None) -> str:
+    target = (
+        f"the probability of outcome **{outcome_class1_label}**" if outcome_is_binary
+        else f"the outcome variable **{outcome_col}**"
+    )
+    return (
+        "The bar chart below shows the fitted regression's own coefficient for every input feature - "
+        "every backdoor variable (or panel-data covariate) plus the treatment, all supplied to the model "
+        "as inputs. A categorical feature gets one bar per observed value, since each is handled as its "
+        "own separate 0/1 indicator by the model.\n\n"
+        f"Both the **sign** and **magnitude** are meaningful: a positive coefficient means that feature "
+        f"is positively correlated with {target}, and vice-versa for negative - check this against your "
+        "own expectations of the system; agreement is good confirmation the model is capturing things "
+        "correctly. A coefficient close to zero has an unstable sign and is best ignored.\n\n"
+        "Magnitudes are only directly comparable across features if your numerical variables were "
+        "standardized before upload - and even then, highly correlated features can produce unstable "
+        "coefficient magnitudes (this doesn't affect the model's own predictions or the estimated effect "
+        f"itself, only how easily you can read its coefficients) "
         f"([read more]({SITE_URL}/articles/feature-importance/))."
     )
 

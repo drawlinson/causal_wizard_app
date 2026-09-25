@@ -45,6 +45,7 @@ def build_results(
     train_predictions: dict | None = None,
     estimand_variables: list[str] | None = None,
     regression_summary: str | None = None,
+    coefficients: dict | None = None,
 ) -> dict:
     return {
         "schemaVersion": 1,
@@ -78,6 +79,7 @@ def build_results(
             "trainPredictions": train_predictions,
             "estimandVariables": estimand_variables or [],
             "regressionSummary": regression_summary,
+            "coefficients": coefficients,
         },
         "sample": {
             "contingencyTable": contingency,

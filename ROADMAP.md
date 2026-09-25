@@ -1402,6 +1402,68 @@ matching its pre-fix value - unaffected by the encoding change). Re-ran
 all 16 previously-covered scenarios plus this new frontdoor one
 end-to-end - all clean.
 
+**8.6 follow-up 12 — Feature importance section, and duplicate entity/time rows allowed for PD+FE** ✅ done
+Two independent user-reported items:
+
+1. *Missing Feature importance section.* The old site's `result_show.html`/
+   `result.js` had a "Feature importance" section (a horizontal bar chart
+   of the fitted regression's own coefficients - treatment plus every
+   backdoor/covariate feature, one bar per dummy level for a categorical
+   one) with commentary on reading sign/magnitude - entirely missing from
+   the new notebooks. The underlying data (`coefficients`, already
+   computed by both `estimation_cdpo.py`'s own linear_regression/GLM
+   branch and `estimation_pdfe.py`) was being thrown away - never even
+   added to `results_schema.build_results()`. Fixed by threading
+   `coefficients` through into `results.json`, adding
+   `diagnostics.feature_label()` (turns a raw patsy term like
+   `"C(Q('Married'))[T.1.0]"` into `"Married = 1.0"`, `Intercept`
+   excluded - it isn't a feature) and `feature_importance_markdown_intro()`
+   (ported commentary, linking the already-existing
+   `/articles/feature-importance/`), and `plotting.plot_feature_importance()`
+   (same orange horizontal bar chart, sorted by value, as the old site).
+   New "## 10. Feature importance" section in notebook 2, gated on
+   `e["coefficients"]` being present - `None` for propensity/DML/IV/
+   frontdoor, same gating as the existing "Summary results" section.
+
+2. *Duplicate entity/time rows wrongly rejected for PD+FE.* The site's
+   `validate.js` `runPanelDataCheck()` rejected a panel-data study outright
+   if any (entity, time) pair repeated across rows ("time_non_unique").
+   This is unnecessarily strict: `estimation_pdfe.py`'s demeaning is a
+   plain groupby-mean (see follow-up 6) which already handles many rows
+   sharing one entity and/or one time value correctly - and it's a
+   completely standard design (e.g. a coarse group/period cell containing
+   many individual units - a repeated-cross-section DiD, not a "each unit
+   observed once per period" panel). Confirmed no statistical harm before
+   implementing: the within-transformation's algebra doesn't assume one
+   row per (entity, time) cell, and entity-clustered SEs (already the
+   default with an entity set) are, if anything, *more* appropriate with
+   repeated rows per entity - that's exactly what clustering corrects for.
+   Removed the check (and its now-dead `time_non_unique` issue message).
+
+Verified against the user's own `billboard_impact_treatment.csv` (the
+classic bank-deposits/billboard DiD dataset - entity `poa` and time `jul`
+each only 2-valued, so every (entity, time) cell has hundreds of rows) via
+a real browser walkthrough: uploaded the dataset, built a PD+FE study with
+entity=`poa`, time=`jul`, treatment=`treated` (0/1, 3800 control / 800
+treated - matches the user's own reported counts exactly), no covariates.
+Check passed cleanly (would previously have failed with "Each entity/time
+combination should appear only once"); downloaded the real generated
+config and ran it through both notebooks end-to-end - effect (ATT) ≈
+5.16 on `deposits`, identified estimand `Q('deposits') ~ Q('treated')`
+matching the user's description exactly, Feature importance section shows
+a single "treated" bar (no covariates, entity/time demeaned out) with no
+errors. Also directly verified `feature_label()`/`plot_feature_importance()`
+against a categorical-covariate scenario (lalonde backdoor linear
+regression: `Married`/`No_Degree`) - dummy levels render as
+"Married = 1.0" / "No_Degree = 1.0", correctly sorted, `Intercept`
+excluded. Re-ran all 18 previously-covered scenarios (including this new
+one) end-to-end - all clean.
+
+Side note while re-testing: confirmed (again) that `notebooks/.venv` has
+no working `pip` and `causalwizard` isn't actually installed into it (see
+follow-up 11) - scratch-dir test runs continue to need `PYTHONPATH` set
+explicitly rather than relying on the notebook's own install-cell.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

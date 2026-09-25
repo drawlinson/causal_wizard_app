@@ -97,7 +97,7 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema, resol
   if (issues.length > 0) return { valid: false, issues };
 
   if (method === "pd+fe") {
-    return runPanelDataCheck({ panelData, datasetColumns, outcomeType, outcomeCardinality });
+    return runPanelDataCheck({ panelData, outcomeType, outcomeCardinality });
   }
 
   const observable = new Set(graph.nodes.filter((n) => !n.startsWith("u")));
@@ -108,21 +108,17 @@ export function runCheck({ question, graph, datasetColumns, datasetSchema, resol
   return { valid: true, estimands: result.estimands, groupCounts };
 }
 
-function runPanelDataCheck({ panelData, datasetColumns, outcomeType, outcomeCardinality }) {
+function runPanelDataCheck({ panelData, outcomeType, outcomeCardinality }) {
   // Entity/time are optional - without them this is just an ordinary
   // regression (no fixed effects), which the notebook handles directly.
-  // The entity/time duplicate check only makes sense once both are given.
-  if (panelData?.entity && panelData?.time) {
-    const entities = datasetColumns[panelData.entity];
-    const times = datasetColumns[panelData.time];
-    const seen = new Set();
-    for (let i = 0; i < entities.length; i++) {
-      const key = `${entities[i]}|${times[i]}`;
-      if (seen.has(key)) return { valid: false, issues: ["time_non_unique"] };
-      seen.add(key);
-    }
-  }
-
+  // Repeated entity/time combinations are fine (e.g. several individual
+  // units - branches, accounts - sharing the same coarser group/period
+  // cell, a standard repeated-cross-section panel design): the notebook's
+  // demeaning is a plain groupby-mean, which handles multiple rows per
+  // entity and/or per time perfectly well, and entity-clustered SEs are
+  // if anything more appropriate with them (that's exactly what
+  // clustering corrects for) - so this used to reject that as an error,
+  // which was wrong.
   const estimand = {
     type: ESTIMAND_TYPE.FIXED_EFFECTS,
     name: "Fixed Effects",
