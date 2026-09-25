@@ -1201,6 +1201,28 @@ outcome) directly, plus the two previously-untested end-to-end (GLM with
 each outcome type, via `jupyter nbconvert --execute`) - all give distinct,
 sane effect estimates with working refutation, no crashes.
 
+**8.6 follow-up 5 — None in required_cols crashed dropna for PD+FE** ✅ done
+Covariates, entity, and time are all independently optional (an empty
+covariate list is fine; only PD+FE needs entity/time at all, and even
+those aren't guaranteed present on an incompletely-configured study). The
+"Finalize sample" cell's `required_cols` list included `panelData.entity`/
+`time` unconditionally whenever method was PD+FE, so an unset one landed
+in the list as a literal `None`, and `config.dropna_rows()`'s
+`df.dropna(subset=[...])` raised `KeyError: [None]` - `None` isn't a real
+column. Fixed by filtering falsy entries out of `required_cols` before the
+call. Investigating the repro also confirmed PD+FE genuinely cannot run
+without *both* entity and time (the demeaning step groups by each in
+turn), so a config missing either was always going to fail somewhere -
+just three cells later, as an opaque pandas `TypeError: You have to supply
+one of 'by' and 'level'`. Added an explicit check in the Identification
+cell instead, raising a clear, actionable error immediately.
+
+Re-verified: the exact reported repro (entity set, time unset) now fails
+fast with the clear message instead of the KeyError; a genuinely
+covariate-free PD+FE study (entity and time both set) runs cleanly
+end-to-end through both notebooks; all previously-covered scenarios
+unaffected.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data
