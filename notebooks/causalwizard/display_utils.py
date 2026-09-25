@@ -33,6 +33,21 @@ def style_yes_no(df, column: str):
     return df.style.map(_color, subset=[column])
 
 
+def wrap_table(df, wrap_columns: list[str] | None = None):
+    """A DataFrame styled so a wide text column (e.g. a "Notes"
+    explanation) wraps onto multiple lines instead of pandas' default
+    truncate-with-"..." at 50 characters (its default `display.
+    max_colwidth`, which plain `display(df)` applies but a Styler
+    doesn't) - and the table stretches to use the available width rather
+    than staying cramped to its narrowest natural size."""
+    wrap_columns = list(df.columns) if wrap_columns is None else wrap_columns
+    return (
+        df.style
+        .set_properties(subset=wrap_columns, **{"white-space": "normal", "text-align": "left"})
+        .set_table_attributes('style="width:100%"')
+    )
+
+
 def style_confusion_matrix(df):
     """Colours a confusion-matrix DataFrame (rows=Actual, columns=
     Predicted) the way the old site did: green on the diagonal (correct

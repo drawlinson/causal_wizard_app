@@ -1533,6 +1533,24 @@ Recall table plus a green/red 2x2 (+Total) confusion matrix; a numerical-
 outcome scenario shows a real 3-row R²/RMSE/MAE table. Re-ran all 19
 scenarios end-to-end - all clean.
 
+**8.6 follow-up 15 — Generalization metrics table: notes column truncated instead of wrapping** ✅ done
+Follow-up 14's new table looked fine when inspected via `.to_html()`, but
+plain `display(df)` (the actual notebook path, via `_repr_html_()`) truncates
+any cell text past pandas' `display.max_colwidth` (default 50 chars) with
+"..." - the Notes column's explanations are all well past that, and every
+one got cut off mid-sentence, in a table that only used about half the
+page width. Added `display_utils.wrap_table()`: a `Styler` (which, unlike
+`display(df)`, isn't subject to `max_colwidth` at all) with `white-space:
+normal` on the wrapped column so long text flows onto multiple lines
+instead of truncating, plus `width:100%` so the table uses the available
+page width rather than shrinking to its narrowest natural size. Applied
+to both branches (numerical R²/RMSE/MAE and categorical Accuracy/F1/
+Precision/Recall) of the generalization metrics table.
+
+Verified by rendering the actual styled HTML output and looking at it:
+full Notes text now visible with no "...", table stretches full width.
+Re-ran all 19 scenarios end-to-end - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data
