@@ -440,10 +440,11 @@ def covariate_balance_markdown_intro() -> str:
     return (
         "Propensity weighting/matching aims to make the Control and Treated groups statistically "
         f"similar on every covariate - **covariate balance** ([read more]({SITE_URL}/articles/covariate-balance/)). "
-        "The plot below (a \"love plot\") shows the absolute standardized mean difference (SMD) between "
-        "groups for each covariate, before and after weighting. Balance is considered good when the "
-        "weighted SMD is close to zero; 0.1 is a common threshold, shown as a dashed line, but it's "
-        "indicative rather than a hard cutoff."
+        "The plot below (a \"Love plot\") shows the absolute standardized mean difference (SMD) between "
+        "groups for each covariate, before and after weighting - a categorical covariate gets one row per "
+        "value (e.g. \"region = North\"), each treated as its own 0/1 indicator. Balance is considered "
+        "good when the weighted SMD is close to zero; 0.1 is a common threshold, shown as a dashed line, "
+        "but it's indicative rather than a hard cutoff."
     )
 
 

@@ -1325,6 +1325,28 @@ the actual per-row treatment); the validation table shows the good/bad
 explanation and article link, and blank cells instead of NaN. Re-ran all
 12 previously-covered scenarios - all clean.
 
+**8.6 follow-up 9 — Love plot showed no dots for an all-categorical backdoor set** ✅ done
+`propensity.covariate_balance()` excluded categorical confounders entirely
+(SMD needs a numeric mean/variance) - fine when the identified backdoor
+set has at least one numerical variable, but a study whose *whole*
+backdoor set is categorical (e.g. a single confounder like "region") got
+an empty plot with no explanation, which reads as broken rather than "not
+applicable." Fixed properly rather than just labelling the gap: each
+categorical confounder now gets one row per observed level, treated as
+its own 0/1 indicator (SMD on an indicator is the same formula, and a 0/1
+variable's mean is just its proportion) - the standard way balance-
+checking tools (R's cobalt/MatchIt) handle a factor variable. Also fixed
+"love plot" to "Love plot" throughout (named after Thomas E. Love; the
+old site's own text already had this right, ported text had lower-cased
+it).
+
+Re-verified: a synthetic all-categorical-backdoor scenario (a 3-level
+"region" confounder) now shows 3 real SMD dots, before/after weighting
+(0.18-0.50 unweighted -> 0.008-0.02 weighted, a clear balance-improvement
+signal); the original all-numerical lalonde scenario re-verified
+unaffected. Re-ran all 12 previously-covered scenarios end-to-end - all
+clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

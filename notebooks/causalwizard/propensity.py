@@ -1,5 +1,5 @@
 """Propensity-score diagnostics (results-page features 6 and 7) -
-positivity check and covariate balance ("love plot"). Only relevant for
+positivity check and covariate balance ("Love plot"). Only relevant for
 the three propensity-based estimators (weighting/matching/stratification),
 which is also where the propensity scores themselves come from: DoWhy's
 own PropensityScoreEstimator base class fits a logistic regression of
@@ -52,11 +52,15 @@ def positivity_distribution(propensity: np.ndarray, treatment_binary: np.ndarray
 
 
 def covariate_balance(df: pd.DataFrame, backdoor_vars: list[str], covariate_types: dict, treatment_binary: np.ndarray, propensity: np.ndarray) -> dict:
-    """Standardized Mean Difference per numerical backdoor variable,
-    unweighted ("original") and IPW-weighted ("weighted") - the
-    before/after pair a love plot needs. Categorical confounders are
-    excluded (SMD needs a numeric mean/variance), matching the old site."""
-    numerical_vars = [v for v in backdoor_vars if covariate_types.get(v) == "numerical"]
+    """Standardized Mean Difference per backdoor variable, unweighted
+    ("original") and IPW-weighted ("weighted") - the before/after pair a
+    Love plot needs. A categorical confounder gets one row per observed
+    level, each as a 0/1 indicator (SMD on an indicator is the same
+    formula, and a 0/1 variable's mean is just its proportion) - the
+    standard way balance-checking tools (e.g. R's cobalt/MatchIt) handle a
+    factor variable. Without this, a study whose whole identified backdoor
+    set happens to be categorical would show an empty plot - not a rare
+    case (e.g. a single categorical confounder like "region")."""
     treated_mask = treatment_binary == 1
     control_mask = treatment_binary == 0
     weight = np.where(treated_mask, 1.0 / np.clip(propensity, 1e-6, 1), 1.0 / np.clip(1 - propensity, 1e-6, 1))
@@ -71,15 +75,25 @@ def covariate_balance(df: pd.DataFrame, backdoor_vars: list[str], covariate_type
         pooled_sd = np.sqrt((var_t + var_c) / 2)
         return float((mean_t - mean_c) / pooled_sd) if pooled_sd > 0 else 0.0
 
+    features: list[str] = []
     original: dict[str, float] = {}
     weighted: dict[str, float] = {}
-    for var in numerical_vars:
-        values = df[var].to_numpy(dtype=float)
-        original[var] = smd(values, None)
-        weighted[var] = smd(values, weight)
+    for var in backdoor_vars:
+        if covariate_types.get(var) == "categorical":
+            for level in sorted(df[var].dropna().unique(), key=str):
+                label = f"{var} = {level}"
+                indicator = (df[var] == level).to_numpy(dtype=float)
+                features.append(label)
+                original[label] = smd(indicator, None)
+                weighted[label] = smd(indicator, weight)
+        else:
+            values = df[var].to_numpy(dtype=float)
+            features.append(var)
+            original[var] = smd(values, None)
+            weighted[var] = smd(values, weight)
 
     return {
-        "features": numerical_vars,
+        "features": features,
         "original": original,
         "weighted": weighted,
         "reference_line": SMD_REFERENCE_LINE,

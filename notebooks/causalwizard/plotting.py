@@ -61,7 +61,7 @@ def plot_positivity(distribution: dict) -> go.Figure:
     return fig
 
 
-# ---------- Covariate balance / love plot ----------
+# ---------- Covariate balance / Love plot ----------
 
 
 def plot_covariate_balance(balance: dict) -> go.Figure:
