@@ -1366,6 +1366,42 @@ good/bad translation both work in the direction that matters, not just
 that green appears somewhere. Re-ran all 12 previously-covered scenarios
 end-to-end - all clean.
 
+**8.6 follow-up 11 — categorical mediator crashed frontdoor estimation** ✅ done
+`config.prepare_dataframe()` stringified every non-numerical covariate
+("categorical" per `resolve_effective_type()`), including 2-level/boolean
+ones like `No_Degree` (raw CSV values already 0/1) - fine for a regular
+backdoor covariate (patsy's `C()`/DoWhy's own `_encode()` both handle a
+string column), but broke frontdoor: DoWhy's `TwoStageRegressionEstimator`
+fits its first-stage OLS with the mediator column used directly as the raw
+endog (`sm.OLS(data[outcome_variable[0]], features)`, no encoding step,
+unlike the treatment/common-cause columns which do go through `_encode()`).
+Any 2-level covariate can end up chosen as a frontdoor mediator, so a
+string dtype there raised `ValueError: Pandas data cast to numpy dtype of
+object`. Fixed with a new `config._encode_categorical()`: a genuinely
+2-level categorical is now encoded 0.0/1.0 (mirroring how the treatment
+column is already encoded), exactly like the old site did for treatment/
+outcome but never generalised to every binary covariate; a true 3+-level
+categorical is still left as trimmed strings for patsy/DoWhy's own dummy
+encoding.
+
+Root-caused directly against the user's own `lalonde.csv` + a real
+frontdoor config (Treated → No_Degree → Wage_1978, with No_Degree also
+directly caused by Treated and causing Wage_1978) - confirmed the crash
+reproduces on the pre-fix code and is resolved after. Also discovered
+mid-investigation that the `causalwizard` package was never actually
+pip-installed in `notebooks/.venv` (it only imported because the shell's
+cwd happened to be the notebooks directory, which Python implicitly adds
+to `sys.path`) and that `pip` itself is currently missing from that venv -
+worked around by setting `PYTHONPATH` when invoking `jupyter nbconvert`
+from a scratch test directory, rather than relying on the notebook's own
+install-cell/GitHub fallback (needs network + pip, neither available
+here); this doesn't affect Colab, which has both. Re-verified: the
+frontdoor config now estimates cleanly (effect≈251.1); the paired backdoor
+config using the same graph still estimates correctly too (effect≈992.6,
+matching its pre-fix value - unaffected by the encoding change). Re-ran
+all 16 previously-covered scenarios plus this new frontdoor one
+end-to-end - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data

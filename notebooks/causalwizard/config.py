@@ -161,6 +161,25 @@ def _resolve_outcome(series: pd.Series, effective_type: str) -> tuple[pd.Series,
     return series.map(encode), class1
 
 
+def _encode_categorical(series: pd.Series) -> pd.Series:
+    """A 2-level categorical (e.g. a boolean flag stored as 0/1, True/False,
+    Yes/No) is encoded as 0.0/1.0 rather than stringified, exactly like the
+    treatment column already is - a genuine 3+-level categorical is left as
+    trimmed strings, for patsy's C()/DoWhy's own encoder to dummy-encode.
+
+    This matters beyond styling: DoWhy's frontdoor TwoStageRegressionEstimator
+    fits its first-stage OLS with the mediator column used directly as the
+    raw endog (`sm.OLS(data[outcome_variable[0]], features)`, no encoding
+    step) - if a boolean mediator like this were left as an object/string
+    column, that raises "Pandas data cast to numpy dtype of object". Any
+    2-level covariate can end up selected as a frontdoor mediator, so all of
+    them are kept numeric, not just ones actually chosen as one."""
+    levels = sorted(series.dropna().unique(), key=str)
+    if len(levels) == 2:
+        return series.map({levels[0]: 0.0, levels[1]: 1.0})
+    return series.astype(str).str.strip()
+
+
 def prepare_dataframe(config: dict, raw_df: pd.DataFrame) -> PreparedData:
     """Applies the study's question (treatment grouping, outcome encoding)
     to the raw uploaded data, re-deriving everything from the config
@@ -194,7 +213,7 @@ def prepare_dataframe(config: dict, raw_df: pd.DataFrame) -> PreparedData:
         if col_type == "numerical":
             df[col] = df[col].map(parse_numeric)
         else:
-            df[col] = df[col].astype(str).str.strip()
+            df[col] = _encode_categorical(df[col])
 
     before = len(df)
     df = df.dropna(subset=[treatment_col, outcome_col]).copy()
