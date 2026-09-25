@@ -16,7 +16,202 @@ title: Causal Inference app - Features
       The features are designed to help you understand and gain confidence in your results.
     </div>
   </div>
+</div><!-- card body -->
 
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-12">
+      <h5>Study design, estimator &amp; estimand &times; analysis features</h5>
+      <p>
+        Not every analysis feature applies to every combination of method, estimand, estimator, and
+        treatment/outcome type - for example, propensity diagnostics only make sense for a propensity-based
+        estimator, and a causal diagram only exists for Causal Diagram &amp; Potential Outcomes studies. The
+        table below is the full reference: one row per supported combination, one column per feature, with
+        a &check; where it applies.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover align-middle" style="font-size:0.85rem;">
+          <thead class="table-light">
+            <tr>
+              <th>Method</th>
+              <th>Estimand</th>
+              <th>Estimator</th>
+              <th>Treatment design</th>
+              <th>Outcome type</th>
+              <th>ATE</th>
+              <th>ATT</th>
+              <th>ATC</th>
+              <th>Counterfactual table<br><small class="text-muted">(do-operator)</small></th>
+              <th>Held-out<br>generalization</th>
+              <th>Validation / refutation tests</th>
+              <th>Positivity &amp;<br>covariate balance</th>
+              <th>Regression<br>summary table</th>
+              <th>Causal<br>diagram</th>
+              <th>Contingency<br>table</th>
+              <th>Outcomes plot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4"><a href="/articles/causal-diagram/" target="_blank">CD+PO</a></td>
+              <td rowspan="4"><a href="/articles/backdoor-variable/" target="_blank">Backdoor</a></td>
+              <td>Linear Regression</td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical &amp; Categorical</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td>Generalized Linear Model</td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical <small class="text-muted">(Poisson)</small> &amp; Categorical <small
+                  class="text-muted">(Binomial)</small></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td>Propensity Score<br>Weighting / Matching / Stratification<br><small
+                  class="text-muted">(<a href="/articles/propensity-scores/" target="_blank">propensity
+                    scores</a>)</small></td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical &amp; Categorical</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td><a href="/articles/double-ml/" target="_blank">Double ML</a></td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical only</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i><br><small class="text-muted">(shift from actual
+                  only)</small></td>
+              <td></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td><a href="/articles/causal-diagram/" target="_blank">CD+PO</a></td>
+              <td><a href="/articles/iv/" target="_blank">Instrumental Variable</a></td>
+              <td>Instrumental Variable</td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical &amp; Categorical</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td><a href="/articles/causal-diagram/" target="_blank">CD+PO</a></td>
+              <td><a href="/articles/frontdoor-variable/" target="_blank">Frontdoor</a></td>
+              <td>Two-stage Regression</td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical &amp; Categorical</td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td></td>
+              <td>Bootstrap, placebo treatment, random common cause</td>
+              <td></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort</td>
+            </tr>
+            <tr>
+              <td rowspan="2"><a href="/articles/fixed-effects/" target="_blank">PD+FE</a><br><small
+                  class="text-muted">(<a href="/articles/panel-data/" target="_blank">panel data</a>)</small>
+              </td>
+              <td rowspan="2"><small class="text-muted">n/a</small></td>
+              <td rowspan="2">Fixed Effects</td>
+              <td>Binary<br><small class="text-muted">(Control/Treated)</small></td>
+              <td>Numerical &amp; Categorical</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i><br><small class="text-muted">(always ATT)</small></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>z-statistic, F-statistic</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>By Sample Cohort, Over Time <small class="text-muted">(if a time variable is set)</small></td>
+            </tr>
+            <tr>
+              <td>Continuous</td>
+              <td>Numerical &amp; Categorical</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i><br><small class="text-muted">(always ATT)</small></td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td>z-statistic, F-statistic</td>
+              <td></td>
+              <td><i class="bi-check-lg text-success"></i></td>
+              <td></td>
+              <td></td>
+              <td>By Entity, Over Time <small class="text-muted">(if a time variable is set)</small></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-muted mb-0">
+        <small>
+          Entity, time, and additional covariates are all independently optional for PD+FE - with neither an
+          entity nor a time variable, it reduces to plain linear regression. Every estimator above also
+          always shows Assumptions and Modelling Statements, and CD+PO's causal diagram is coloured by
+          identified variable role (backdoor/frontdoor/instrumental/mediator/collider) regardless of
+          estimator. "Outcome type" only changes <i>which</i> outcome plot/metrics render (e.g. a confusion
+          matrix and Accuracy/F1/Precision/Recall for a categorical outcome vs. R&sup2;/RMSE/MAE for a
+          numerical one), not whether generalization itself is available.
+        </small>
+      </p>
+    </div>
+  </div>
+</div><!-- card body -->
+
+<div class="card-body">
   <div class="row">
     <div class="col-md-6 mt-3">
 
