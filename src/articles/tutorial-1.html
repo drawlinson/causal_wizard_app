@@ -11,29 +11,25 @@ categorySlugs: ["tutorial"]
 <div>&nbsp;</div>
 <div>We will actually model the problem in <strong>2 different ways</strong> and compare the result, to demonstrate the importance and impact of the domain knowledge you provide when you use Causal Wizard.&nbsp;</div>
 </div>
-<h3>Step 1: Create a new Study</h3>
+<h3>Step 1: Get the data</h3>
+<p>Download <a href="/assets/data/tutorials/tutorial-1-education-wages.csv" download><strong>tutorial-1-education-wages.csv</strong></a>, then upload it via the <a href="/data/" target="_blank">Data</a> page (name it whatever you like, e.g. "Tutorial 1"). See <a href="/articles/dataset/">Dataset</a> if you haven't uploaded a file before.</p>
+<h3>Step 2: Create a new Study</h3>
 <ol>
 <li>Click on <strong>Studies</strong> in the menu bar.</li>
-<li>In the Studies list page, click the <strong>Create</strong> button.</li>
-<li>Give the new Study any <strong>name</strong> you like (e.g. Tutorial 1).</li>
-<li>Select the Dataset with the name beginning "<strong>Tutorial 1</strong>"</li>
-<li>Click <strong>Create</strong> and the new Study will be displayed.</li>
+<li>Under <strong>Create a new study</strong>, give it any <strong>name</strong> you like (e.g. Tutorial 1).</li>
+<li>Select the Dataset you just uploaded.</li>
+<li>Click <strong>Create</strong> and the new Study will open.</li>
 </ol>
-<h3>Step 2: Specify Treatment and Outcome</h3>
-<p>In this case study our <strong>treatment</strong> is the variable <strong>Education </strong>(number of years' education) and the Outcome we're interested in is <strong>Weekly W</strong><strong>age</strong>. Specifically, we're interested in estimating the effect on wages of having more than the standard 12 years education.</p>
+<h3>Step 3: Specify Treatment and Outcome</h3>
+<p>In this case study our <strong>treatment</strong> is the variable <strong>Education</strong> (number of years' education) and the Outcome we're interested in is <strong>Weekly Wage</strong>. Specifically, we're interested in estimating the effect on wages of having more than the standard 12 years education.</p>
 <p>Since Education is a whole number (integer) value rather than a true/false property, we need to specify a threshold to group our sample into <strong>Control</strong> (&lt;= 12 years' education) and <strong>Treated</strong> cohorts (&gt; 12 years' education).</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_treatment_and_outcome.png" alt="Treatment and Outcome settings" height="250" /></p>
 <ol>
-<li>Click <strong>Treatment</strong> and select <strong>Education</strong>.</li>
-<li>Click <strong>Outcome</strong> and select <strong>Weekly Wage</strong>.</li>
-<li>Now specify the Control / Treated Threshold. Click the <strong>Show</strong> button next to the <strong>Threshold</strong> input.</li>
-<li>A dialog will appear, showing the distribution of years' education.</li>
-<li>In the input at the top, enter <strong>12</strong>. The plot will update.</li>
-<li>You can now see in the plot that samples with up to 12 years' education are recognised as <strong>Controls</strong>, and samples with more years' education are <strong>Treated</strong>.</li>
-<li>Press <strong>Save</strong> and the dialog will close.</li>
+<li>Set <strong>Treatment</strong> to <strong>Education</strong>, and <strong>Outcome</strong> to <strong>Weekly Wage</strong>.</li>
+<li>Click <strong>Treatment groups</strong> to open the group editor.</li>
+<li>In the <strong>Treated</strong> row, set the lower bound operator to <strong>&gt;</strong> and enter <strong>12</strong>.</li>
+<li>Leave the <strong>Control</strong> row's upper bound as <strong>&lt;</strong> and enter <strong>12</strong> (so Control is &le; 12 and Treated is &gt; 12 - a histogram below the editor updates live so you can check the split makes sense).</li>
 </ol>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_threshold_modal.png" alt="Modal dialog for setting Control/Treated threshold value." height="300" /></p>
-<h3>Step 3: Draw Causal Diagram</h3>
+<h3>Step 4: Draw Causal Diagram</h3>
 <p>The next step is to tell Causal Wizard how these variables interact. Following the textbook, we assume that:</p>
 <ul>
 <li><strong>Education</strong> affects <strong>Wages</strong></li>
@@ -44,81 +40,42 @@ categorySlugs: ["tutorial"]
 <p>However, the effect we're interested in is the effect of Education, not Intelligence. How can we separate these effects?</p>
 <p>The simple answer is that we draw the diagram corresponding to our beliefs listed above.</p>
 <ol>
-<li>In the <strong>Causal Diagram</strong> panel, click somewhere near the middle. A dialog will appear.&nbsp;</li>
-<li>In the <strong>Data Column</strong> selector, select <strong>Education</strong>.&nbsp;</li>
-<li>Click <strong>Save</strong>.&nbsp;</li>
-<li>The dialog will disappear and a node will appear in the diagram called <strong>Education</strong>.</li>
-<li>Repeat the above steps to add a node for <strong>Weekly Wage</strong>.</li>
-<li>Repeat the above steps to add a node for <strong>IQ</strong> (representing intelligence).</li>
-<li>Now we need to draw the <strong>arrows</strong> in the Causal Diagram.&nbsp;</li>
-<li>Click the <strong>Draw Edges</strong> toggle button above the Causal Diagram.</li>
-<li><strong>Click and drag</strong> an edge from <strong>Education</strong> to <strong>Weekly Wage</strong>. This represents the direct effect.</li>
-<li><strong>Click and drag</strong> an edge from <strong>IQ</strong> to <strong>Education</strong>.</li>
-<li><strong>Click and drag</strong> an edge from <strong>IQ</strong> to <strong>Weekly Wage</strong>.</li>
+<li>In the <strong>Causal diagram</strong> panel, make sure <strong>Edit nodes</strong> is selected, then click somewhere empty. A dialog will appear.&nbsp;</li>
+<li>In the <strong>Variable</strong> selector, select <strong>Education</strong>. Click <strong>Save</strong>.&nbsp;</li>
+<li>Repeat to add a node for <strong>Weekly Wage</strong>, and another for <strong>IQ</strong> (representing intelligence).</li>
+<li>Now we need to draw the <strong>edges</strong> (arrows).</li>
+<li>Click the <strong>Draw edges</strong> toggle button above the diagram.</li>
+<li><strong>Click and drag</strong> from <strong>Education</strong> to <strong>Weekly Wage</strong>. This represents the direct effect.</li>
+<li><strong>Click and drag</strong> from <strong>IQ</strong> to <strong>Education</strong>.</li>
+<li><strong>Click and drag</strong> from <strong>IQ</strong> to <strong>Weekly Wage</strong>.</li>
 </ol>
-<p>The diagram should now look like this:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_causal_diagram.png" alt="Causal diagram" height="200" /></p>
-<h3>Step 4: Check the setup</h3>
+<h3>Step 5: Check the setup and download your config</h3>
 <ol>
 <li>Press the <strong>Check</strong> button at the top of the page.&nbsp;</li>
 <li>If something is not right, you'll get some warning messages - follow their instructions to complete or fix the setup.</li>
-<li>If everything went as planned, you'll see a large green block which invites you to select a <strong>Model</strong> type. <strong>Select "Backdoor: Linear regression"</strong>. (This tutorial won't cover model selection criteria.)</li>
-<li>Press the <strong>Calculate</strong> button below the green block.</li>
+<li>If everything went as planned, a dialog will confirm your diagram and data support estimating this effect, and offer a choice of <strong>Model</strong>. <strong>Select "Backdoor: Linear regression"</strong>. (This tutorial won't cover model selection criteria - see <a href="/articles/model-selection/">Model Selection</a> if you're curious.)</li>
+<li>Click <strong>Download config JSON</strong>, and note the link to your uploaded data file (you already have this).</li>
 </ol>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_model_choice.png" alt="Choose model to use for estimation" height="300" />Note that you can't click Calculate until all issues identified during the Check process have been resolved.</p>
-<p>It may take a few minutes to get a result, depending how busy our servers are. Eventually, a dialog will pop up, inviting you to view the result. <strong>Click View Result</strong>.</p>
-<h3>Step 5: Reviewing the results</h3>
-<p>You can always come back to earlier results. If you decided to come back later while following this tutorial, you can find your result by:</p>
-<ol>
-<li>Clicking on <strong>Studies</strong> in the menu bar.</li>
-<li>In the Studies list page, click the <strong>Results</strong> button next to your "Tutorial 1" Study.</li>
-<li>You'll now see all Results for this Study. If you've followed this tutorial, you'll only have one. Click the <strong>Open</strong> button.</li>
-</ol>
-<p>Each Result is a full page document.&nbsp;</p>
-<p>You an download Results as <strong>PDF files</strong> by clicking the <strong>Download</strong> button.</p>
-<p>Let's look at the headline result. You should see something like this:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_result_1.png" alt="" height="200" />Some takeaway points:</p>
-<ul>
-<li>First, the causal effect was estimated as <strong>144.85</strong>, with a 95% <strong>confidence interval </strong>of <strong>102</strong> to <strong>189</strong>. This means that in stability testing, 95% of the results on different subsamples fell in this range. Thus, if real-world conditions are statistically similar to our sample data, and we have modelled all relevant variables in our Causal Diagram, we can expect a result within this range.</li>
-<li>The second bullet point tries to explain the implications of the result. Note that the units of the result are in whatever the original outcome units were (in this case, weekly wages in US Dollars).
-<ul>
-<li>Note: In other Studies, if the outcome is binary, the units will be a probability.</li>
-</ul>
-</li>
-<li>Third, Causal Wizard warns us that some validation tests failed. Causal Wizard is quite sensitive and it is common for some of these tests to fail. We should look especially closely at those validation results.</li>
-</ul>
-<p>The next part of the results presents the estimated effect graphically:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_result_1_plot.png" alt="result plot" height="250" />Our two cohorts (groups of people) are presented side by side. This is known as a "Violin plot", because they often appear violin-shaped. You can see that the distribution of weekly wages for Treated is different and higher than for Controls.&nbsp;</p>
-<p>The effect of the treatment (obtaining more than 12 years of education) is presented as the separation of two horizontal lines. The orange line is the mean wage of the Control cohort, and the dashed blue line is the mean wage of the Control cohort plus the estimated effect. This represents a <a href="/articles/counterfactual/" target="_blank" rel="noopener">Counterfactual</a> outcome - the shift in this group's mean weekly wage if they had all had more education.</p>
-<p>We can see that this shift would make the Control and Treated cohorts roughly equal in weekly wages, which seems sensible given the Causal Diagram we have provided.</p>
-<p>Next, let's look at the validation results. They are presented in a table:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_result_1_validation.png" alt="" height="250" />As noted above, not all tests passed.&nbsp;</p>
-<ul>
-<li>The <strong>bootstrap</strong> test examined the stability of the effect with different subsamples of the data. This test was passed, meaning the effect is strong and stable as long as our data is a representative sample.</li>
-<li>The <strong>placebo</strong> treatment test was failed. We wanted the effect to go to zero; however, it changed from +144 to -3, which means it became close to zero. So perhaps this result is acceptable, or we should revisit our assumptions.</li>
-<li>The third validation test added a <strong>random common cause</strong> of both variables, to see if the effect would remain unchanged. It changed from 144.85 to 144.97, so this is nearly unchanged. Again, we can use our own judgement about whether to accept this result.</li>
-</ul>
-<p>These tests are sometimes quite sensitive when used with smaller sample sizes (e.g. &lt; 1000).</p>
-<p>The remaining parts of the Result explain the assumptions used, the handling and modelling process, and document the Causal Diagram you provided.</p>
-<h3>Step 6: What if we didn't consider intelligence?</h3>
+<h3>Step 6: Run the notebook</h3>
+<p>Click <strong>Open in Colab</strong> (or clone the linked notebooks repository to run locally). When the notebook asks for your config file and data file, upload the two files from Step 5. Run every cell from top to bottom - <b>Runtime &rarr; Run all</b> in Colab.</p>
+<p>The notebook re-checks everything independently and doesn't just trust the site, so if anything here turns out to be a poor fit for your data, it'll tell you there too. Once notebook 1 finishes, open notebook 2 and run it the same way - it picks up the results automatically.</p>
+<h3>Step 7: Reviewing the results</h3>
+<p>Scroll to the <strong>Findings</strong> section first. You should see something like:</p>
+<p>First, the causal effect was estimated as approximately <strong>144.85</strong>, with a 95% <strong>confidence interval</strong> of roughly <strong>102</strong> to <strong>189</strong> (your exact numbers will vary slightly, since Causal Wizard's notebooks re-fit the model on your data with a random held-out test split each time). This means that in stability testing, 95% of the results on different subsamples fell in this range. The units of the result are whatever the original outcome units were (in this case, weekly wages).</p>
+<p>Next, look at the <strong>Outcomes plots</strong> section. Since this is a binary (Control/Treated) design, you'll see a box plot comparing the two cohorts' outcome distributions side by side - you can see that the distribution of weekly wages for Treated is different and higher than for Controls.</p>
+<p>Now scroll to the <strong>Refutation / validation</strong> section, presented as a table with an "Estimate valid?" column telling you, at a glance, whether each test supports or undermines the result. Causal Wizard's validation tests are quite strict, and it is common for some of these tests to fail - look especially closely at those.</p>
+<p>The remaining sections explain the assumptions made, the modelling process, and document the Causal Diagram you provided.</p>
+<h3>Step 8: What if we didn't consider intelligence?</h3>
 <p>Let's explore what would have happened if we didn't consider intelligence - perhaps because we wonder whether it really does cause an increase in education, or wages. We now think it's irrelevant to everything.</p>
-<p>It's often useful to model several different Causal Diagram to answer questions about possible confounding. We could do this as a separate Study, or by modifying this one and generating a new Result. Let's do the latter.</p>
+<p>It's often useful to model several different Causal Diagrams to answer questions about possible confounding. Let's modify this Study and generate a new set of results.</p>
 <ol>
-<li>Clicking on <strong>Studies</strong> in the menu bar.</li>
-<li>In the Studies list page, click the <strong>Edit</strong>&nbsp;button next to your "Tutorial 1" Study.</li>
-<li>You'll now be back in the Wizard editor for the Study, and see the Treatment, Outcome variables and Causal Diagram.</li>
-</ol>
-<p>Now let's tell Causal Wizard we no longer think Intelligence affects anything.</p>
-<ol>
-<li>Above the Causal Diagram editor, click <strong>Draw Edges</strong>.</li>
+<li>Go back to your <strong>Study</strong> (Studies in the menu bar, then open "Tutorial 1" again).</li>
+<li>Above the Causal Diagram editor, click <strong>Draw edges</strong>.</li>
 <li><strong>Click on the edge</strong> between IQ and <strong>Education</strong> to delete it.</li>
 <li><strong>Click on the edge</strong> between IQ and <strong>Weekly Wage</strong> to delete it.</li>
-<li>Click the <strong>Check</strong> button. There should be no issues ...</li>
-<li>Ensure the <strong>Backdoor: Linear Regression model </strong>is selected as before.</li>
-<li>Click the <strong>Calculate</strong> button, and wait for your new Result to pop up.</li>
-<li>Click <strong>View Result</strong> in the Popup.</li>
+<li>Click <strong>Check</strong>. There should be no issues, and <strong>Backdoor: Linear Regression</strong> should still be selected.</li>
+<li>Download the new config file, and run it through the notebook again exactly as before (you can reuse the same data file).</li>
 </ol>
-<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_1_modified_causal_diagram.png" alt="Modified causal diagram" height="200" /></strong></p>
-<p><strong>We found that by removing these edges, the estimated effect of education on wages increased from 144 to 229. </strong>Which result is more correct? The answer depends on your prior assumptions, encoded in the causal diagram.</p>
-<p>This shows how important your domain knowledge is, in the form of the causal diagram, selection of data, and in the interpretation of the results. While Causal Wizard will calculate these effects for you, <strong>your judgement and review is even more important</strong>. Review the results closely, and critically. Feel free to contact us if you want to discuss one of your results.</p>
+<p><strong>We found that by removing these edges, the estimated effect of education on wages increased from 144 to 229.</strong> Which result is more correct? The answer depends on your prior assumptions, encoded in the causal diagram.</p>
+<p>This shows how important your domain knowledge is, in the form of the causal diagram, selection of data, and in the interpretation of the results. While Causal Wizard's notebooks will calculate these effects for you, <strong>your judgement and review is even more important</strong>. Review the results closely, and critically. Feel free to contact us if you want to discuss one of your results.</p>
 <p>Tip: You may also want to experiment with removing <strong>only</strong> the edge between IQ and Education, and allowing IQ to still affect wage. What happens to the estimated effect of education on wages?</p>

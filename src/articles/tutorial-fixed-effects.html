@@ -5,7 +5,7 @@ keywords: "TWFE example tutorial fixed effects model regression two way"
 categorySlugs: ["study-design", "tutorial"]
 ---
 <h3>Tutorials</h3>
-<p>To illustrate and explain the Fixed-Effects models available in Causal Wizard, <strong>we will work through 3 of the examples</strong> described in Matheus Facure's excellent <a title="Python Causality Handbook &quot;Causal Inference for the Brave and True&quot;" href="https://matheusfacure.github.io/python-causality-handbook" target="_blank" rel="noopener">Python Causality Handbook - "Causal Inference for the Brave and True"</a>. <strong>The datasets for each method are pre-loaded in Causal Wizard for you to use.</strong> Just create a new <a title="Study in Causal Wizard" href="/articles/study/" target="_blank" rel="noopener"><strong>Study</strong></a> and select the relevant <strong><a title="Dataset Causal Wizard" href="/articles/dataset/" target="_blank" rel="noopener">Dataset</a></strong>.</p>
+<p>To illustrate and explain the Fixed-Effects models available in Causal Wizard, <strong>we will work through 3 of the examples</strong> described in Matheus Facure's excellent <a title="Python Causality Handbook &quot;Causal Inference for the Brave and True&quot;" href="https://matheusfacure.github.io/python-causality-handbook" target="_blank" rel="noopener">Python Causality Handbook - "Causal Inference for the Brave and True"</a>. Each example has a downloadable dataset - just <a href="/data/" target="_blank">upload it</a> and create a new <a title="Study in Causal Wizard" href="/articles/study/" target="_blank" rel="noopener"><strong>Study</strong></a> against it.</p>
 <ol>
 <li><strong>Example 1 is from Chapter 14, titled <a title="&quot;Visualizing Fixed Effects&quot; example" href="https://matheusfacure.github.io/python-causality-handbook/14-Panel-Data-and-Fixed-Effects.html#visualizing-fixed-effects" target="_blank" rel="noopener">"Visualizing Fixed Effects"</a></strong>. It shows how a simple regression fit to the data would be misleading, and produce an effect with the wrong sign! We then show how including the fixed-effects of each city, we are able to recover the correct effect.</li>
 <li><strong>Example 2 is from Chapter 24 - </strong><a title="&quot;The promise of Panel Data&quot; example Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/24-The-Diff-in-Diff-Saga.html#birth-the-promise-of-panel-data" target="_blank" rel="noopener"><strong>"The promise of Panel Data"</strong></a>. This example describes a company rolling out a new feature to users in different cities at different times, and trying to work out whether the feature increases sales - and by how much.</li>
@@ -21,7 +21,7 @@ categorySlugs: ["study-design", "tutorial"]
 <p>Usually, several&nbsp;<strong>Entities</strong>&nbsp;(maybe individuals, but often&nbsp;<strong>groups</strong>) are observed over a period of&nbsp;<strong>time</strong>, resulting in multiple measurements of each Entity or group. This is a more generalized form of the popular&nbsp;<a title="Difference-in-Differences (DiD)" href="/articles/did/" target="_blank" rel="noopener"><strong>Difference-in-Differences (DiD)</strong></a> technique, where the number of groups and time periods is relaxed from 2, to any number. Given this experiment design, the data is typically in <a title="Panel Data format" href="/articles/panel-data/" target="_blank" rel="noopener">Panel Data format</a>.</p>
 <h3>Example 1: Visualizing Fixed-Effects</h3>
 <ul>
-<li>Original data source - <a title="Chapter 14 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/14-Panel-Data-and-Fixed-Effects.html#visualizing-fixed-effects" target="_blank" rel="noopener"><strong>Chapter 14</strong></a>.</li>
+<li>Original data source - <a title="Chapter 14 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/14-Panel-Data-and-Fixed-Effects.html#visualizing-fixed-effects" target="_blank" rel="noopener"><strong>Chapter 14</strong></a>. Download: <a href="/assets/data/tutorials/tutorial-fe-1-toy-panel.csv" download><strong>tutorial-fe-1-toy-panel.csv</strong></a>.</li>
 </ul>
 <p><strong>Introduction &amp; objectives</strong></p>
 <p>Imagine you wanted to explore the effect of<strong> Treatment: "marketing costs"</strong> on <strong>Outcome: "purchases" </strong>across four <strong>cities</strong> where you have shops.</p>
@@ -32,153 +32,114 @@ categorySlugs: ["study-design", "tutorial"]
 <p>We can reproduce the same result in Causal Wizard.</p>
 <p><strong>Steps</strong></p>
 <ol>
-<li>Click <strong>Studies</strong> in the Menu bar</li>
-<li>Click the <strong>Create</strong> button</li>
-<li>Enter any name you like, such as "FE example 1"</li>
-<li>Select the Dataset named <span style="color: #ba372a;"><strong>"Tutorial FE: Toy Panel"</strong></span> and press <strong>Create</strong></li>
-<li>If you want to view or analyse the data itself, click the <strong>Data tab</strong>. Otherwise, skip this step.</li>
-<li>Since we want to use the Fixed Effects models, change <strong>Method</strong> to <strong>Panel Data Methods</strong></li>
-<li>In this case, our Treatment variable is a <em>continuous numerical value</em> (marketing costs), so change the experiment <strong>Design</strong> to <strong>Continuous, numerical Treatment</strong></li>
-<li>Set <strong>Treatment</strong> to <strong>mkt_costs</strong>. This tells Causal Wizard that this is our Treatment variable.</li>
-<li>Set <strong>Outcome</strong> to <strong>purchase</strong>. Causal Wizard will be estimating the effect of Marketing Costs on Purchase.</li>
-<li>In the Define Intervention section, <strong>enter 2 as the lower value</strong> and <strong>5 as the upper value</strong>. Athough we have a continuous, numerical Treatment rather than a <a title="Binary (case control) study design" href="/articles/study-design-method/" target="_blank" rel="noopener">Binary (case-control) study Design</a>, we can still obtain <a title="Counterfactual estimates" href="/articles/counterfactual/" target="_blank" rel="noopener">counterfactual</a> estimates at these two set-points for the <a title="Treatment variable" href="/articles/treatment/" target="_blank" rel="noopener">Treatment variable</a>.&nbsp;</li>
-<li>Set <strong>Entity grouping</strong> to <strong>city</strong>. The fixed-effects of city will be accounted for in the model separately to the effect of Treatment.</li>
-<li>Leave <strong>Time</strong> as <strong>None</strong>. There is no time concept in this dataset. The other examples do consider time.</li>
-<li>Leave <strong>Other covariates</strong> empty.</li>
-<li>Press <strong>Check</strong> to request Causal Wizard to review your setup.</li>
-<li>If you have any errors, check the steps above carefully.&nbsp;</li>
-<li>Otherwise, you should be offered one model - the Fixed Effects - Linear Regression estimator. Press <strong>Calculate</strong>.</li>
-<li>After a few seconds, you should be offered a new <a title="Causal Wizard result" href="/articles/result/" target="_blank" rel="noopener">Result</a> to view. Click <strong>View Result</strong>.</li>
+<li>Upload the dataset above via the <a href="/data/" target="_blank">Data</a> page.</li>
+<li>Click <strong>Studies</strong> in the menu bar, name your study (e.g. "FE example 1"), select the dataset, and press <strong>Create</strong>.</li>
+<li>Change <strong>Method</strong> to <strong>Panel Data with Fixed Effects</strong>.</li>
+<li>Set <strong>Treatment</strong> to <strong>mkt_costs</strong> and <strong>Outcome</strong> to <strong>purchase</strong>.</li>
+<li>Click <strong>Treatment groups</strong>. Since our Treatment variable is a <em>continuous numerical value</em> (marketing costs), select <strong>Use as a continuous value</strong>.</li>
+<li>In the <strong>Counterfactual value</strong> fields that appear, <strong>enter 2 as the lower (control) value</strong> and <strong>5 as the upper (treated) value</strong>. Although we have a continuous, numerical Treatment rather than a <a title="Binary (case control) study design" href="/articles/study-design-method/" target="_blank" rel="noopener">Binary (case-control) study design</a>, we can still obtain <a title="Counterfactual estimates" href="/articles/counterfactual/" target="_blank" rel="noopener">counterfactual</a> estimates at these two set-points for the <a title="Treatment variable" href="/articles/treatment/" target="_blank" rel="noopener">Treatment variable</a>.&nbsp;</li>
+<li>Under <strong>Panel data structure</strong>, set <strong>Entity column</strong> to <strong>city</strong>. The fixed-effects of city will be accounted for in the model separately to the effect of Treatment.</li>
+<li>Leave <strong>Time column</strong> unset. There is no time concept in this dataset. The other examples do consider time.</li>
+<li>Leave <strong>Covariates</strong> empty.</li>
+<li>Press <strong>Check</strong>. You should be offered one model - <strong>Fixed Effects: Linear Regression</strong>.</li>
+<li>Click <strong>Download config JSON</strong>, then open the notebooks (<strong>Open in Colab</strong>, or clone the repository) and run both top to bottom, providing your config file and data file when asked.</li>
 </ol>
 <p><strong>Reviewing the result</strong></p>
-<p>Causal Wizard provides a range of analyses of your data and model, but scroll down to the plot of predicted vs actual outcomes - in this case, grouped by City:</p>
+<p>Causal Wizard's notebook provides a range of analyses of your data and model, but scroll down to the <strong>Outcomes plots</strong> section, to the scatter plot of predicted vs actual outcomes:</p>
 <p><img src="/assets/images/example_numerical_treatment_vs_outcome_by_group.png" alt="" width="100%" /></p>
 <p>This plot looks a lot like the correct model in the second image from Matheus Facure's original article! Great.</p>
 <ul>
-<li><strong>Black</strong> series indicate actual data, with a different symbol for each Entity (city)</li>
-<li><span style="color: #ba372a;"><strong>Red</strong></span> series are predictions of the same data. Note these are similar to the purple lines in Matheus' correct result.</li>
-<li>The <span style="color: #169179;"><strong>green</strong></span> and <span style="color: #f1c40f;"><strong>yellow</strong></span> series are counterfactual results, illustrating predictions for each city at our two Treatment setpoints. The figure above has setpoints at 1.5 and 4.1. These allow us to visualise model behaviour at specific Treatment levels.</li>
+<li><strong>Grey</strong> "Observed" points are the actual data.</li>
+<li><strong>Dark red "x" </strong>points are the model's own predictions for the same rows.</li>
+<li>The <strong>light green</strong> and <strong>light orange</strong> series are the counterfactual predictions at your two Treatment setpoints (2 and 5) - for panel data, each entity's points are joined by a line, so you can trace one city's predicted response across treatment values.</li>
 </ul>
-<p>There are some other features of the <strong>Result</strong> to take notice of:</p>
+<p>There are some other sections of the notebook worth a look:</p>
 <ul>
-<li><strong><a title="Counterfactual outcomes" href="/articles/counterfactual/" target="_blank" rel="noopener">Counterfactual</a> outcomes: </strong>This table contains the result of setting the Treatment value to the two setpoints for all samples, numerically.</li>
-<li><a title="Validation" href="/articles/validation/" target="_blank" rel="noopener">Validation</a> and <a title="refutation" href="/articles/refutation/" target="_blank" rel="noopener">refutation</a> tests: This table contains the results of relevant statistical tests applied to the results and model. In a Fixed-Effects model, this will typically include the <strong><a title="z-statistic" href="/articles/z-statistic/" target="_blank" rel="noopener">z-statistic</a></strong> (for each input variable aka model coefficient) and the <strong><a title="F-statistic" href="/articles/f-statistic/" target="_blank" rel="noopener">F-statistic</a></strong> (for the model overall).</li>
+<li><strong><a title="Counterfactual outcomes" href="/articles/counterfactual/" target="_blank" rel="noopener">Counterfactual</a> outcomes table: </strong>the result of setting the Treatment value to your two setpoints for every sample, numerically.</li>
+<li><a title="Validation" href="/articles/validation/" target="_blank" rel="noopener">Validation</a> and <a title="refutation" href="/articles/refutation/" target="_blank" rel="noopener">refutation</a> tests: for a Fixed-Effects model, this includes the <strong><a title="z-statistic" href="/articles/z-statistic/" target="_blank" rel="noopener">z-statistic</a></strong> (for each input variable, i.e. model coefficient) and the <strong><a title="F-statistic" href="/articles/f-statistic/" target="_blank" rel="noopener">F-statistic</a></strong> (for the model overall).</li>
+<li><strong>Feature importance:</strong> a bar chart of the fitted model's own coefficients - useful here to directly see the size of each city's fixed effect.</li>
 </ul>
 <p><strong>Challenge</strong></p>
-<p>What would happen if you change <strong>Entity grouping</strong> to <strong>None</strong>? (Tip: The model would behave similarly to the first regression model displayed in the introduction - the incorrect one).</p>
+<p>What would happen if you leave <strong>Entity column</strong> unset? (Tip: The model would behave similarly to the first regression model displayed in the introduction - the incorrect one.)</p>
 <h3>Example 2: The Promise of Panel Data</h3>
 <ul>
-<li>Original data source - <a title="Chapter 24 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/24-The-Diff-in-Diff-Saga.html#birth-the-promise-of-panel-data" target="_blank" rel="noopener"><strong>Chapter 24</strong></a>.</li>
+<li>Original data source - <a title="Chapter 24 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/24-The-Diff-in-Diff-Saga.html#birth-the-promise-of-panel-data" target="_blank" rel="noopener"><strong>Chapter 24</strong></a>. Download: <a href="/assets/data/tutorials/tutorial-fe-2-installs.csv" download><strong>tutorial-fe-2-installs.csv</strong></a>.</li>
 </ul>
 <p><strong>Introduction &amp; objectives</strong></p>
-<p>This example creates a <strong>Two-Way Fixed Effects</strong> (TWFE) model with both <strong>Entities</strong> and <strong>Time</strong>. The experiment <strong>Design</strong> is <strong>Binary</strong> (Case/Control groups). From the original article, the problem is described as follows (emphasis added):</p>
+<p>This example creates a <strong>Two-Way Fixed Effects</strong> (TWFE) model with both <strong>Entities</strong> and <strong>Time</strong>. The experiment design is <strong>Binary</strong> (Case/Control groups). From the original article, the problem is described as follows (emphasis added):</p>
 <p><em>"Panel data methods are often used in government policy evaluation, but we can easily make an argument about why they are also incredibly useful for the (tech) industry. Companies often track user data across multiple periods of time, which results in a rich panel data structure. Not only that, sometimes experimentation is not possible, so we have to rely on other identification strategies. </em><em>To explore that idea further, let&rsquo;s consider a hypothetical example of a young tech company that tracks the number of people that installed its app across multiple cities. </em></p>
 <p><em>At some point in 2021, the tech company launched a new feature in their app. <strong>It now wants to know how many new users that feature brought to the company. </strong>The rollout was gradual. Some cities got the feature in <code class="docutils literal notranslate"><span class="pre">2021-06-01</span></code>. Others, in&nbsp;<code class="docutils literal notranslate"><span class="pre">2021-07-15</span></code>. The full rollout to the rest of the cities only happens in 2022. Since our data only goes up until&nbsp;<code class="docutils literal notranslate"><span class="pre">2021-07-31</span></code>, this last group can be considered the control group. In causal inference terms, rolling out this feature can be seen as the treatment and number of installs can be seen as the outcome. We want to know the treatment effect on the outcome, that is, the effect of the new feature on the number of installs."</em></p>
 <p>In the data provided, the variable <strong>treat</strong> indicates whether users in a city received the feature (1 = yes, 0 = no).</p>
 <p><strong>Steps</strong></p>
 <ol>
-<li>Click <strong>Studies</strong> in the Menu bar</li>
-<li>Click the <strong>Create</strong> button</li>
-<li>Enter any name you like, such as "FE example 1"</li>
-<li>Select the Dataset named <span style="color: #ba372a;"><strong>"Tutorial FE: Installs"</strong></span> and press <strong>Create</strong></li>
-<li>If you want to view or analyse the data itself, click the <strong>Data tab</strong>. Otherwise, skip this step.</li>
-<li>Since we want to use the Fixed Effects models, change <strong>Method</strong> to <strong>Panel Data Methods</strong></li>
-<li>In this case, our Treatment variable is binary (0/1) named <strong>"treat"</strong>, so do not change the experiment <strong>Design</strong>.</li>
-<li>Set <strong>Treatment</strong> to <strong>treat</strong>. This tells Causal Wizard that this is our Treatment variable.</li>
-<li>Set <strong>Outcome</strong> to <strong>installs</strong>. Causal Wizard will be estimating the effect of <strong>treat</strong> on <strong>installs</strong>.</li>
-<li>In the Define Intervention section, click <strong>Identify Groups</strong>. A popup dialog will appear. Change the Treatment <strong>Data Type</strong> to <strong>Categorical</strong>. Causal Wizard will "sniff" your data and suggest values <strong>0 for Control</strong> and <strong>1 for Treated</strong> <a title="Control and Treated groups" href="/articles/control-and-treated/" target="_blank" rel="noopener">groups</a>. Click <strong>Save</strong>.</li>
-<li>Set <strong>Entity grouping</strong> to <strong>unit</strong>. The fixed-effects of each individual unit will be accounted for in the model separately to the effect of Treatment.</li>
-<li>Set <strong>Time periods</strong> to <strong>date</strong>. This will be a Two-Way Fixed-Effects model (Entities and Time).</li>
-<li>Leave <strong>Other covariates</strong> empty.</li>
-<li>Press <strong>Check</strong> to request Causal Wizard to review your setup.</li>
-<li>If you have any errors, check the steps above carefully.&nbsp;</li>
-<li>Otherwise, you should be offered one model - the Fixed Effects - Linear Regression estimator. Press <strong>Calculate</strong>.</li>
-<li>After a few seconds, you should be offered a new <a title="Causal Wizard result" href="/articles/result/" target="_blank" rel="noopener">Result</a> to view. Click <strong>View Result</strong>.</li>
+<li>Upload the dataset above via the <a href="/data/" target="_blank">Data</a> page.</li>
+<li>Create a new Study against it, and change <strong>Method</strong> to <strong>Panel Data with Fixed Effects</strong>.</li>
+<li>Set <strong>Treatment</strong> to <strong>treat</strong> and <strong>Outcome</strong> to <strong>installs</strong>.</li>
+<li>Click <strong>Treatment groups</strong> and confirm <strong>0</strong> is Control and <strong>1</strong> is Treated - the default.</li>
+<li>Under <strong>Panel data structure</strong>, set <strong>Entity column</strong> to <strong>unit</strong>. The fixed-effects of each individual unit will be accounted for in the model separately to the effect of Treatment.</li>
+<li>Set <strong>Time column</strong> to <strong>date</strong>. This will be a Two-Way Fixed-Effects model (Entities and Time).</li>
+<li>Leave <strong>Covariates</strong> empty.</li>
+<li>Press <strong>Check</strong>. You should be offered <strong>Fixed Effects: Linear Regression</strong>.</li>
+<li>Download the config file and run it through the notebooks as before.</li>
 </ol>
 <p><strong>Reviewing the result</strong></p>
-<p>In this case, the data is synthetic and we know the true causal effect, which is <strong>1</strong>. In the first section of your results, called <strong>Findings</strong>, you should see this reported - verify the result is correct. As in the previous tutorial, we should also check our validation and refutation tests.</p>
-<p>Since this example includes Time, we next want to have a look at section <strong>Outcomes over Time</strong>. This includes a plot, which at first will look very busy. That's because we are currently modelling individual fixed effects for each of the many stores.</p>
-<p>These plots are generated using <a title="Plotly.js" href="https://plotly.com/javascript/" target="_blank" rel="noopener">Plotly.js</a>. We can <em>select</em> series by clicking in the Legend; double-clicking a series will cycle through hiding it, showing it, and showing all series. <strong>By selecting only series E.76 (i.e. unit 76)</strong> we can see 4 series for this unit:</p>
+<p>In this case, the data is synthetic and we know the true causal effect, which is <strong>1</strong>. In the <strong>Findings</strong> section, you should see this reported - verify the result is correct. As in the previous tutorial, we should also check our validation and refutation tests.</p>
+<p>Since this example includes Time, we next want to have a look at the <strong>Outcomes over time</strong> plot. This includes a plot, which at first will look very busy - because we are currently modelling individual fixed effects for each of the many units, and every one of them is plotted.</p>
+<p>These plots are generated using <a title="Plotly.js" href="https://plotly.com/javascript/" target="_blank" rel="noopener">Plotly.js</a>. We can <em>select</em> series by clicking in the Legend; double-clicking a series will cycle through hiding it, showing it, and showing all series. <strong>By selecting only the series for one unit</strong> we can see 4 series for it:</p>
 <ul>
-<li>Actual observations (<span style="color: #000000;"><strong>black</strong></span>)</li>
-<li>Predicted observations (<span style="color: #ba372a;"><strong>red dashed line</strong></span>)</li>
-<li>Predictions given treatment is <strong>Control</strong> (0) - <span style="color: #169179;"><strong>green</strong></span></li>
-<li>Predictions given treatment is <strong>Treated</strong> (1) - <span style="color: #e67e23;"><strong>yellow/tan</strong></span></li>
+<li>Actual observations (<strong>solid line with markers</strong>)</li>
+<li>Predicted observations (<strong>dashed line</strong>)</li>
+<li>Predictions given treatment is <strong>Control</strong> (0) - light green</li>
+<li>Predictions given treatment is <strong>Treated</strong> (1) - light orange</li>
 </ul>
-<p>In the case of <strong>Unit 76</strong>, we can see that the predicted values are a good match to the actual values. That's good. Additionally, we can see that after July 4th, both predictions and observations rise to the Treated level, reflecting the fact that this unit was "treated" after this date:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/fixed_effects_result_one_sample_unit.png" alt="" width="100%" /></p>
+<p>For a unit that switches from Control to Treated partway through the data, you should be able to see the predicted and observed values track from the Control level up to the Treated level, at the point the unit was actually treated.</p>
 <p><strong>Additional Analysis</strong></p>
-<p>There are numerous other results to review, but we can also simplify the plot by grouping by City instead of Unit. Let's do that now.</p>
-<ol>
-<li>Go back to your <strong>Study</strong></li>
-<li>Change <strong>Entity Grouping</strong> to <strong>cohort</strong> (the name of the City column)</li>
-<li>Press <strong>Check</strong> to request Causal Wizard to review your setup.</li>
-<li>If you have any errors, check the steps above carefully.&nbsp;</li>
-<li>Otherwise, you should be offered one model - the Fixed Effects - Linear Regression estimator. Press <strong>Calculate</strong>.</li>
-<li>After a few seconds, you should be offered a new <a title="Causal Wizard result" href="/articles/result/" target="_blank" rel="noopener">Result</a> to view. Click <strong>View Result</strong>.</li>
-</ol>
-<p>This will produce a plot more similar to the one in Matheus Facure's book, but the estimated <a title="Causal Effect" href="/articles/causal-effect/" target="_blank" rel="noopener">causal effect</a> will be a little different, because we're not using <strong>Unit</strong> fixed-effects anymore - instead, we fit a <strong>cohort</strong> (city) fixed effect to all the units in the city. You could consider this model is "wrong" because we aren't controlling for the same effects, but it's a good idea to explore a range of related model configurations to ensure they all behave as you'd expect.&nbsp;</p>
-<p>However, the plot is now simplified because one series is plotted for each <strong>Entity</strong> - and we can confirm it matches the one in <a title="Promise of Panel Data example" href="https://matheusfacure.github.io/python-causality-handbook/24-The-Diff-in-Diff-Saga.html#birth-the-promise-of-panel-data" target="_blank" rel="noopener">Matheus Facure's article</a>. This plot is easy to interpret - we can see the effect of treatment on each cohort (city). Causal Wizard will always plot the Entity column, but you can create additional plots of your own if the standard ones don't present the data the way you'd like.</p>
-<p><img src="/assets/images/example_outcome_over_time_by_group.png" alt="" width="100%" />&nbsp;</p>
+<p>There are numerous other results to review. You could also simplify the plot by re-running with a coarser <strong>Entity column</strong> - if your data has a city/cohort column, set <strong>Entity column</strong> to that instead of <strong>unit</strong>, re-check, re-download the config, and re-run. This produces a plot more similar to the one in Matheus Facure's book, with one line per city rather than per individual unit - but the estimated <a title="Causal Effect" href="/articles/causal-effect/" target="_blank" rel="noopener">causal effect</a> will be a little different, because you're no longer controlling for the same effects. You could consider this model "wrong" because it isn't controlling for the same effects as the unit-level one, but it's a good idea to explore a range of related model configurations to ensure they all behave as you'd expect.&nbsp;</p>
 <h3>Example 3: The Difference-in-Differences (DiD) estimator</h3>
 <ul>
-<li>Original data source - <a title="Chapter 13 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html#did-estimator" target="_blank" rel="noopener"><strong>Chapter 13</strong></a>.</li>
+<li>Original data source - <a title="Chapter 13 Matheus Facure" href="https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html#did-estimator" target="_blank" rel="noopener"><strong>Chapter 13</strong></a>. Download: <a href="/assets/data/tutorials/tutorial-fe-3-billboard.csv" download><strong>tutorial-fe-3-billboard.csv</strong></a>.</li>
 </ul>
 <p><strong>Introduction &amp; objectives</strong></p>
-<p>This third example is actually the simplest. It is introducted in <a title="Chapter 13 DiD estimator" href="https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html#did-estimator" target="_blank" rel="noopener">Chapter 13</a> to show the equivalence of DiD and regression under certain conditions, namely <a title="binary treatment design" href="/articles/study-design-method/" target="_blank" rel="noopener">binary treatment design</a>, 2 time periods, and 2 groups of entities with one group treated in the second time period. We will use it for the same purpose, to show how a DiD result can be obtained in Causal Wizard.</p>
-<p>The data has 3 columns:</p>
+<p>This third example is actually the simplest. It is introduced in <a title="Chapter 13 DiD estimator" href="https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html#did-estimator" target="_blank" rel="noopener">Chapter 13</a> to show the equivalence of DiD and regression under certain conditions, namely <a title="binary treatment design" href="/articles/study-design-method/" target="_blank" rel="noopener">binary treatment design</a>, 2 time periods, and 2 groups of entities with one group treated in the second time period. We will use it for the same purpose, to show how a DiD result can be obtained in Causal Wizard.</p>
+<p>The data has 4 columns:</p>
 <ul>
 <li><strong>deposits</strong>: The outcome we want to estimate.</li>
-<li><strong>poa</strong>: The entity group. Value is 1 if sample is from Porto Alegre (POA) and 0 if a sample is from Florianopolis, the other city.</li>
+<li><strong>poa</strong>: The entity group. Value is 1 if the sample is from Porto Alegre (POA) and 0 if from Florianopolis, the other city.</li>
 <li><strong>jul</strong>: The month indicator: Either 0 (May: pre-intervention) or 1 (July: Post-intervention).</li>
-<li><strong>treated</strong>: We have added an "interaction term" column which is simply poa * jul i.e. 1 iff post-intervention and city Porto Alegre. These samples are the only ones which are treated. If you use Causal Wizard for DiD on your data, you'll also need to add an interaction term like this.</li>
+<li><strong>treated</strong>: An "interaction term" column, simply <code>poa * jul</code> i.e. 1 iff post-intervention and city Porto Alegre. These samples are the only ones which are treated. If you use Causal Wizard for DiD on your own data, you'll also need to add an interaction term like this.</li>
 </ul>
-<p>With that data, we want to estimate the effect of <strong>Treatment</strong> on <strong>Outcome: deposits</strong>.</p>
+<p>With that data, we want to estimate the effect of <strong>Treatment</strong> on <strong>Outcome: deposits</strong>. Note that both <strong>poa</strong> and <strong>jul</strong> only take 2 values each, so many individual samples (bank branches) share the same entity and time - that's completely fine for a Fixed Effects model; see <a href="/articles/panel-data/">Panel Data format</a> for why repeated entity/time combinations don't need to be unique.</p>
 <p><strong>Steps</strong></p>
 <ol>
-<li>Click <strong>Studies</strong> in the Menu bar</li>
-<li>Click the <strong>Create</strong> button</li>
-<li>Enter any name you like, such as "FE example 1"</li>
-<li>Select the Dataset named <span style="color: #ba372a;"><strong>"Tutorial FE: Billboard Impact"</strong></span> and press <strong>Create</strong></li>
-<li>If you want to view or analyse the data itself, click the <strong>Data tab</strong>. Otherwise, skip this step.</li>
-<li>Since we want to use the Fixed Effects models, change <strong>Method</strong> to <strong>Panel Data Methods</strong></li>
-<li>In this case, our Treatment variable is binary (0/1) named <strong>"treat"</strong>, so do not change the experiment <strong>Design</strong>.</li>
-<li>Set <strong>Treatment</strong> to <strong>treated</strong>. This tells Causal Wizard that this is our Treatment variable.</li>
-<li>Set <strong>Outcome</strong> to <strong>deposits</strong>. Causal Wizard will be estimating the effect of <strong>treated</strong> on <strong>deposits</strong>.</li>
-<li>In the Define Intervention section, click <strong>Identify Groups</strong>. A popup dialog will appear. Change the Treatment <strong>Data Type</strong> to <strong>Categorical</strong>. Causal Wizard will "sniff" your data and suggest values <strong>0 for Control</strong> and <strong>1 for Treated</strong> <a title="Control and Treated groups" href="/articles/control-and-treated/" target="_blank" rel="noopener">groups</a>. Click <strong>Save</strong>.</li>
-<li>Set <strong>Entity grouping</strong> to <strong>pos</strong>. The fixed-effects of each individual unit will be accounted for in the model separately to the effect of Treatment.</li>
-<li>Set <strong>Time periods</strong> to <strong>jul</strong>. This will be a Two-Way Fixed-Effects model (Entities and Time).</li>
-<li>Leave <strong>Other covariates</strong> empty.</li>
-<li>Press <strong>Check</strong> to request Causal Wizard to review your setup.</li>
-<li>If you have any errors, check the steps above carefully.&nbsp;</li>
-<li>Otherwise, you should be offered one model - the Fixed Effects - Linear Regression estimator. Press <strong>Calculate</strong>.</li>
-<li>After a few seconds, you should be offered a new <a title="Causal Wizard result" href="/articles/result/" target="_blank" rel="noopener">Result</a> to view. Click <strong>View Result</strong>.</li>
+<li>Upload the dataset above via the <a href="/data/" target="_blank">Data</a> page.</li>
+<li>Create a new Study against it, and change <strong>Method</strong> to <strong>Panel Data with Fixed Effects</strong>.</li>
+<li>Set <strong>Treatment</strong> to <strong>treated</strong> and <strong>Outcome</strong> to <strong>deposits</strong>.</li>
+<li>Click <strong>Treatment groups</strong> and confirm <strong>0</strong> is Control and <strong>1</strong> is Treated - the default.</li>
+<li>Under <strong>Panel data structure</strong>, set <strong>Entity column</strong> to <strong>poa</strong>. The fixed-effects of each city will be accounted for in the model separately to the effect of Treatment.</li>
+<li>Set <strong>Time column</strong> to <strong>jul</strong>. This will be a Two-Way Fixed-Effects model (Entities and Time).</li>
+<li>Leave <strong>Covariates</strong> empty.</li>
+<li>Press <strong>Check</strong>. You should be offered <strong>Fixed Effects: Linear Regression</strong>.</li>
+<li>Download the config file and run it through the notebooks as before.</li>
 </ol>
 <p><strong>Reviewing the result</strong></p>
 <p>In this case we have a "correct" result from Matheus Facure's article, which we expect to obtain: <strong>6.52</strong>. This is the value of the interaction coefficient (treated variable) he obtained from both the simple DiD calculation, and OLS regression.</p>
-<p><em>Your</em> result should be somewhere between 5 and 7, probably not quite right. Why is that?&nbsp;</p>
-<p><strong>As part of <a title="Validation (test set)" href="/articles/validation/" target="_blank" rel="noopener">Validation</a>, Causal Wizard automatically assumes you want to keep some data for generalization testing, by default a random 10% of your data.</strong> To reproduce the original result exactly, we must use all our data for training the mode.</p>
+<p><em>Your</em> result should be somewhere close to this, but probably not exactly right. Why is that?&nbsp;</p>
+<p><strong>As part of <a title="Validation (test set)" href="/articles/validation/" target="_blank" rel="noopener">Validation</a>, Causal Wizard's notebook automatically holds back some data for generalization testing, by default a random 20% of your data.</strong> To reproduce the original result exactly, we must use all our data for training the model.</p>
 <ol>
-<li>Go back to your <strong>Study</strong></li>
-<li>Click <strong>Advanced Options</strong> at the bottom of the page. Some additional controls will appear.</li>
-<li><strong>Set "Use % of all rows" to 0.</strong></li>
-<li><strong>Ensure "Use first N rows" is 0.</strong> These two settings will disable the test set.</li>
-<li>Press <strong>Check</strong> to request Causal Wizard to review your setup.</li>
-<li>If you have any errors, check the steps above carefully.&nbsp;</li>
-<li>Otherwise, you should be offered one model - the Fixed Effects - Linear Regression estimator. Press <strong>Calculate</strong>.</li>
-<li>After a few seconds, you should be offered a new <a title="Causal Wizard result" href="/articles/result/" target="_blank" rel="noopener">Result</a> to view. Click <strong>View Result</strong>.</li>
+<li>Go back to your <strong>Study</strong>.</li>
+<li>Open <strong>Advanced options</strong> at the bottom of the page.</li>
+<li>Set <strong>Held-out test set (%)</strong> to <strong>0</strong>. This disables the test set.</li>
+<li>Press <strong>Check</strong> again, download the new config file, and re-run the notebooks.</li>
 </ol>
-<p>The new <a title="causal effect" href="/articles/causal-effect/" target="_blank" rel="noopener">causal effect</a> should be 6.52 (or very close to it).</p>
+<p>The new <a title="causal effect" href="/articles/causal-effect/" target="_blank" rel="noopener">causal effect</a> should now be 6.52 (or very close to it).</p>
 <p><strong>Parallel Trends plot</strong></p>
-<p>One of the important assumptions to check in a DiD study is the <a title="parallel trends assumption" href="https://www.publichealth.columbia.edu/research/population-health-methods/difference-difference-estimation" target="_blank" rel="noopener"><strong>parallel trends assumption</strong></a>. This assumption is that, absent treatment, both/all Entity groups would have experienced the same change in Outcome. The <strong>Outcomes over Time</strong> plot is intended to visualise this and help you confirm it. The plot has<strong> 4 series</strong> per <strong>Entity</strong>:</p>
+<p>One of the important assumptions to check in a DiD study is the <a title="parallel trends assumption" href="https://www.publichealth.columbia.edu/research/population-health-methods/difference-difference-estimation" target="_blank" rel="noopener"><strong>parallel trends assumption</strong></a>: absent treatment, both/all Entity groups would have experienced the same change in Outcome. The <strong>Outcomes over time</strong> plot is intended to visualise this and help you confirm it. It has up to <strong>4 series</strong> per <strong>Entity</strong>:</p>
 <ul>
-<li>Actual observations (<span style="color: #000000;"><strong>black</strong></span>)</li>
-<li>Predicted observations (<span style="color: #ba372a;"><strong>red dashed line</strong></span>)</li>
-<li>Predictions given treatment is <strong>Control</strong> (0) - <span style="color: #169179;"><strong>green</strong></span></li>
-<li>Predictions given treatment is <strong>Treated</strong> (1) - <span style="color: #e67e23;"><strong>yellow/tan</strong></span></li>
+<li>Actual observations (solid line with markers)</li>
+<li>Predicted observations (dashed line)</li>
+<li>Predictions given treatment is <strong>Control</strong> (0) - light green</li>
+<li>Predictions given treatment is <strong>Treated</strong> (1) - light orange</li>
 </ul>
-<p><span style="color: #000000;">In the case of DiD, we want to confirm that the trend for the Treated entity (city of POA) is similar to the trend for the Control entity (city FL). Since we only have 2 time points, we can't verify this - but in your data, you may have multiple time periods and the Causal Wizard model will work just as well. You'll see all time points in the chart.</span></p>
-<p><span style="color: #000000;">The plot shows <strong><a title="counterfactuals" href="/articles/counterfactual/" target="_blank" rel="noopener">counterfactuals</a></strong> and predictions so you can compare model predictive behaviour to observations, and visualize the effect of your <strong><a title="intervention" href="/articles/intervention/" target="_blank" rel="noopener">intervention</a></strong> (treatment).</span></p>
-<p><span style="color: #ba372a;">Caution: All plot results are produced from 1000 random samples from your data, or the entire data - whichever is smaller. This means that there may be small variations in all plots due to sampling. This is necessary to avoid copying large datasets entirely to your browser to render results.</span></p>
-<p><img src="/assets/images/example_did.png" alt="" width="100%" /></p>
-<p>Above: The outcome over time plot shows the prediction of city PoA (entity=1) deposits increasing from the green (<strong>control</strong>) line to the yellow/tan <strong>treated</strong> line over time. The actual data matches this behaviour closely. In contrast, the city FL (entity = 0) red prediction line remains equal to the Control (green) line.</p>
+<p>In the case of DiD, we want to confirm that the trend for the Treated entity (city of POA) is similar to the trend for the Control entity (city FL). Since we only have 2 time points, we can't verify this visually here - but in your own data, you may have multiple time periods, and the Causal Wizard model will work just as well; you'll see all time points in the chart, and duplicate entity/time rows are automatically averaged before plotting.</p>
+<p>The plot shows <strong><a title="counterfactuals" href="/articles/counterfactual/" target="_blank" rel="noopener">counterfactuals</a></strong> and predictions so you can compare model predictive behaviour to observations, and visualize the effect of your <strong><a title="intervention" href="/articles/intervention/" target="_blank" rel="noopener">intervention</a></strong> (treatment).</p>
+<p>Above: the outcome-over-time plot should show the prediction for city POA (entity=1) rising from the Control level to the Treated level between May and July. The actual data should match this behaviour closely. In contrast, city FL's (entity=0) prediction line should remain at the Control level throughout, since it was never treated.</p>

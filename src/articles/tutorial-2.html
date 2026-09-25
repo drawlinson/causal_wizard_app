@@ -13,78 +13,53 @@ categorySlugs: ["tutorial"]
 <p>But wait!</p>
 <p>What Adam showed was that when accounting for authorship, the effect <em>disappeared</em>. In this data, longer headlines don't in fact cause higher click through rates. <em>Better authors</em> cause higher click through rates!</p>
 <p>So, we'll modify the Study to reflect that and see what happens to the results. We expect to see the (false) effect of headline-length disappear.</p>
-<h3>Step 1: Create a new Study</h3>
+<h3>Step 1: Get the data</h3>
+<p>Download <a href="/assets/data/tutorials/tutorial-2-headlines.csv" download><strong>tutorial-2-headlines.csv</strong></a>, then upload it via the <a href="/data/" target="_blank">Data</a> page.</p>
+<h3>Step 2: Create a new Study</h3>
 <ol>
 <li>Click on <strong>Studies</strong> in the menu bar.</li>
-<li>In the Studies list page, click the <strong>Create</strong> button.</li>
 <li>Give the new Study any <strong>name</strong> you like (e.g. Tutorial 2).</li>
-<li>Select the Dataset with the name beginning "<strong>Tutorial 2</strong>"</li>
-<li>Click <strong>Create</strong> and the new Study will be displayed.</li>
+<li>Select the Dataset you just uploaded, and press <strong>Create</strong>.</li>
 </ol>
-<h3>Step 2: Specify Treatment and Outcome</h3>
+<h3>Step 3: Specify Treatment and Outcome</h3>
 <p>We want to see whether longer titles increase click-through rate. So, select variable <strong>title_length</strong> as the <strong>Treatment</strong> and select <strong>click_through_rate</strong> as the <strong>Outcome</strong>.</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_setup.png" alt="" height="204" /></p>
-<p>Adam's model says that a "long" title is one with more than 10 words. So, click the <strong>Threshold value</strong> input to open the threshold dialog.&nbsp;</p>
-<p>Type <strong>10</strong> into the input, and <strong>press</strong> <strong>ENTER</strong>, then click <strong>Save</strong>. The dialog will close.</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_threshold.png" alt="" height="400" /></p>
-<h3>Step 3: Draw Causal Diagram</h3>
-<p>The next step is to tell Causal Wizard how these variables interact. Following the original case study, we assume that:</p>
+<p>Adam's model says that a "long" title is one with more than 10 words.</p>
+<ol>
+<li>Click <strong>Treatment groups</strong> to open the group editor.</li>
+<li>Set the <strong>Treated</strong> row's lower bound to <strong>&gt; 10</strong>, and the <strong>Control</strong> row's upper bound to <strong>&le; 10</strong>.</li>
+</ol>
+<h3>Step 4: Draw Causal Diagram</h3>
+<p>The next step is to tell Causal Wizard how these variables interact. Following the original case study, we'll <strong>first</strong> assume only that:</p>
 <ul>
 <li><strong>title_length</strong> affects <strong>click_through_rate</strong> directly</li>
-<li><strong>author</strong> affects both <strong>title_length</strong> and <strong>click_through_rate</strong></li>
 </ul>
-<p>Adam's case study originally didn't consider author, leading them to the claim that longer headlines lead to&nbsp;</p>
-<p>Click and add the 3 nodes to the graph:&nbsp;</p>
+<p>(Adam's original case study didn't consider author, leading to the claim that longer headlines lead to more clicks - we'll add author back in shortly.)</p>
 <ol>
-<li>title_length</li>
-<li>author</li>
-<li>click_through_rate</li>
+<li>Add nodes for <strong>title_length</strong> and <strong>click_through_rate</strong> (click empty space in <strong>Edit nodes</strong> mode, choose the variable, Save).</li>
+<li>Switch to <strong>Draw edges</strong> and drag from <strong>title_length</strong> to <strong>click_through_rate</strong>.</li>
 </ol>
-<p>Add an edge:</p>
-<ul>
-<li>from <strong>title_length</strong> to <strong>click_through_rate</strong></li>
-</ul>
-<p>The graph should look like this:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_graph_1.png" alt="" height="400" /></p>
-<h3>Step 4: Check the setup</h3>
+<h3>Step 5: Check, download, and run the notebook</h3>
 <ol>
-<li>Press the <strong>Check</strong> button at the top of the page.&nbsp;</li>
-<li>If something is not right, you'll get some warning messages - follow their instructions to complete or fix the setup.</li>
-<li>If everything went as planned, you'll see a large green block which invites you to select a <strong>Model</strong> type. <strong>Select "Backdoor: Linear regression"</strong>. (This tutorial won't cover model selection criteria.)</li>
-<li>Press the <strong>Calculate</strong> button below the green block.</li>
-<li>Click confirm.</li>
+<li>Press <strong>Check</strong>.</li>
+<li>If everything went as planned, select <strong>"Backdoor: Linear regression"</strong> as the Model.</li>
+<li>Click <strong>Download config JSON</strong>.</li>
+<li>Open the notebooks (<strong>Open in Colab</strong>, or clone the repository), and run both notebooks top to bottom, providing your config file and data file when asked.</li>
 </ol>
-<h3>Step 5: Reviewing the results</h3>
-<p>You can always come back to earlier results. If you decided to come back later while following this tutorial, you can find your result by:</p>
-<ol>
-<li>Clicking on <strong>Studies</strong> in the menu bar.</li>
-<li>In the Studies list page, click the <strong>Results</strong> button next to your <strong>Tutorial 2</strong>&nbsp;Study.</li>
-<li>You'll now see all Results for this Study. If you've followed this tutorial, you'll only have one. Click the <strong>Open</strong> button.</li>
-</ol>
-<p>The key finding is that we have found title length greater than 10 has an effect of +0.01 on click through rate.&nbsp; While that might not seem like much, <strong>the average click through rate is 0.05 so +0.01 is a 20% increase!</strong></p>
+<h3>Step 6: Reviewing the results</h3>
+<p>In the <strong>Findings</strong> section, the key finding is that title length greater than 10 has an effect of around <strong>+0.01</strong> on click through rate. While that might not seem like much, <strong>the average click through rate is 0.05, so +0.01 is a 20% increase!</strong></p>
 <p>The problem is that as Adam pointed out, the effect of authorship is being ignored. Let's go back to the Study and add the missing edges.</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_results_1.png" alt="" height="400" /></p>
-<h3>Step 6: Modifying the Causal Diagram</h3>
-<p>Click "Edit Study" (or switch tabs if the Study is already open).</p>
-<p>In the Study editor page, click the Draw Edges button to modify the causal diagram.</p>
-<p>Add edges:</p>
-<ul>
-<li>from <strong>author</strong> to <strong>title_length</strong></li>
-<li>from <strong>author</strong> to <strong>click_through_rate</strong></li>
-</ul>
-<p>There should now be 3 edges in total, like this:</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_graph_2.png" alt="" height="400" /></p>
-<p>Next:</p>
+<h3>Step 7: Modifying the Causal Diagram</h3>
 <ol>
-<li>Press the <strong>Check</strong> button at the top of the page.&nbsp;</li>
-<li>If something is not right, you'll get some warning messages - follow their instructions to complete or fix the setup.</li>
-<li>If everything went as planned, you'll see a large green block which invites you to select a <strong>Model</strong> type. <strong>Select "Backdoor: Linear regression"</strong>. (This tutorial won't cover model selection criteria.)</li>
-<li>Press the <strong>Calculate</strong> button below the green block.</li>
-<li>Click confirm.</li>
+<li>Go back to your Study (Studies in the menu bar, open "Tutorial 2" again).</li>
+<li>Add a node for <strong>author</strong>.</li>
+<li>Switch to <strong>Draw edges</strong> and add two edges: from <strong>author</strong> to <strong>title_length</strong>, and from <strong>author</strong> to <strong>click_through_rate</strong>.</li>
 </ol>
-<h3>Step 7: Review the updated results</h3>
-<p>When available, navigate to the new result.</p>
-<p>You should now notice that the causal effect has disappeared. The new estimate, controlling for authorship, is 0.</p>
-<p>Notice also that the statistical significance test is now failed, suggesting the results are no better than chance.</p>
+<p>There should now be 3 edges in total.</p>
+<ol>
+<li>Press <strong>Check</strong> again.</li>
+<li>Confirm <strong>"Backdoor: Linear regression"</strong> is still selected, and download the new config file.</li>
+<li>Run it through the notebooks again, the same way as before (you can reuse the same data file).</li>
+</ol>
+<h3>Step 8: Review the updated results</h3>
+<p>In the new <strong>Findings</strong> section, you should now notice that the causal effect has disappeared - the new estimate, controlling for authorship, is close to 0. Notice also that the significance tests in the <strong>Refutation / validation</strong> section now suggest the result is no better than chance.</p>
 <p>The key takeaway here is that properly accounting for a confounding variable (authorship) eliminated what originally appeared to be a promising insight. If we had just done a simple association or non-causal analysis of the title length and click through rate, we might right now be "optimizing" our web content in completely the wrong way...</p>
-<p><img style="display: block; margin-left: auto; margin-right: auto;" src="/assets/images/tutorial_2_results_2.png" alt="" height="400" /></p>
