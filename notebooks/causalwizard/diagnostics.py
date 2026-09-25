@@ -279,37 +279,44 @@ def validation_rows(validation: dict | None) -> list[dict]:
     return rows
 
 
-# {key: (description, desired result)} - ported from result_show.html's
-# validation table, one row per test.
+# {key: (description, desired result, is "Significant"=True the good outcome?)}
+# - ported from result_show.html's validation table, one row per test.
+# The third element is the non-obvious part: bootstrap (and PD+FE's z/F
+# tests) follow the intuitive convention where Significant=True supports
+# the effect being real, but the two refuters are backwards - they
+# deliberately try to make the effect disappear (placebo) or stay
+# unaffected (random common cause), so finding a *significant* result
+# there means the refuter caught a problem. See
+# bootstrap-refuters-dowhy for the full derivation of both conventions.
 VALIDATION_DESCRIPTIONS = {
     "z_statistic": (
         "Tests the significance of the treatment variable's own coefficient. The p-value is the "
         "probability of a z-statistic this extreme under the null hypothesis that treatment has no "
         f"effect ([read more]({SITE_URL}/articles/z-statistic/)).",
-        "p ≤ 0.05",
+        "p ≤ 0.05", True,
     ),
     "f_statistic": (
         "Tests the overall significance of the regression model - whether *at least one* input "
         f"variable has a non-zero coefficient ([read more]({SITE_URL}/articles/f-statistic/)).",
-        "p ≤ 0.05",
+        "p ≤ 0.05", True,
     ),
     "bootstrap": (
         "Randomly permutes the outcome many times, destroying any real causal effect, and measures "
         "how often a result this strong appears by chance alone "
         f"([read more]({SITE_URL}/articles/random-outcomes/)).",
-        "p ≤ 0.05",
+        "p ≤ 0.05", True,
     ),
     "placebo_treatment": (
         "Randomly permutes the treatment, destroying any real causal effect, and re-estimates - a "
         "robust result should see the effect collapse towards zero "
         f"([read more]({SITE_URL}/articles/placebo-treatment/)).",
-        "New effect ≈ 0",
+        "New effect ≈ 0", False,
     ),
     "random_common_cause": (
         "Adds an extra, random, independent variable as if it were a confounder and re-estimates - a "
         "robust result shouldn't move much "
         f"([read more]({SITE_URL}/articles/random-common-cause/)).",
-        "Effect unchanged",
+        "Effect unchanged", False,
     ),
 }
 
@@ -319,14 +326,21 @@ def validation_markdown_intro(validation: dict | None) -> str:
         return "_No validation tests were run for this estimator._"
     lines = [
         "Several tests were applied to assess the statistical significance, robustness and stability "
-        "of the result:",
+        "of the result. **\"Significant\" doesn't always mean \"good\" here** - the bootstrap "
+        "significance test (and PD+FE's z/F-statistics) follow the usual convention where "
+        "Significant = True supports the effect being real, but the two refuters below are "
+        "deliberately built to try to make the effect disappear (placebo treatment) or stay "
+        "unaffected (random common cause) - so for *those two*, Significant = True means the "
+        "refuter found a problem, not that it confirmed one "
+        f"([read more]({SITE_URL}/articles/bootstrap-refuters-dowhy/)):",
         "",
     ]
     for key, label in VALIDATION_LABELS.items():
         if key not in validation:
             continue
-        desc, desired = VALIDATION_DESCRIPTIONS[key]
-        lines.append(f"- **{label}** (desired: {desired}) - {desc}")
+        desc, desired, significant_is_good = VALIDATION_DESCRIPTIONS[key]
+        verdict = "Significant = **good**" if significant_is_good else "Significant = **bad**, not significant is good here"
+        lines.append(f"- **{label}** (desired: {desired}; {verdict}) - {desc}")
     return "\n".join(lines)
 
 

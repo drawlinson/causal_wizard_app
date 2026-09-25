@@ -144,29 +144,34 @@ def plot_outcomes_entity(
     a real relationship between unrelated units, so points stay unjoined."""
     fig = go.Figure()
 
-    def add_series(values, color: str, name: str, symbol: str = "circle", width: int = 2):
+    def add_series(values, color: str, name: str, symbol: str = "circle", width: int = 2, x_value: float | None = None):
+        """`x_value` fixes every point's x to that one value (the
+        counterfactual series: every row's outcome under a hypothetical
+        treatment value, not its own actual one) - omit it to use each
+        row's actual treatment value instead (Observed/Predicted)."""
         d = df[[treatment_col]].copy()
         d["_y"] = np.asarray(values)
+        d["_x"] = x_value if x_value is not None else df[treatment_col].values
         if entity_col and entity_col in df.columns:
             d[entity_col] = df[entity_col].values
             for i, (_, group) in enumerate(d.groupby(entity_col)):
                 group = group.sort_values(treatment_col)
                 fig.add_trace(go.Scatter(
-                    x=group[treatment_col], y=group["_y"], mode="lines+markers", name=name,
+                    x=group["_x"], y=group["_y"], mode="lines+markers", name=name,
                     legendgroup=name, showlegend=(i == 0),
                     line=dict(color=color, width=width), marker=dict(color=color, symbol=symbol),
                 ))
         else:
             fig.add_trace(go.Scatter(
-                x=d[treatment_col], y=d["_y"], mode="markers", name=name,
+                x=d["_x"], y=d["_y"], mode="markers", name=name,
                 marker=dict(color=color, symbol=symbol),
             ))
 
     add_series(df[outcome_col], "#444444", "Observed")
     if predicted is not None:
         add_series(predicted, PREDICTED_COLOR, "Predicted", symbol="x")
-        add_series(control_pred, "lightgreen", f"Control/Lower = {control_value}", width=1)
-        add_series(treated_pred, "#ffcc80", f"Treated/Upper = {treated_value}", width=1)
+        add_series(control_pred, "lightgreen", f"Control/Lower = {control_value}", width=1, x_value=control_value)
+        add_series(treated_pred, "#ffcc80", f"Treated/Upper = {treated_value}", width=1, x_value=treated_value)
 
     fig.update_layout(title=f"Scatter plot of predicted and actual Outcomes '{outcome_col}'", xaxis_title=f"Treatment ({treatment_col})", yaxis_title=outcome_col, width=PLOT_WIDTH, height=PLOT_HEIGHT)
     return fig

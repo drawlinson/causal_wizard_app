@@ -1290,6 +1290,41 @@ consistent per-series colour), and the counterfactual table shows exactly
 3 correctly-labelled rows. Also re-ran all 12 previously-covered scenarios
 - all clean.
 
+**8.6 follow-up 8 — counterfactual scatter x-coordinates, and validation table clarity** ✅ done
+- **`plot_outcomes_entity()`'s counterfactual series used the wrong x
+  values**: the Control/Lower and Treated/Upper points were plotted at
+  each row's *actual* treatment value, not the fixed counterfactual value
+  their y was computed at - a leftover from generalising the per-entity
+  line-drawing added in follow-up 7, which reused one x source for every
+  series without noticing the counterfactual ones need a fixed x instead.
+  `add_series()` now takes an explicit `x_value` override, used only by
+  the two counterfactual series; y still comes from the precomputed
+  per-row do-operator predictions, one point per row (so a time-based
+  study gets one counterfactual point per entity per timestep, same
+  granularity as Observed/Predicted).
+- **The Validation table didn't say whether "Significant" was good or
+  bad**, and this genuinely isn't obvious: the bootstrap significance
+  test (and PD+FE's z/F-statistics) follow the usual convention
+  (Significant = True supports the effect being real), but the two
+  refuters are reversed by construction - they're built to try to make
+  the effect disappear (placebo treatment) or stay unchanged (random
+  common cause), so a *significant* result there means the refuter found
+  a problem, not that it confirmed the effect. Independently re-derived
+  this against `/articles/bootstrap-refuters-dowhy/` (confirmed correct)
+  before writing it up: `VALIDATION_DESCRIPTIONS` now carries a
+  significant-is-good flag per test, rendered explicitly per row, with a
+  general explanation and article link up top.
+- **The table also showed literal `NaN`** for cells a given test doesn't
+  have (bootstrap has no "New effect", the refuters have no "95% CI") -
+  `pandas.DataFrame` fills a row's absent keys with NaN when union-ing
+  rows with different key sets. Now `.fillna("")` before display.
+
+Re-verified: direct inspection of the rendered Plotly trace data confirms
+the counterfactual series' x is now the fixed control/treated value (not
+the actual per-row treatment); the validation table shows the good/bad
+explanation and article link, and blank cells instead of NaN. Re-ran all
+12 previously-covered scenarios - all clean.
+
 **8.7 — Update site content**
 Rewrite help articles, tutorials, and security/privacy copy to describe the
 new workflow (site → config JSON → notebooks) and its implications for data
